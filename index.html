@@ -947,12 +947,11 @@ table.price-table th{
   background:#fff;
   border-radius:14px;
   border:1px solid #E5DDD4;
-  padding:14px 16px;
+  padding:16px 18px;
   box-shadow:var(--shadow);
-  display:grid;
-  grid-template-columns:180px 1fr auto;
-  align-items:center;
-  gap:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 .history-left{
@@ -978,9 +977,22 @@ table.price-table th{
   overflow-wrap:anywhere;
 }
 
+.history-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.history-card-meta{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
 .history-date{
-  font-size:.78rem;
+  font-size:.76rem;
   color:#7F7A76;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 
 .history-summary{
@@ -998,7 +1010,7 @@ table.price-table th{
   align-items:center;
   gap:8px;
   flex-wrap:wrap;
-  justify-content:flex-end;
+  justify-content:flex-start;
 }
 
 .history-actions .tbtn{
@@ -1028,115 +1040,110 @@ table.price-table th{
 
 }
 /* ===== BARRE RECALCUL IA ===== */
-.recalcul-bar {
-  background: #F8F6FD;
-  border: 2px solid #CFC4E6;
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.recalcul-bar{
+  background:#F8F6FD;
+  border:2px solid #CFC4E6;
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
-.recalcul-bar-top {
-  display: flex;
-  align-items: center;
+.recalcul-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:.68rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--lav);
 }
-.recalcul-bar-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700;
-  font-size: .68rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--lav);
+.recalcul-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
 }
-.recalcul-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.recalcul-chip{
+  padding:4px 11px;
+  border:1.5px solid #D4CCE8;
+  border-radius:20px;
+  background:#fff;
+  font-family:'Barlow',sans-serif;
+  font-size:.76rem;
+  color:#6B5A9A;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+  user-select:none;
 }
-.recalcul-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 11px;
-  border: 1.5px solid #D4CCE8;
-  border-radius: 20px;
-  background: #fff;
-  font-family: 'Barlow', sans-serif;
-  font-size: .76rem;
-  color: #6B5A9A;
-  cursor: pointer;
-  transition: all .15s;
-  white-space: nowrap;
-  user-select: none;
+.recalcul-chip:hover,.recalcul-chip.on{
+  background:var(--lav);
+  border-color:var(--lav);
+  color:#fff;
 }
-.recalcul-chip:hover { background: var(--lav); border-color: var(--lav); color: #fff; }
-.recalcul-chip.active { background: var(--lav); border-color: var(--lav); color: #fff; }
-.recalcul-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
+.recalcul-row{
+  display:flex;
+  gap:10px;
+  align-items:flex-end;
 }
-.recalcul-textarea {
-  flex: 1;
-  min-height: 56px;
-  max-height: 120px;
-  resize: vertical;
-  border: 1.5px solid #D4CCE8;
-  border-radius: 10px;
-  padding: 10px 13px;
-  font-family: 'Barlow', sans-serif;
-  font-size: .9rem;
-  color: var(--navy);
-  background: #fff;
-  outline: none;
-  line-height: 1.45;
-  transition: border-color .15s;
+.recalcul-textarea{
+  flex:1;
+  min-height:52px;
+  max-height:110px;
+  resize:vertical;
+  border:1.5px solid #D4CCE8;
+  border-radius:10px;
+  padding:10px 13px;
+  font-family:'Barlow',sans-serif;
+  font-size:.9rem;
+  color:var(--navy);
+  background:#fff;
+  outline:none;
+  line-height:1.45;
+  transition:border-color .15s;
 }
-.recalcul-textarea:focus { border-color: var(--lav); }
-.recalcul-textarea::placeholder { color: #B5AEC8; font-size: .85rem; }
-.recalcul-btn {
-  height: 42px;
-  padding: 0 18px;
-  background: var(--navy);
-  color: #fff;
-  border: none;
-  border-radius: 21px;
-  cursor: pointer;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700;
-  font-size: .7rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: background .15s;
-  flex-shrink: 0;
+.recalcul-textarea:focus{ border-color:var(--lav); }
+.recalcul-textarea::placeholder{ color:#B5AEC8; font-size:.85rem; }
+.recalcul-btn{
+  flex-shrink:0;
+  height:42px;
+  padding:0 18px;
+  background:var(--navy);
+  color:#fff;
+  border:none;
+  border-radius:21px;
+  cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:background .15s;
 }
-.recalcul-btn:hover:not(:disabled) { background: var(--navy-dk); }
-.recalcul-btn:disabled { opacity: .35; cursor: not-allowed; }
-.recalcul-note { font-size: .75rem; color: #9A8EAA; }
-.hbadge-refined {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: .64rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  background: #EDE9F5;
-  color: #6B5A9A;
-  margin-left: 6px;
-  vertical-align: middle;
+.recalcul-btn:hover:not(:disabled){ background:var(--navy-dk); }
+.recalcul-btn:disabled{ opacity:.35; cursor:not-allowed; }
+.recalcul-note{ font-size:.74rem; color:#9A8EAA; }
+/* badge historique */
+.hbadge{
+  display:inline-block;
+  padding:2px 7px;
+  border-radius:7px;
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-left:5px;
+  vertical-align:middle;
 }
-.history-refine-note {
-  font-size: .78rem;
-  color: #7F7A76;
-  background: #F8F6FD;
-  border-left: 3px solid var(--lav);
-  border-radius: 6px;
-  padding: 6px 10px;
-  margin-top: 2px;
+.hbadge-refined{ background:#EDE9F5; color:#6B5A9A; }
+.history-refine-note{
+  font-size:.78rem;
+  color:#7F7A76;
+  background:#F8F6FD;
+  border-left:3px solid var(--lav);
+  border-radius:6px;
+  padding:6px 10px;
 }
-.history-actions .tbtn { min-width: max-content !important; }
+.history-actions .tbtn{ min-width:max-content; }
 
 </style>
 </head>
@@ -1587,8 +1594,8 @@ function renderResults(r, refinementNote) {
   emptyEl.style.display   = "none";
   resultsEl.style.display = "flex";
 
-  const recalculBar = (currentTab !== "historique") ? renderRecalculBar(false, null) : "";
-  const finalHtml = html + recalculBar;
+  const bar = (currentTab !== "historique") ? renderRecalculBar(false, null) : "";
+  const finalHtml = html + bar;
   resultsEl.innerHTML = finalHtml;
 
   if (currentTab !== "historique") {
@@ -1999,50 +2006,50 @@ function copySmsPresta() {
 
 const CHIPS = {
   devis:  ["chantier au 3e sans ascenseur","surface réelle 32 m²","prévoir ragréage","rajouter marge sécurité","nom client : Dupont","prix déjà négocié"],
-  fourn:  ["client fournit le carrelage","prix déjà remisé","livraison incluse","quantité à revoir","gamme haut de gamme","commande urgente"],
+  fourn:  ["client fournit le carrelage","prix fournisseur déjà remisé","livraison incluse","quantité à revoir","gamme haut de gamme","commande urgente"],
   presta: ["prestataire pose uniquement","chantier au 3e sans ascenseur","prévoir ragréage","fournitures par le client","surface réelle 28 m²","accord oral à 900 € HT"]
 };
 
 function renderRecalculBar(fromHistory, historyId) {
   const tab = (currentTab === "historique") ? "devis" : currentTab;
-  const chips = (CHIPS[tab] || CHIPS.devis).map(c =>
-    `<span class="recalcul-chip" onclick="chipClick(this)">${c}</span>`
-  ).join("");
+  const chips = (CHIPS[tab] || CHIPS.devis)
+    .map(c => `<span class="recalcul-chip" onclick="chipClick(this)">${c}</span>`)
+    .join("");
 
-  const onBtn = fromHistory
+  const callFn = fromHistory
     ? `recalculFromHistory(${JSON.stringify(historyId)})`
     : "recalculCurrent()";
 
   const noteHisto = fromHistory
-    ? `<span class="recalcul-note">🗂️ La nouvelle version sera ajoutée à l'historique sans effacer l'originale.</span>`
+    ? `<span class="recalcul-note">🗂️ La nouvelle version sera ajoutée à l'historique — l'originale est conservée.</span>`
     : `<span class="recalcul-note">💾 Le résultat recalculé sera enregistré dans l'historique.</span>`;
 
   return `
-  <div class="recalcul-bar" id="recalcul-bar">
-    <div class="recalcul-bar-top">
-      <span class="recalcul-bar-label">🔄 Recalculer avec des précisions</span>
-    </div>
-    <div class="recalcul-chips">${chips}</div>
-    <div class="recalcul-row">
-      <textarea id="recalcul-input" class="recalcul-textarea"
-        placeholder="Ex : chantier au 3e sans ascenseur • surface réelle 32 m² • client fournit le carrelage • nom client : Martin…"
-      ></textarea>
-      <button class="recalcul-btn" id="recalcul-btn" onclick="${onBtn}">↗ Recalculer</button>
-    </div>
-    ${noteHisto}
-  </div>`;
+<div class="recalcul-bar" id="recalcul-bar">
+  <span class="recalcul-label">🔄 Recalculer avec des précisions</span>
+  <div class="recalcul-chips">${chips}</div>
+  <div class="recalcul-row">
+    <textarea id="recalcul-input" class="recalcul-textarea"
+      placeholder="Ex : chantier au 3e sans ascenseur • surface réelle 32 m² • client fournit le carrelage • nom client : Martin…"
+    ></textarea>
+    <button class="recalcul-btn" id="recalcul-btn" onclick="${callFn}">↗ Recalculer</button>
+  </div>
+  ${noteHisto}
+</div>`;
 }
 
 function chipClick(el) {
   const inp = document.getElementById("recalcul-input");
   if (!inp) return;
-  el.classList.toggle("active");
   const txt = el.textContent.trim();
+  el.classList.toggle("on");
   let val = inp.value.trim();
-  if (el.classList.contains("active")) {
+  if (el.classList.contains("on")) {
     inp.value = val ? val + " • " + txt : txt;
   } else {
-    inp.value = val.replace(" • " + txt, "").replace(txt + " • ", "").replace(txt, "").trim().replace(/^[•\s]+|[•\s]+$/g,"").trim();
+    // retire le chip du texte
+    val = val.replace("• " + txt, "").replace(txt + " •", "").replace(txt, "");
+    inp.value = val.replace(/^[\s•]+|[\s•]+$/g, "").trim();
   }
 }
 
@@ -2089,7 +2096,7 @@ async function recalculFromHistory(historyId) {
   const note = inp ? inp.value.trim() : "";
   if (!note) { showError("Ajoutez au moins une précision avant de recalculer."); return; }
   const item = getHistory().find(h => h.id === historyId);
-  if (!item) { showError("Analyse introuvable dans l'historique."); return; }
+  if (!item) { showError("Analyse introuvable."); return; }
   const btn = document.getElementById("recalcul-btn");
   if (btn) btn.disabled = true;
   currentTab = item.tab || "devis";
@@ -2188,19 +2195,14 @@ function renderHistory() {
         ${history.map(h => `
           <div class="history-card">
             <div class="history-card-top">
-              <div>
-                <div class="history-type">${h.type}</div>
+              <div class="history-card-meta">
+                <div class="history-type">${h.type}${h.isRefined ? '<span class="hbadge hbadge-refined">🔄 Recalculée</span>' : ''}</div>
                 <div class="history-file">${h.file}</div>
+                <div class="history-date">${h.date}</div>
               </div>
-              <div class="history-date">${h.date}</div>
             </div>
-
-            <div class="history-summary">
-              ${h.summary}
-              ${h.isRefined ? '<span class="hbadge-refined">🔄 Recalculée</span>' : ''}
-            </div>
+            <div class="history-summary">${h.summary}</div>
             ${h.refinementNote ? `<div class="history-refine-note">✏️ ${h.refinementNote}</div>` : ''}
-
             <div class="history-actions">
               <button class="tbtn tbtn-navy" onclick="openHistoryItem('${h.id}')">Ouvrir + Recalculer</button>
               <button class="tbtn tbtn-lav" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
@@ -2217,7 +2219,6 @@ function openHistoryItem(id) {
   const item = getHistory().find(h => h.id === id);
   if (!item) return;
 
-  // Restaure l'état pour recalculFromHistory
   currentTab        = item.tab || "devis";
   lastResult        = item.result || null;
   lastExtractedText = item.sourceText || "";
@@ -2228,7 +2229,7 @@ function openHistoryItem(id) {
 
   let extra = "";
   if (item.refinementNote) {
-    extra += `<div class="history-refine-note">✏️ Précisions : <em>${item.refinementNote}</em></div>`;
+    extra += `<div class="history-refine-note" style="margin-bottom:4px">✏️ Précisions utilisées : <em>${item.refinementNote}</em></div>`;
   }
   extra += renderRecalculBar(true, id);
   resultsEl.innerHTML = item.html + extra;
