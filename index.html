@@ -767,28 +767,53 @@ table.price-table th{
 }
 
 
-/* ===== CORRECTIF ZONES CLIQUABLES ===== */
-.file-pill{
+/* Les champs prestataire restent cliquables */
+.extra-fields,
+.extra-fields *{
   position:relative !important;
-  cursor:pointer !important;
-}
-
-.file-pill input[type="file"]{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
-  opacity:0 !important;
-  cursor:pointer !important;
   z-index:5 !important;
 }
 
-.extra-fields.show{
-  display:flex !important;
+.actions{
+  position:relative !important;
+  z-index:5 !important;
 }
 
-.field-input{
-  min-width:150px !important;
+
+/* ===== UPLOAD PROPRE ET STABLE ===== */
+.file-pill{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  height:34px !important;
+  padding:0 16px !important;
+  border:1.5px dashed var(--grey-lt) !important;
+  border-radius:18px !important;
+  cursor:pointer !important;
+  background:var(--white) !important;
+  z-index:1 !important;
+  overflow:visible !important;
+}
+
+.file-pill.has-file{
+  border-style:solid !important;
+  border-color:var(--green) !important;
+  background:#F0FAF5 !important;
+}
+
+.file-pill-text{
+  pointer-events:none !important;
+  white-space:nowrap !important;
+}
+
+#file-input{
+  display:none !important;
+}
+
+.toolbar > *{
+  flex-shrink:0 !important;
 }
 
 </style>
@@ -823,10 +848,10 @@ table.price-table th{
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <div class="file-pill" id="file-pill">
-    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
+  <label class="file-pill" id="file-pill" for="file-input">
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
-  </div>
+  </label>
+  <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="display:none" />
 
   <!-- Champs extra tabs 2 & 3 -->
   <div class="extra-fields" id="extra-fourn">
@@ -1578,7 +1603,7 @@ btnCopy.addEventListener("click", async () => {
 });
 
 btnReset.addEventListener("click", () => {
-  const newWindow = window.open(window.location.href, "_blank", "noopener,noreferrer");
+  const newWindow = window.open(window.location.href, "_blank");
   if (newWindow) newWindow.focus();
 });
   hideStatus(); hideResults();
@@ -1595,57 +1620,46 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 
 <!-- Correctif bouton prestataire + nouvelle analyse nouvel onglet -->
 
+
+
+
 <script>
-/* ===== CORRECTIF UPLOAD + CHAMPS PRESTATAIRE ===== */
-(function(){
+document.addEventListener("DOMContentLoaded", () => {
 
-  const filePillFix = document.getElementById("file-pill");
-  const fileInputFix = document.getElementById("file-input");
+  const fileInput = document.getElementById("file-input");
+  const fileText = document.getElementById("file-pill-text");
+  const btnAnalyze = document.getElementById("btn-analyze");
 
-  if (filePillFix && fileInputFix) {
-    filePillFix.addEventListener("click", function(e){
-      if (e.target !== fileInputFix) {
-        fileInputFix.click();
+  if(fileInput){
+
+    fileInput.addEventListener("change", () => {
+
+      if(fileInput.files && fileInput.files.length > 0){
+
+        const name = fileInput.files[0].name;
+
+        if(fileText){
+          fileText.textContent = "📄 " + name;
+        }
+
+        const pill = document.getElementById("file-pill");
+        if(pill){
+          pill.classList.add("has-file");
+        }
+
+        if(btnAnalyze){
+          btnAnalyze.disabled = false;
+          btnAnalyze.style.opacity = "1";
+          btnAnalyze.style.pointerEvents = "auto";
+        }
+
       }
+
     });
+
   }
 
-  function ensurePrestaFields(){
-    const extraPresta = document.getElementById("extra-presta");
-    if (!extraPresta) return;
-
-    if (!document.getElementById("inp-lot")) {
-      extraPresta.insertAdjacentHTML("beforeend",
-        '<input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot(s) : faïence, sol, peinture…" />'
-      );
-    }
-
-    if (!document.getElementById("inp-presta")) {
-      extraPresta.insertAdjacentHTML("beforeend",
-        '<input type="text" class="field-input w-presta" id="inp-presta" placeholder="Prestataire" />'
-      );
-    }
-
-    if (!document.getElementById("inp-note")) {
-      extraPresta.insertAdjacentHTML("beforeend",
-        '<input type="text" class="field-input w-note" id="inp-note" placeholder="Notes : contraintes, étage, surface…" />'
-      );
-    }
-  }
-
-  ensurePrestaFields();
-
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      ensurePrestaFields();
-      const extraPresta = document.getElementById("extra-presta");
-      if (extraPresta) {
-        extraPresta.classList.toggle("show", tab.dataset.tab === "presta");
-      }
-    });
-  });
-
-})();
+});
 </script>
 
 </body>
