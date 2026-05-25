@@ -998,13 +998,14 @@ table.price-table th{
 }
 
 .history-summary{
-  font-size:.95rem;
-  line-height:1.4;
+  font-size:.92rem;
+  line-height:1.45;
   color:#1E2630;
-  background:#FCFAF8;
+  background:#EDE8F0;
   border-left:4px solid var(--lav);
-  padding:10px 12px;
+  padding:10px 14px;
   border-radius:8px;
+  font-weight:500;
 }
 
 .history-actions{
@@ -1013,6 +1014,7 @@ table.price-table th{
   gap:8px;
   flex-wrap:wrap;
   justify-content:flex-start;
+  padding-top:2px;
 }
 
 .history-actions .tbtn{
@@ -2199,16 +2201,14 @@ function renderHistory() {
           <div class="history-card">
             <div class="history-card-top">
               <div class="history-card-meta">
-                <div class="history-type">${h.type}${h.isRefined ? '<span class="hbadge hbadge-refined">🔄 Recalculée</span>' : ''}</div>
+                <div class="history-type">${h.type}</div>
                 <div class="history-file">${h.file}</div>
                 <div class="history-date">${h.date}</div>
               </div>
             </div>
             <div class="history-summary">${h.summary}</div>
             <div class="history-actions">
-              <button class="tbtn tbtn-navy" onclick="openHistoryItem('${h.id}')">Ouvrir + Recalculer</button>
-              <button class="tbtn tbtn-lav" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
-              <button class="tbtn tbtn-ghost" onclick="copyHistoryItem('${h.id}')">Copier</button>
+              <button class="tbtn tbtn-navy" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
               <button class="tbtn tbtn-ghost" onclick="deleteHistoryItem('${h.id}')">Supprimer</button>
             </div>
           </div>
@@ -2229,12 +2229,7 @@ function openHistoryItem(id) {
   emptyEl.style.display = "none";
   resultsEl.style.display = "flex";
 
-  let extra = "";
-  if (item.refinementNote) {
-    extra += `<div class="history-refine-note" style="margin-bottom:4px">✏️ Précisions utilisées : <em>${item.refinementNote}</em></div>`;
-  }
-  extra += renderRecalculBar(true, id);
-  resultsEl.innerHTML = item.html + extra;
+  resultsEl.innerHTML = item.html + renderRecalculBar(true, id);
 
   btnCopy.style.display = "flex";
   btnReset.style.display = "flex";
