@@ -785,6 +785,10 @@
   const AI_MODEL   = "claude-sonnet-4-20250514";
   const AI_TOKENS  = 1000;
 
+  // ⬇️ REMPLACEZ par l'URL de votre Cloudflare Worker
+  // Exemple : "https://ab-renov-proxy.VOTRE-COMPTE.workers.dev"
+  const PROXY_URL  = "https://cool-cell-9dbd.abrenov35.workers.dev";
+
   /* Prompt système — Expert BTP + commercial AB RENOV */
   const SYSTEM_PROMPT = `Tu es un expert senior en bâtiment, rénovation intérieure, et développement commercial BTP.
 Tu travailles pour AB RENOV (Aménagement et Rénovation, Rennes). Ta mission : analyser les devis avant envoi client.
@@ -874,14 +878,15 @@ Structure exacte :
   async function callAI(devisText) {
     const userMsg = `Voici le contenu extrait du devis PDF à analyser pour AB RENOV :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nAnalyse ce devis et retourne le JSON.`;
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model:      AI_MODEL,
         max_tokens: AI_TOKENS,
         system:     SYSTEM_PROMPT,
-        messages:   [{ role: "user", content: userMsg }]
+        messages:   [{ role: "user", content: userMsg }],
+        // Le proxy Cloudflare ajoute automatiquement la clé API et les headers Anthropic
       })
     });
 
