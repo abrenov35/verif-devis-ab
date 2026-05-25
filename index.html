@@ -1107,6 +1107,106 @@ table.price-table th{
   min-width:max-content !important;
 }
 
+
+/* ===== BARRE ACTIONS CENTREE ===== */
+
+.toolbar{
+  width:100%;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:12px !important;
+  flex-wrap:wrap !important;
+  margin:18px auto 22px auto !important;
+}
+
+.toolbar-left{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:12px !important;
+  flex-wrap:wrap !important;
+  width:auto !important;
+}
+
+.toolbar-right{
+  display:none !important;
+}
+
+
+/* ===== KPI TOP BLOCS ===== */
+
+.top-kpis{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+  margin:8px 0 18px 0;
+}
+
+.kpi-card{
+  min-height:118px;
+  border-radius:18px;
+  padding:20px 22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  background:#fff;
+  border:1px solid #E5DDD4;
+  box-shadow:var(--shadow);
+}
+
+.kpi-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.88rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.kpi-value{
+  font-size:2.2rem;
+  font-weight:800;
+  line-height:1;
+}
+
+.kpi-value span{
+  font-size:1rem;
+  opacity:.7;
+}
+
+.kpi-green{
+  border-top:5px solid #29B35B;
+}
+
+.kpi-green .kpi-value{
+  color:#29B35B;
+}
+
+.kpi-orange{
+  border-top:5px solid #F39B11;
+}
+
+.kpi-orange .kpi-value{
+  color:#F39B11;
+}
+
+.kpi-red{
+  border-top:5px solid #E54B4B;
+}
+
+.kpi-red .kpi-value{
+  color:#E54B4B;
+}
+
+@media (max-width:900px){
+
+  .top-kpis{
+    grid-template-columns:1fr;
+  }
+
+}
+
 </style>
 </head>
 <body>
@@ -1143,6 +1243,8 @@ table.price-table th{
 
 <!-- TOOLBAR -->
 <div class="toolbar">
+
+  <div class="toolbar-left">
   <div class="file-pill" id="file-pill">
     <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
