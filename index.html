@@ -1687,8 +1687,6 @@ btnReset.addEventListener("click", () => {
   const newWindow = window.open(window.location.href, "_blank");
   if (newWindow) newWindow.focus();
 });
-  hideStatus(); hideResults();
-});
 
 function showStatus(type, msg) {
   statusEl.className = type;
