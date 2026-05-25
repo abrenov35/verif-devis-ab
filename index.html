@@ -844,7 +844,14 @@ async function callAI(devisText) {
   const raw = data.content?.map(b => b.text || "").join("") || "";
   if (!raw) throw new Error("Réponse vide.");
   const clean = raw.replace(/```json|```/g, "").trim();
-  try { return JSON.parse(clean); }
+  try { console.log(clean);
+
+      try {
+        return JSON.parse(clean);
+      } catch(e) {
+        console.error("JSON invalide :", clean);
+        throw e;
+      } }
   catch { throw new Error("Format inattendu : " + raw.slice(0, 120)); }
 }
 
@@ -938,7 +945,7 @@ function renderDevis(r) {
 
       <div class="verdict-content">
         <div class="verdict-label">Vérification devis client</div>
-        <div class="verdict-text">${r.avis_global || "-"}</div>
+        <div class="verdict-text">${r.avis_global || "Analyse terminée"}</div>
       </div>
     </div>
 
@@ -1004,7 +1011,7 @@ function renderFourn(r) {
 
       <div class="verdict-content">
         <div class="verdict-label">Analyse fournisseur / revente</div>
-        <div class="verdict-text">${r.verdict || "-"}</div>
+        <div class="verdict-text">${r.verdict || "Analyse terminée"}</div>
       </div>
     </div>
 
@@ -1056,52 +1063,116 @@ function renderFourn(r) {
 
 
 /* ── PRESTATAIRE ── */
+
 function renderPresta(r) {
+
   const kv = [
-    ["Lot analysé",              r.lot||"—"],
-    ["Montant vendu client HT",  r.montant_client_ht||"—"],
-    ["Part fourniture estimée",  r.fourniture_ht||"—"],
-    ["Part main-d'œuvre estimée",r.mo_ht||"—"],
-    ["Fourchette prestataire",   r.presta_fourchette||"—"],
-    ["Maximum à ne pas dépasser",r.presta_max||"—"],
-    ["Marge AB RENOV estimée",   r.marge_estimee||"—"],
+    ["Lot analysé", r.lot||"—"],
+    ["Montant client HT", r.montant_client_ht||"—"],
+    ["Fourniture estimée", r.fourniture_ht||"—"],
+    ["Main-d'œuvre estimée", r.mo_ht||"—"],
+    ["Fourchette presta", r.presta_fourchette||"—"],
+    ["Maximum conseillé", r.presta_max||"—"],
+    ["Marge estimée", r.marge_estimee||"—"]
   ];
 
   const kvHtml = kv.map(([k,v]) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid #F2EBE3">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid #F2EBE3">
       <span style="font-size:.82rem;color:var(--grey)">${k}</span>
-      <span style="font-size:.88rem;font-weight:600;color:var(--navy)">${v}</span>
+      <span style="font-size:.95rem;font-weight:700;color:var(--navy)">${v}</span>
     </div>`).join("");
 
   return `
     <div class="verdict v-presta">
+
       <div class="verdict-badge">${r.emoji||"🔧"}</div>
+
       <div class="verdict-content">
         <div class="verdict-label">Analyse prestataire — Main-d'œuvre HT</div>
         <div class="verdict-text">${r.verdict||"—"}</div>
       </div>
+
     </div>
+
     <div class="sections">
+
       <div class="sec">
+
         <div class="sec-header">
           <div class="sec-icon" style="background:#E8EEF5">📊</div>
           <div class="sec-title">Synthèse financière HT</div>
         </div>
-        <div>${kvHtml}</div>
+
+        <div>
+          ${kvHtml}
+        </div>
+
       </div>
+
       <div style="display:flex;flex-direction:column;gap:12px">
+
         ${secCard("⚠️","Alertes marge","c-red", listItems(r.alertes,"c-red"))}
+
         ${secCard("❓","Points à clarifier","c-lav", listItems(r.a_clarifier,"c-lav"))}
+
       </div>
+
     </div>
+
     <div class="sec sec-conseil full">
+
+      <div class="sec-header">
+        <div class="sec-icon">💰</div>
+        <div class="sec-title">Offre prestataire conseillée</div>
+      </div>
+
+      <div class="sec-items">
+
+        <div class="item">
+          <div class="item-bullet"></div>
+          <span>
+            Au vu du devis signé, proposer une offre simple et sécurisée,
+            avec descriptif sommaire et prix volontairement bas,
+            afin de conserver une marge de manœuvre chantier.
+          </span>
+        </div>
+
+        <div class="item">
+          <div class="item-bullet"></div>
+          <span>
+            Ne pas intégrer :
+            fournitures, reprises imprévues, modifications client,
+            reprises supports lourdes ou prestations non visibles.
+          </span>
+        </div>
+
+        <div class="item">
+          <div class="item-bullet"></div>
+          <span>
+            Base conseillée :
+            privilégier la fourchette basse compatible avec un chantier propre.
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="sec sec-conseil full">
+
       <div class="sec-header">
         <div class="sec-icon">💡</div>
         <div class="sec-title">Recommandations avant validation</div>
       </div>
-      <div class="sec-items">${listItems(r.conseil,"")}</div>
-    </div>`;
+
+      <div class="sec-items">
+        ${listItems(r.conseil,"")}
+      </div>
+
+    </div>
+  `;
 }
+
 
 /* ── HELPERS HTML ── */
 function secCard(icon, title, colorClass, itemsHtml) {
