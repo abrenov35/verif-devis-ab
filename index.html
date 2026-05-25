@@ -959,11 +959,20 @@ table.price-table th{
   background:#fff;
   border-radius:14px;
   border:1px solid #E5DDD4;
-  padding:16px 18px;
+  padding:14px 18px;
   box-shadow:var(--shadow);
   display:flex;
-  flex-direction:column;
-  gap:10px;
+  flex-direction:row;
+  align-items:center;
+  gap:16px;
+}
+.history-card-body{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:14px;
 }
 
 .history-left{
@@ -999,14 +1008,15 @@ table.price-table th{
   display:flex;
   flex-direction:column;
   gap:2px;
+  flex-shrink:0;
+  min-width:120px;
 }
 .history-date{
-  font-size:.72rem;
-  color:rgba(255,255,255,.4);
+  font-size:.7rem;
+  color:#B0A8A0;
   white-space:nowrap;
   flex-shrink:0;
-  margin-left:4px;
-  align-self:center;
+  margin-left:6px;
 }
 
 .history-summary{
@@ -1024,14 +1034,14 @@ table.price-table th{
   display:flex;
   align-items:center;
   gap:8px;
-  flex-wrap:wrap;
-  justify-content:flex-start;
-  padding-top:2px;
+  flex-shrink:0;
 }
-
 .history-actions .tbtn{
-  min-width:110px;
+  min-width:auto;
   justify-content:center;
+}
+.history-actions .tbtn-navy{
+  margin-left:auto;
 }
 
 .history-empty{
@@ -1047,12 +1057,14 @@ table.price-table th{
 
   .history-card{
     flex-direction:column;
-    align-items:flex-start;
+    align-items:stretch;
+    gap:10px;
   }
+  .history-card-body{ flex-direction:column; }
   .history-actions{
-    flex-direction:row;
     flex-wrap:wrap;
   }
+  .history-actions .tbtn-navy{ margin-left:0; }
 
 }
 /* ===== BARRE RECALCUL IA ===== */
@@ -2240,10 +2252,10 @@ function renderHistory() {
               <div class="history-summary">${h.summary}</div>
             </div>
             <div class="history-actions">
-              <button class="tbtn tbtn-navy" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
               <button class="tbtn tbtn-lav" onclick="openHistoryItem('${h.id}')">Voir l'analyse</button>
               <button class="tbtn tbtn-ghost" onclick="deleteHistoryItem('${h.id}')">Supprimer</button>
               <span class="history-date">${h.date}</span>
+              <button class="tbtn tbtn-navy" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
             </div>
           </div>
         `).join("")}
