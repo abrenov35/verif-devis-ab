@@ -781,15 +781,6 @@ table.price-table th{
 
 
 
-/* ===== MULTI ONGLETS ===== */
-.multi-session-info{
-  padding:8px 24px 0 24px;
-  font-size:.78rem;
-  color:#7B746E;
-  letter-spacing:.03em;
-}
-
-
 /* ===== SMS PRESTATAIRE ===== */
 .sms-box{
   background:#FFFFFF !important;
@@ -805,67 +796,51 @@ table.price-table th{
 }
 
 
-/* ===== SIGNAL BTN ===== */
-.signal-btn{
-  opacity:.55 !important;
-  cursor:not-allowed !important;
+/* ===== STABILISATION BOUTONS ===== */
+.file-pill {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  border: 1.5px dashed var(--grey-lt) !important;
+  border-radius: 17px !important;
+  cursor: pointer !important;
+  background: var(--white) !important;
+  overflow: hidden !important;
 }
-
-
-/* ===== CORRECTION FINALE AB RENOV ===== */
-.file-pill{
-  position:relative !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  height:34px !important;
-  padding:0 16px !important;
-  border:1.5px dashed var(--grey-lt) !important;
-  border-radius:18px !important;
+.file-pill input[type="file"] {
+  position:absolute !important;
+  inset:0 !important;
+  opacity:0 !important;
   cursor:pointer !important;
-  background:var(--white) !important;
+  width:100% !important;
+  height:100% !important;
+  z-index:2 !important;
+}
+.file-pill-text {
+  pointer-events:none !important;
+  position:relative !important;
   z-index:1 !important;
 }
-.file-pill.has-file{
+.file-pill.has-file {
   border-style:solid !important;
   border-color:var(--green) !important;
   background:#F0FAF5 !important;
 }
-.file-pill.has-file .file-pill-text{
+.file-pill.has-file .file-pill-text {
   color:var(--green) !important;
 }
-.file-pill-text{
-  pointer-events:none !important;
-  white-space:nowrap !important;
-}
-#file-input{
-  position:absolute !important;
-  left:-9999px !important;
-  width:1px !important;
-  height:1px !important;
-  opacity:0 !important;
-}
-#btn-analyze:not(:disabled){
+#btn-analyze:not(:disabled) {
   opacity:1 !important;
-  pointer-events:auto !important;
   cursor:pointer !important;
-  background:var(--navy) !important;
-  color:#fff !important;
+  pointer-events:auto !important;
 }
-.extra-fields.show{
+.extra-fields.show {
   display:flex !important;
 }
-.sms-box{
-  background:#FFFFFF !important;
-  border-left-color:var(--green) !important;
-  font-size:1rem !important;
-  font-weight:700 !important;
-  color:#0C1E33 !important;
-}
-.sms-copy-btn{
-  width:max-content !important;
-}
-.signal-btn{
+.signal-btn {
   opacity:.55 !important;
   cursor:not-allowed !important;
 }
@@ -902,10 +877,10 @@ table.price-table th{
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <label class="file-pill" id="file-pill" for="file-input">
+  <div class="file-pill" id="file-pill">
+    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
-  </label>
-  <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
+  </div>
 
   <!-- Champs extra tabs 2 & 3 -->
   <div class="extra-fields" id="extra-fourn">
@@ -1129,22 +1104,18 @@ function updateEmptyState() {
 ================================================================ */
 
 
-
 fileInput.addEventListener("change", () => {
-  if (fileInput.files && fileInput.files.length > 0) {
+  if (fileInput.files && fileInput.files[0]) {
     loadFile(fileInput.files[0]);
   }
 });
 
 function loadFile(f) {
   currentFile = f;
-  const name = f.name.length > 30 ? f.name.slice(0, 28) + "…" : f.name;
+  const name = f.name.length > 26 ? f.name.slice(0, 24) + "…" : f.name;
   filePillTxt.textContent = "📄 " + name;
   filePill.classList.add("has-file");
   btnAnalyze.disabled = false;
-  btnAnalyze.removeAttribute("disabled");
-  btnAnalyze.style.opacity = "1";
-  btnAnalyze.style.pointerEvents = "auto";
   hideStatus();
   hideResults();
 }
@@ -1496,16 +1467,7 @@ function renderPresta(r) {
 
   const lotTxt = r.lot || "le lot concerné";
   const offreTxt = r.offre_basse_ht || r.presta_fourchette || r.presta_max || "la base basse indiquée";
-  const clientNom = r.client || r.nom_client || "NOM CLIENT";
-  const smsTxt = r.sms_prestataire || `Bonjour,
-
-Suite à l’étude du dossier ${clientNom}, nous pouvons vous proposer ce lot sur une base de ${offreTxt} HT en main-d’œuvre seule.
-
-Descriptif visible sur l’application Vertuoza.
-
-Hors prestations complémentaires ou imprévus éventuels.
-
-Dites-moi si cela peut vous convenir.`;
+  const smsTxt = r.sms_prestataire || `Bonjour, au vu du devis signé, je peux vous proposer ${lotTxt} sur une base de ${offreTxt} HT, main-d'œuvre seule, suivant descriptif transmis. Merci de me confirmer si cela peut vous convenir.`;
 
   return `
     <div class="verdict v-presta">
@@ -1586,15 +1548,9 @@ Dites-moi si cela peut vous convenir.`;
           <span id="sms-presta">${smsTxt}</span>
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px 14px">
-          <button class="tbtn tbtn-navy sms-copy-btn" onclick="copySmsPresta()">
-            Copier le SMS
-          </button>
-
-          <button class="tbtn tbtn-ghost signal-btn" disabled>
-            ↗ Envoyer via Signal
-          </button>
-        </div>
+        <button class="tbtn tbtn-navy sms-copy-btn" onclick="copySmsPresta()">
+          Copier le SMS
+        </button>
 
       </div>
 
