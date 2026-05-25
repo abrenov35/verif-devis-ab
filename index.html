@@ -1010,20 +1010,84 @@ table.price-table th{
 }
 
 
-/* ===== CHAMPS CONTEXTE ANALYSE ===== */
-#extra-devis .w-note,
-#extra-fourn .w-note,
-#extra-presta .w-note{
-  width:260px !important;
+/* ===== AFFINAGE APRES ANALYSE ===== */
+.refine-box{
+  margin-top:2px;
+  border:1.5px solid #D4CCE8;
+  background:#F8F6FD;
 }
 
-@media (max-width:900px){
-  #extra-devis .w-note,
-  #extra-fourn .w-note,
-  #extra-presta .w-note{
-    width:100% !important;
-    min-width:220px !important;
-  }
+.refine-body{
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.refine-textarea{
+  width:100%;
+  min-height:82px;
+  resize:vertical;
+  border:1.5px solid #D4CCE8;
+  border-radius:10px;
+  padding:12px 14px;
+  font-family:'Barlow', sans-serif;
+  font-size:.95rem;
+  color:var(--navy);
+  background:#fff;
+  outline:none;
+}
+
+.refine-textarea:focus{
+  border-color:var(--lav);
+}
+
+.refine-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.refine-help{
+  font-size:.82rem;
+  color:#7F7A76;
+}
+
+
+/* ===== AFFINAGE GRAND CHAMP REDACTION ===== */
+.refine-box{
+  border:2px solid #CFC4E6 !important;
+  background:#F8F6FD !important;
+}
+
+.refine-body{
+  padding:16px !important;
+}
+
+.refine-textarea{
+  min-height:170px !important;
+  font-size:1rem !important;
+  line-height:1.45 !important;
+  padding:14px 16px !important;
+  border-radius:12px !important;
+}
+
+.refine-actions .tbtn{
+  height:38px !important;
+  padding:0 20px !important;
+  font-size:.78rem !important;
+}
+
+.refine-help{
+  max-width:760px !important;
+  line-height:1.35 !important;
+}
+
+
+/* ===== RELANCE HISTORIQUE ===== */
+.history-actions .tbtn{
+  min-width:max-content !important;
 }
 
 </style>
@@ -1068,14 +1132,8 @@ table.price-table th{
   </div>
 
   <!-- Champs contexte par onglet -->
-  <div class="extra-fields show" id="extra-devis">
-    <input type="text" class="field-input w-note" id="inp-devis-client" placeholder="Client / chantier" />
-    <input type="text" class="field-input w-note" id="inp-devis-note" placeholder="Infos utiles : occupé, accès, urgence, doute…" />
-  </div>
-
-  <div class="extra-fields" id="extra-fourn">
-    <input type="text" class="field-input w-note" id="inp-fourn-lot" placeholder="Lot / produit concerné" />
-    <input type="text" class="field-input w-note" id="inp-fourn-note" placeholder="Infos utiles : gamme, marque, quantité, objectif marge…" />
+<div class="extra-fields" id="extra-fourn">
+    <!-- Pas de champ avant analyse : l'affinage se fait après résultat -->
   </div>
 
   <div class="extra-fields" id="extra-presta">
@@ -1247,6 +1305,8 @@ Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 let currentTab  = "devis";
 let currentFile = null;
 let plainText   = "";
+let lastExtractedText = "";
+let lastResult = null;
 
 /* ================================================================
    DOM
@@ -1271,7 +1331,6 @@ document.querySelectorAll(".tab").forEach(tab => {
     tab.classList.add("active");
     currentTab = tab.dataset.tab;
 
-    document.getElementById("extra-devis").classList.toggle("show", currentTab === "devis");
     document.getElementById("extra-fourn").classList.toggle("show",  currentTab === "fourn");
     document.getElementById("extra-presta").classList.toggle("show", currentTab === "presta");
 
@@ -1362,32 +1421,6 @@ async function callAI(devisText) {
 
   let userContext = "";
 
-  if (currentTab === "devis") {
-    const clientEl = document.getElementById("inp-devis-client");
-    const noteEl = document.getElementById("inp-devis-note");
-
-    const client = clientEl ? clientEl.value.trim() : "";
-    const note = noteEl ? noteEl.value.trim() : "";
-
-    userContext = [
-      client ? `Client / chantier : ${client}` : "",
-      note ? `Informations complémentaires : ${note}` : ""
-    ].filter(Boolean).join(" | ");
-  }
-
-  if (currentTab === "fourn") {
-    const lotEl = document.getElementById("inp-fourn-lot");
-    const noteEl = document.getElementById("inp-fourn-note");
-
-    const lot = lotEl ? lotEl.value.trim() : "";
-    const note = noteEl ? noteEl.value.trim() : "";
-
-    userContext = [
-      lot ? `Lot / produit concerné : ${lot}` : "",
-      note ? `Informations complémentaires : ${note}` : ""
-    ].filter(Boolean).join(" | ");
-  }
-
   if (currentTab === "presta") {
     const lotEl = document.getElementById("inp-lot");
     const prestaEl = document.getElementById("inp-presta");
@@ -1470,6 +1503,7 @@ btnAnalyze.addEventListener("click", async () => {
         text = "[OCR impossible. Analyse à partir des informations disponibles et du contexte saisi.]";
       }
     }
+    lastExtractedText = text;
     showStatus("loading", "Analyse IA en cours… (20-30 sec)");
     const result = await callAI(text);
     renderResults(result);
@@ -1501,12 +1535,15 @@ function renderResults(r) {
     plainText = buildPlainPresta(r);
   }
 
+  lastResult = r;
   emptyEl.style.display   = "none";
   resultsEl.style.display = "flex";
-  resultsEl.innerHTML = html;
+
+  const finalHtml = currentTab !== "historique" ? html + renderRefineBox() : html;
+  resultsEl.innerHTML = finalHtml;
 
   if (currentTab !== "historique") {
-    saveHistoryItem(r, html, plainText);
+    saveHistoryItem(r, finalHtml, plainText);
   }
 }
 
@@ -1906,6 +1943,78 @@ function copySmsPresta() {
 }
 
 
+
+/* ================================================================
+   AFFINAGE APRES ANALYSE
+================================================================ */
+function renderRefineBox() {
+  return `
+    <div class="sec full refine-box">
+      <div class="sec-header">
+        <div class="sec-icon">✍️</div>
+        <div class="sec-title">Compléter l’analyse</div>
+      </div>
+
+      <div class="refine-body">
+        <textarea id="refine-input" class="refine-textarea" placeholder="Ajoutez ici vos informations utiles pour corriger ou compléter l’analyse : nom client, contrainte chantier, surface réelle, accès, support, étage, gamme produit, budget prestataire, accord oral, point oublié, doute sur une ligne, remarque terrain…"></textarea>
+
+        <div class="refine-actions">
+          <button class="tbtn tbtn-navy" onclick="refineCurrentAnalysis()">Améliorer l’analyse</button>
+          <span class="refine-help">L’IA reprend l’analyse affichée, intègre vos informations utiles et réécrit le résultat.</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function refineCurrentAnalysis() {
+  const input = document.getElementById("refine-input");
+  const note = input ? input.value.trim() : "";
+
+  if (!note) {
+    showError("Ajoutez une précision avant d'améliorer l’analyse.");
+    return;
+  }
+
+  if (!lastResult) {
+    showError("Aucune analyse à améliorer.");
+    return;
+  }
+
+  showStatus("loading", "Amélioration de l’analyse…");
+
+  try {
+    const previous = JSON.stringify(lastResult);
+    const sourceText = lastExtractedText || "";
+
+    const refineText = `
+Analyse précédente :
+${previous}
+
+Informations utiles ajoutées par l’utilisateur :
+${note}
+
+Document initial :
+${sourceText.slice(0, 12000)}
+
+Tu dois refaire l’analyse du même onglet.
+Tu dois obligatoirement intégrer les informations utiles ajoutées par l’utilisateur dans le raisonnement et dans les résultats visibles.
+Si ces informations corrigent ou contredisent l’analyse précédente, corrige clairement l’analyse.
+Si elles ajoutent une réserve, un complément, un risque ou une précision, fais-la apparaître dans la section adaptée.
+Conserve un style court, terrain, concret.
+Retourne uniquement le même format JSON que demandé au départ.
+`;
+
+    const improved = await callAI(refineText);
+    renderResults(improved);
+    hideStatus();
+    btnCopy.style.display = "flex";
+    btnReset.style.display = "flex";
+  } catch (err) {
+    showError(err.message);
+  }
+}
+
 /* ================================================================
    HISTORIQUE LOCAL
 ================================================================ */
@@ -1944,7 +2053,8 @@ function saveHistoryItem(result, htmlResult, textResult) {
     summary: summary,
     result: result,
     html: htmlResult,
-    plain: textResult || ""
+    plain: textResult || "",
+    sourceText: lastExtractedText || ""
   };
 
   history.unshift(item);
@@ -1996,6 +2106,7 @@ function renderHistory() {
 
             <div class="history-actions">
               <button class="tbtn tbtn-navy" onclick="openHistoryItem('${h.id}')">Ouvrir</button>
+              <button class="tbtn tbtn-lav" onclick="rerunHistoryItem('${h.id}')">Relancer analyse</button>
               <button class="tbtn tbtn-lav" onclick="copyHistoryItem('${h.id}')">Copier</button>
               <button class="tbtn tbtn-ghost" onclick="deleteHistoryItem('${h.id}')">Supprimer</button>
             </div>
@@ -2015,6 +2126,52 @@ function openHistoryItem(id) {
   plainText = item.plain || "";
   btnCopy.style.display = "flex";
   btnReset.style.display = "flex";
+}
+
+
+async function rerunHistoryItem(id) {
+  const item = getHistory().find(h => h.id === id);
+
+  if (!item) {
+    showError("Analyse introuvable.");
+    return;
+  }
+
+  currentTab = item.tab || "devis";
+
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.tab === currentTab);
+  });
+
+  showStatus("loading", "Relance de l’analyse IA…");
+
+  try {
+
+    const relancePrompt = `
+Analyse précédente :
+${JSON.stringify(item.result)}
+
+Texte source du devis :
+${(item.sourceText || "").slice(0, 14000)}
+
+Tu dois refaire une analyse complète plus pertinente, plus précise et plus cohérente.
+Tu peux corriger les erreurs éventuelles de l’analyse précédente.
+Tu dois garder le même format JSON attendu pour cet onglet.
+Retourne uniquement le JSON.
+`;
+
+    const improved = await callAI(relancePrompt);
+
+    hideStatus();
+
+    renderResults(improved);
+
+    btnCopy.style.display = "flex";
+    btnReset.style.display = "flex";
+
+  } catch(err) {
+    showError(err.message);
+  }
 }
 
 function copyHistoryItem(id) {
