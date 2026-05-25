@@ -107,40 +107,39 @@
 
     /* ── TOOLBAR ── */
     .toolbar {
-      background: var(--navy);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      padding: 0 24px;
-      height: 44px;
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--grey-lt);
+      padding: 0 28px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: nowrap;
       flex-shrink: 0;
     }
-    /* Zone actions cachée dans tabs, on n'en a plus besoin */
     .tabs-actions { display: none !important; }
 
     .file-pill {
       position: relative;
-      display: flex; align-items: center; gap: 6px;
-      height: 30px; padding: 0 14px;
-      border: 1.5px dashed rgba(255,255,255,.3);
-      border-radius: 15px; cursor: pointer;
-      transition: all .2s; background: rgba(255,255,255,.08);
+      display: flex; align-items: center; gap: 7px;
+      height: 34px; padding: 0 16px;
+      border: 2px solid var(--grey-lt);
+      border-radius: 8px; cursor: pointer;
+      transition: all .2s; background: #F7F3EE;
     }
-    .file-pill:hover { border-color: var(--lav); background: rgba(164,149,195,.2); }
-    .file-pill.has-file { border-style:solid; border-color: #4FBF7F; background: rgba(79,191,127,.15); }
+    .file-pill:hover { border-color: var(--lav); background: var(--lav-bg); }
+    .file-pill.has-file { border-color: var(--green); background: #EDFAF3; }
     .file-pill input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     .file-pill-text {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .72rem;
-      letter-spacing: .07em; text-transform: uppercase;
-      color: rgba(255,255,255,.75); white-space: nowrap;
+      font-weight: 700; font-size: .75rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--navy); white-space: nowrap;
     }
-    .file-pill.has-file .file-pill-text { color: #4FBF7F; }
+    .file-pill.has-file .file-pill-text { color: var(--green); }
 
-    /* Extra fields (for tabs 2 & 3) */
+    /* Extra fields */
     .extra-fields {
       display: none;
       align-items: center;
@@ -150,50 +149,51 @@
     .extra-fields.show { display: flex; }
 
     .field-input {
-      height: 30px;
-      border: 1.5px solid rgba(255,255,255,.2);
-      border-radius: 15px;
+      height: 34px;
+      border: 2px solid var(--grey-lt);
+      border-radius: 8px;
       padding: 0 13px;
       font-family: 'Barlow', sans-serif;
-      font-size: .8rem;
-      color: var(--white);
-      background: rgba(255,255,255,.1);
+      font-size: .85rem;
+      color: var(--navy);
+      background: #F7F3EE;
       outline: none;
-      transition: border-color .15s;
+      transition: border-color .15s, background .15s;
     }
-    .field-input:focus { border-color: var(--lav); background: rgba(255,255,255,.15); }
-    .field-input::placeholder { color: rgba(255,255,255,.35); }
-    .field-input.w-lot { width: 150px; }
-    .field-input.w-context { width: 280px; }
+    .field-input:focus { border-color: var(--lav); background: #fff; }
+    .field-input::placeholder { color: #AAA09A; font-size:.82rem; }
+    .field-input.w-lot { width: 140px; }
+    .field-input.w-context { width: 340px; }
 
-    .tsep { width:1px; height:18px; background:rgba(255,255,255,.15); }
+    .tsep { width:1px; height:22px; background: var(--grey-lt); margin: 0 2px; }
 
     .tbtn {
       display: flex; align-items: center; gap: 6px;
-      height: 30px; padding: 0 15px;
-      border: none; border-radius: 15px;
+      height: 34px; padding: 0 18px;
+      border: 2px solid transparent;
+      border-radius: 8px;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .72rem;
-      letter-spacing: .08em; text-transform: uppercase;
+      font-weight: 800; font-size: .75rem;
+      letter-spacing: .1em; text-transform: uppercase;
       transition: all .15s; white-space: nowrap;
     }
     .tbtn:active { transform: scale(.97); }
-    .tbtn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
-    .tbtn-navy  { background: #9B82C8; color: var(--white); letter-spacing:.1em; }
-    .tbtn-navy:hover:not(:disabled)  { background: #8F7FB0; }
-    .tbtn-lav   { background: rgba(255,255,255,.15); color: var(--white); border: 1.5px solid rgba(255,255,255,.25); }
-    .tbtn-lav:hover:not(:disabled)   { background: rgba(255,255,255,.22); }
-    .tbtn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,.2); color: rgba(255,255,255,.7); }
-    .tbtn-ghost:hover:not(:disabled) { border-color: rgba(255,255,255,.5); color: var(--white); }
+    .tbtn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+    .tbtn-navy  { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .tbtn-navy:hover:not(:disabled)  { background: var(--navy-dk); border-color: var(--navy-dk); }
+    .tbtn-lav   { background: var(--lav); color: #fff; border-color: var(--lav); }
+    .tbtn-lav:hover:not(:disabled)   { background: #8F7FB0; border-color: #8F7FB0; }
+    .tbtn-ghost { background: transparent; border-color: var(--grey-lt); color: var(--navy); }
+    .tbtn-ghost:hover:not(:disabled) { border-color: var(--navy); }
 
     #status {
       display: none; align-items: center; gap: 7px;
-      font-size: .74rem; font-weight: 500;
-      padding: 4px 11px; border-radius: 14px;
+      font-size: .76rem; font-weight: 600;
+      padding: 5px 13px; border-radius: 8px;
     }
-    #status.loading { display:flex; background:rgba(164,149,195,.25); color:#C8BCDF; }
-    #status.error   { display:flex; background:rgba(208,57,43,.22); color:#FF8878; max-width:360px; }
+    #status.loading { display:flex; background: var(--lav-bg); color: #5B44A0; }
+    #status.error   { display:flex; background: #FEF2F2; color: var(--red); max-width:360px; }
     .spinner {
       width:12px; height:12px;
       border:2px solid currentColor; border-top-color:transparent;
@@ -804,17 +804,18 @@ table.price-table th{
 
 
 /* ===== STABILISATION BOUTONS ===== */
+/* file-pill override — cohérent avec toolbar blanche */
 .file-pill {
   position: relative !important;
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  gap: 7px !important;
   height: 34px !important;
-  padding: 0 14px !important;
-  border: 1.5px dashed var(--grey-lt) !important;
-  border-radius: 17px !important;
+  padding: 0 16px !important;
+  border: 2px solid var(--grey-lt) !important;
+  border-radius: 8px !important;
   cursor: pointer !important;
-  background: var(--white) !important;
+  background: #F7F3EE !important;
   overflow: hidden !important;
 }
 .file-pill input[type="file"] {
@@ -830,14 +831,16 @@ table.price-table th{
   pointer-events:none !important;
   position:relative !important;
   z-index:1 !important;
+  font-size:.75rem !important;
+  font-weight:700 !important;
+  color: var(--navy) !important;
 }
 .file-pill.has-file {
-  border-style:solid !important;
-  border-color:var(--green) !important;
-  background:#F0FAF5 !important;
+  border-color: var(--green) !important;
+  background: #EDFAF3 !important;
 }
 .file-pill.has-file .file-pill-text {
-  color:var(--green) !important;
+  color: var(--green) !important;
 }
 #btn-analyze:not(:disabled) {
   opacity:1 !important;
@@ -1172,15 +1175,15 @@ table.price-table th{
 <div class="tabs">
   <button class="tab t-devis active" data-tab="devis">
     <div class="tab-dot"></div>
-    Vérification devis client
+    Devis client
   </button>
   <button class="tab t-fourn" data-tab="fourn">
     <div class="tab-dot"></div>
-    Devis fournisseur / Revente
+    Devis fournisseur
   </button>
   <button class="tab t-presta" data-tab="presta">
     <div class="tab-dot"></div>
-    Prestataire main-d'œuvre
+    Prestataire
   </button>
   <button class="tab t-histo" data-tab="historique">
     <div class="tab-dot"></div>
@@ -1661,7 +1664,7 @@ const surveillances = Array.isArray(r.points_surveillance)
       <div class="verdict-badge">${r.emoji || "🟠"}</div>
 
       <div class="verdict-content">
-        <div class="verdict-label">Vérification devis client</div>
+        <div class="verdict-label">Devis client</div>
         <div class="verdict-text">${r.avis_global || "Analyse terminée"}</div>
       </div>
     </div>
