@@ -107,93 +107,93 @@
 
     /* ── TOOLBAR ── */
     .toolbar {
-      background: #FFFFFF;
-      border-bottom: 2px solid var(--grey-lt);
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,.07);
       padding: 0 28px;
-      height: 48px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: nowrap;
       flex-shrink: 0;
     }
     .tabs-actions { display: none !important; }
 
+    /* pill fichier */
     .file-pill {
       position: relative;
       display: flex; align-items: center; gap: 7px;
-      height: 34px; padding: 0 16px;
-      border: 2px solid var(--grey-lt);
-      border-radius: 8px; cursor: pointer;
-      transition: all .2s; background: #F7F3EE;
+      height: 32px; padding: 0 14px;
+      border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 4px; cursor: pointer;
+      transition: all .2s; background: rgba(255,255,255,.06);
     }
-    .file-pill:hover { border-color: var(--lav); background: var(--lav-bg); }
-    .file-pill.has-file { border-color: var(--green); background: #EDFAF3; }
+    .file-pill:hover { border-color: var(--lav); background: rgba(164,149,195,.18); }
+    .file-pill.has-file { border-color: #4FBF7F; background: rgba(79,191,127,.12); }
     .file-pill input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     .file-pill-text {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .75rem;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: var(--navy); white-space: nowrap;
+      font-weight: 700; font-size: .72rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.8); white-space: nowrap;
     }
-    .file-pill.has-file .file-pill-text { color: var(--green); }
+    .file-pill.has-file .file-pill-text { color: #4FBF7F; }
 
-    /* Extra fields */
+    /* champs contexte */
     .extra-fields {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
+      display: none; align-items: center;
+      gap: 8px; flex-wrap: nowrap;
     }
     .extra-fields.show { display: flex; }
 
     .field-input {
-      height: 34px;
-      border: 2px solid var(--grey-lt);
-      border-radius: 8px;
-      padding: 0 13px;
+      height: 32px;
+      border: 1.5px solid rgba(255,255,255,.2);
+      border-radius: 4px;
+      padding: 0 12px;
       font-family: 'Barlow', sans-serif;
-      font-size: .85rem;
-      color: var(--navy);
-      background: #F7F3EE;
+      font-size: .82rem;
+      color: #fff;
+      background: rgba(255,255,255,.08);
       outline: none;
       transition: border-color .15s, background .15s;
     }
-    .field-input:focus { border-color: var(--lav); background: #fff; }
-    .field-input::placeholder { color: #AAA09A; font-size:.82rem; }
-    .field-input.w-lot { width: 140px; }
-    .field-input.w-context { width: 340px; }
+    .field-input:focus { border-color: var(--lav); background: rgba(255,255,255,.13); }
+    .field-input::placeholder { color: rgba(255,255,255,.3); font-size:.8rem; }
+    .field-input.w-lot { width: 130px; }
+    .field-input.w-context { width: 320px; }
 
-    .tsep { width:1px; height:22px; background: var(--grey-lt); margin: 0 2px; }
+    .tsep { width:1px; height:20px; background: rgba(255,255,255,.15); margin: 0 2px; }
 
+    /* boutons toolbar */
     .tbtn {
       display: flex; align-items: center; gap: 6px;
-      height: 34px; padding: 0 18px;
-      border: 2px solid transparent;
-      border-radius: 8px;
+      height: 32px; padding: 0 16px;
+      border: 1.5px solid transparent;
+      border-radius: 4px;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; font-size: .75rem;
-      letter-spacing: .1em; text-transform: uppercase;
+      font-weight: 800; font-size: .72rem;
+      letter-spacing: .12em; text-transform: uppercase;
       transition: all .15s; white-space: nowrap;
     }
     .tbtn:active { transform: scale(.97); }
-    .tbtn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
-    .tbtn-navy  { background: var(--navy); color: #fff; border-color: var(--navy); }
-    .tbtn-navy:hover:not(:disabled)  { background: var(--navy-dk); border-color: var(--navy-dk); }
-    .tbtn-lav   { background: var(--lav); color: #fff; border-color: var(--lav); }
-    .tbtn-lav:hover:not(:disabled)   { background: #8F7FB0; border-color: #8F7FB0; }
-    .tbtn-ghost { background: transparent; border-color: var(--grey-lt); color: var(--navy); }
-    .tbtn-ghost:hover:not(:disabled) { border-color: var(--navy); }
+    .tbtn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
+    .tbtn-navy  { background: var(--lav); color: #fff; border-color: var(--lav); }
+    .tbtn-navy:hover:not(:disabled)  { background: #8A74B8; border-color: #8A74B8; }
+    .tbtn-lav   { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.28); }
+    .tbtn-lav:hover:not(:disabled)   { background: rgba(255,255,255,.18); }
+    .tbtn-ghost { background: transparent; border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.75); }
+    .tbtn-ghost:hover:not(:disabled) { border-color: rgba(255,255,255,.5); color: #fff; }
 
     #status {
       display: none; align-items: center; gap: 7px;
-      font-size: .76rem; font-weight: 600;
-      padding: 5px 13px; border-radius: 8px;
+      font-size: .72rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 4px;
     }
-    #status.loading { display:flex; background: var(--lav-bg); color: #5B44A0; }
-    #status.error   { display:flex; background: #FEF2F2; color: var(--red); max-width:360px; }
+    #status.loading { display:flex; background: rgba(164,149,195,.25); color: #C8BCDF; }
+    #status.error   { display:flex; background: rgba(208,57,43,.22); color: #FF8878; max-width:340px; }
     .spinner {
       width:12px; height:12px;
       border:2px solid currentColor; border-top-color:transparent;
@@ -804,18 +804,18 @@ table.price-table th{
 
 
 /* ===== STABILISATION BOUTONS ===== */
-/* file-pill override — cohérent avec toolbar blanche */
+/* file-pill override — toolbar navy */
 .file-pill {
   position: relative !important;
   display: flex !important;
   align-items: center !important;
   gap: 7px !important;
-  height: 34px !important;
-  padding: 0 16px !important;
-  border: 2px solid var(--grey-lt) !important;
-  border-radius: 8px !important;
+  height: 32px !important;
+  padding: 0 14px !important;
+  border: 1.5px solid rgba(255,255,255,.22) !important;
+  border-radius: 4px !important;
   cursor: pointer !important;
-  background: #F7F3EE !important;
+  background: rgba(255,255,255,.06) !important;
   overflow: hidden !important;
 }
 .file-pill input[type="file"] {
@@ -831,16 +831,18 @@ table.price-table th{
   pointer-events:none !important;
   position:relative !important;
   z-index:1 !important;
-  font-size:.75rem !important;
+  font-size:.72rem !important;
   font-weight:700 !important;
-  color: var(--navy) !important;
+  letter-spacing:.1em !important;
+  text-transform:uppercase !important;
+  color: rgba(255,255,255,.8) !important;
 }
 .file-pill.has-file {
-  border-color: var(--green) !important;
-  background: #EDFAF3 !important;
+  border-color: #4FBF7F !important;
+  background: rgba(79,191,127,.12) !important;
 }
 .file-pill.has-file .file-pill-text {
-  color: var(--green) !important;
+  color: #4FBF7F !important;
 }
 #btn-analyze:not(:disabled) {
   opacity:1 !important;
@@ -999,10 +1001,12 @@ table.price-table th{
   gap:2px;
 }
 .history-date{
-  font-size:.76rem;
-  color:#7F7A76;
+  font-size:.72rem;
+  color:rgba(255,255,255,.4);
   white-space:nowrap;
   flex-shrink:0;
+  margin-left:4px;
+  align-self:center;
 }
 
 .history-summary{
@@ -1279,6 +1283,12 @@ Réponse :
 - aucune littérature
 - uniquement du concret métier
 
+IMPORTANT : chaque élément des tableaux points_surveillance, risques et points_positifs doit commencer par un emoji adapté :
+- 🔴 point critique bloquant
+- ⚠️ vigilance ou incohérence
+- ✅ point positif ou cohérent
+- 💡 conseil ou observation utile
+
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1287,13 +1297,16 @@ Retourne UNIQUEMENT un JSON valide :
   "position_marche": "correct",
   "marge": "correcte",
   "points_surveillance": [
-    "Faïence probablement sous-chiffrée."
+    "⚠️ Faïence probablement sous-chiffrée.",
+    "🔴 Poste dépose non prévu au devis."
   ],
   "risques": [
-    "Temps plomberie sous-estimé."
+    "⚠️ Temps plomberie sous-estimé.",
+    "🔴 Absence de réserve imprévus."
   ],
   "points_positifs": [
-    "Cuisine cohérente marché Rennes."
+    "✅ Cuisine cohérente marché Rennes.",
+    "✅ TVA bien appliquée."
   ]
 }
 
@@ -1312,6 +1325,12 @@ Objectif :
 - détecter oublis accessoires
 - détecter produits risqués SAV
 
+IMPORTANT : chaque élément des tableaux alertes et conseil doit commencer par un emoji adapté :
+- 🔴 problème critique ou prix aberrant
+- ⚠️ vigilance, oubli probable ou risque SAV
+- ✅ point cohérent ou bon rapport qualité/prix
+- 💡 conseil ou opportunité commerciale
+
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1327,10 +1346,12 @@ Retourne UNIQUEMENT un JSON valide :
     }
   ],
   "alertes": [
-    "Accessoires probablement absents."
+    "⚠️ Accessoires probablement absents.",
+    "🔴 Coeff trop bas sur carrelage grand format."
   ],
   "conseil": [
-    "Marge correcte."
+    "✅ Marge correcte sur la porte coulissante.",
+    "💡 Prévoir joint de dilatation à chiffrer en option."
   ]
 }
 
@@ -1340,6 +1361,13 @@ presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (R
 Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
 Toutes les valeurs doivent être en HT uniquement. Protège toujours la marge AB RENOV.
 Contexte fourni par l'utilisateur (lot, prestataire, notes) : {CONTEXT}
+
+IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit commencer par un emoji adapté :
+- 🔴 risque critique marge ou dépassement
+- ⚠️ vigilance ou point flou à surveiller
+- ❓ question à clarifier avant de valider
+- ✅ point favorable ou confirmé
+- 💡 conseil ou recommandation terrain
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
@@ -1352,9 +1380,9 @@ Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
   "presta_fourchette": "fourchette basse – haute conseillée HT",
   "presta_max": "montant maximum à ne pas dépasser HT",
   "marge_estimee": "marge AB RENOV estimée si respecté",
-  "alertes": ["alerte marge 1", "point à clarifier 1"],
-  "a_clarifier": ["point à clarifier avant validation 1", "..."],
-  "conseil": ["recommandation 1", "recommandation 2"],
+  "alertes": ["🔴 risque marge critique", "⚠️ point de vigilance"],
+  "a_clarifier": ["❓ point à clarifier avant validation", "❓ ..."],
+  "conseil": ["✅ point positif ou validé", "💡 recommandation terrain"],
   "client": "nom du client si visible dans le devis, sinon NOM CLIENT",
   "sms_prestataire": "Bonjour, pour le dossier NOM CLIENT, je peux proposer 1500 € HT pour le lot concerné en main-d'œuvre seule, suivant descriptif visible sur Vertuoza. Fournitures fournies par AB RENOV. Hors sujétions imprévues et prestations non prévues au descriptif. Accord ?",
   "offre_basse_ht": "montant bas HT conseillé"
@@ -2208,13 +2236,14 @@ function renderHistory() {
               <div class="history-card-meta">
                 <div class="history-type">${h.type}</div>
                 <div class="history-file">${h.file}</div>
-                <div class="history-date">${h.date}</div>
               </div>
               <div class="history-summary">${h.summary}</div>
             </div>
             <div class="history-actions">
               <button class="tbtn tbtn-navy" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
+              <button class="tbtn tbtn-lav" onclick="openHistoryItem('${h.id}')">Voir l'analyse</button>
               <button class="tbtn tbtn-ghost" onclick="deleteHistoryItem('${h.id}')">Supprimer</button>
+              <span class="history-date">${h.date}</span>
             </div>
           </div>
         `).join("")}
