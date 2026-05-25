@@ -1009,6 +1009,23 @@ table.price-table th{
   border:1px dashed #D8CEC5;
 }
 
+
+/* ===== CHAMPS CONTEXTE ANALYSE ===== */
+#extra-devis .w-note,
+#extra-fourn .w-note,
+#extra-presta .w-note{
+  width:260px !important;
+}
+
+@media (max-width:900px){
+  #extra-devis .w-note,
+  #extra-fourn .w-note,
+  #extra-presta .w-note{
+    width:100% !important;
+    min-width:220px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1050,15 +1067,21 @@ table.price-table th{
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
   </div>
 
-  <!-- Champs extra tabs 2 & 3 -->
+  <!-- Champs contexte par onglet -->
+  <div class="extra-fields show" id="extra-devis">
+    <input type="text" class="field-input w-note" id="inp-devis-client" placeholder="Client / chantier" />
+    <input type="text" class="field-input w-note" id="inp-devis-note" placeholder="Infos utiles : occupé, accès, urgence, doute…" />
+  </div>
+
   <div class="extra-fields" id="extra-fourn">
-    <!-- Pas de champ supplémentaire pour fournisseur -->
+    <input type="text" class="field-input w-note" id="inp-fourn-lot" placeholder="Lot / produit concerné" />
+    <input type="text" class="field-input w-note" id="inp-fourn-note" placeholder="Infos utiles : gamme, marque, quantité, objectif marge…" />
   </div>
 
   <div class="extra-fields" id="extra-presta">
     <input type="text" class="field-input w-lot"    id="inp-lot"    placeholder="Lot (ex: faïence, plomberie…)" />
     <input type="text" class="field-input w-presta" id="inp-presta" placeholder="Nom du prestataire" />
-    <input type="text" class="field-input w-note"   id="inp-note"   placeholder="Notes libres…" />
+    <input type="text" class="field-input w-note"   id="inp-note"   placeholder="Infos utiles : surface, étage, support, accès, contraintes…" />
   </div>
 
   <div class="tsep"></div>
@@ -1248,6 +1271,7 @@ document.querySelectorAll(".tab").forEach(tab => {
     tab.classList.add("active");
     currentTab = tab.dataset.tab;
 
+    document.getElementById("extra-devis").classList.toggle("show", currentTab === "devis");
     document.getElementById("extra-fourn").classList.toggle("show",  currentTab === "fourn");
     document.getElementById("extra-presta").classList.toggle("show", currentTab === "presta");
 
@@ -1336,7 +1360,34 @@ async function extractImageText(file) {
 async function callAI(devisText) {
   let systemPrompt = PROMPTS[currentTab];
 
-  // Inject context for presta tab
+  let userContext = "";
+
+  if (currentTab === "devis") {
+    const clientEl = document.getElementById("inp-devis-client");
+    const noteEl = document.getElementById("inp-devis-note");
+
+    const client = clientEl ? clientEl.value.trim() : "";
+    const note = noteEl ? noteEl.value.trim() : "";
+
+    userContext = [
+      client ? `Client / chantier : ${client}` : "",
+      note ? `Informations complémentaires : ${note}` : ""
+    ].filter(Boolean).join(" | ");
+  }
+
+  if (currentTab === "fourn") {
+    const lotEl = document.getElementById("inp-fourn-lot");
+    const noteEl = document.getElementById("inp-fourn-note");
+
+    const lot = lotEl ? lotEl.value.trim() : "";
+    const note = noteEl ? noteEl.value.trim() : "";
+
+    userContext = [
+      lot ? `Lot / produit concerné : ${lot}` : "",
+      note ? `Informations complémentaires : ${note}` : ""
+    ].filter(Boolean).join(" | ");
+  }
+
   if (currentTab === "presta") {
     const lotEl = document.getElementById("inp-lot");
     const prestaEl = document.getElementById("inp-presta");
@@ -1345,15 +1396,19 @@ async function callAI(devisText) {
     const lot = lotEl ? lotEl.value.trim() : "";
     const presta = prestaEl ? prestaEl.value.trim() : "";
     const note = noteEl ? noteEl.value.trim() : "";
-    const ctx = [
-      lot    ? `Lot : ${lot}`         : "",
+
+    userContext = [
+      lot ? `Lot : ${lot}` : "",
       presta ? `Prestataire : ${presta}` : "",
-      note   ? `Notes : ${note}`      : ""
-    ].filter(Boolean).join(" | ") || "Aucun contexte fourni.";
-    systemPrompt = systemPrompt.replace("{CONTEXT}", ctx);
+      note ? `Informations complémentaires : ${note}` : ""
+    ].filter(Boolean).join(" | ");
+
+    systemPrompt = systemPrompt.replace("{CONTEXT}", userContext || "Aucun contexte fourni.");
   }
 
-  const userMsg = `Voici le contenu du document à analyser :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
+  const contextBlock = userContext ? `\n\nContexte saisi par l’utilisateur :\n${userContext}\n` : "";
+
+  const userMsg = `Voici le contenu du document à analyser :${contextBlock}\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
 
   const resp = await fetch(PROXY_URL, {
     method: "POST",
