@@ -6,7 +6,7 @@
   <title>AB RENOV — Vérificateur de Devis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     :root {
@@ -16,19 +16,17 @@
       --lav:     #A495C3;
       --lav-bg:  #F0EDF8;
       --white:   #FFFFFF;
-      --grey:    #8A8A8A;
+      --grey:    #9A9A9A;
       --grey-lt: #E8E0D8;
-      --red:     #C0392B;
-      --orange:  #C0622B;
-      --green:   #1E6B4A;
-      --r: 8px;
-      --shadow: 0 2px 16px rgba(22,45,73,.08);
-      --shadow-lg: 0 6px 32px rgba(22,45,73,.14);
+      --red:     #D0392B;
+      --orange:  #D0622B;
+      --green:   #1E7A4A;
+      --gold:    #9B7B1A;
+      --r: 10px;
+      --shadow: 0 2px 16px rgba(22,45,73,.07);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
-
     body {
       font-family: 'Barlow', sans-serif;
       background: var(--cream);
@@ -38,368 +36,326 @@
       flex-direction: column;
     }
 
-    /* ── HEADER ── */
+    /* HEADER */
     header {
       background: var(--navy);
-      height: 56px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
       flex-shrink: 0;
     }
-
-    .logo-wrap { display: flex; align-items: center; gap: 12px; }
-
-    .logo-letters {
+    .logo {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 800;
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       color: var(--white);
       letter-spacing: .02em;
-    }
-    .logo-letters span { color: var(--lav); }
-
-    .logo-sep { width: 1px; height: 24px; background: rgba(255,255,255,.18); }
-
-    .logo-sub {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-    .logo-sub-top {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: .58rem;
-      font-weight: 400;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.4);
-    }
-    .logo-sub-bot {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--lav);
-    }
-
-    .header-tag {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: .62rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.28);
-    }
-
-    /* ── TOOLBAR ── */
-    .toolbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--grey-lt);
-      padding: 10px 28px;
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
+    }
+    .logo span { color: var(--lav); }
+    .logo-pipe { width:1px; height:22px; background:rgba(255,255,255,.18); }
+    .logo-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--lav);
+      opacity: .8;
+    }
+    .header-right {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-lt);
+      padding: 9px 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       flex-shrink: 0;
     }
 
-    /* File pill */
     .file-pill {
       position: relative;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
+      height: 34px;
       padding: 0 14px;
-      height: 36px;
       border: 1.5px dashed var(--grey-lt);
-      border-radius: 20px;
+      border-radius: 17px;
       cursor: pointer;
       transition: all .2s;
       background: #FDFAF7;
-      white-space: nowrap;
     }
     .file-pill:hover { border-color: var(--lav); background: var(--lav-bg); }
-    .file-pill.has-file {
-      border-style: solid;
-      border-color: var(--green);
-      background: #F0FAF5;
-    }
-    .file-pill input {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-    .file-pill-icon { font-size: .9rem; }
+    .file-pill.has-file { border-style: solid; border-color: var(--green); background: #F0FAF5; }
+    .file-pill input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .file-pill-text {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .06em;
+      font-size: .72rem;
+      letter-spacing: .07em;
       text-transform: uppercase;
       color: var(--navy);
+      white-space: nowrap;
     }
     .file-pill.has-file .file-pill-text { color: var(--green); }
 
-    /* Separator */
-    .toolbar-sep {
-      width: 1px;
-      height: 24px;
-      background: var(--grey-lt);
-    }
+    .tsep { width: 1px; height: 20px; background: var(--grey-lt); }
 
-    /* Toolbar buttons */
     .tbtn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      height: 36px;
-      padding: 0 16px;
-      border: none;
-      border-radius: 20px;
+      display: flex; align-items: center; gap: 6px;
+      height: 34px; padding: 0 16px;
+      border: none; border-radius: 17px;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      transition: all .15s;
-      white-space: nowrap;
+      font-weight: 700; font-size: .72rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      transition: all .15s; white-space: nowrap;
     }
     .tbtn:active { transform: scale(.97); }
-    .tbtn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
-
+    .tbtn:disabled { opacity: .32; cursor: not-allowed; transform: none; }
     .tbtn-navy { background: var(--navy); color: var(--white); }
     .tbtn-navy:hover:not(:disabled) { background: var(--navy-dk); }
-
-    .tbtn-lav { background: var(--lav); color: var(--white); }
+    .tbtn-lav  { background: var(--lav); color: var(--white); }
     .tbtn-lav:hover:not(:disabled) { background: #8F7FB0; }
-
-    .tbtn-ghost {
-      background: transparent;
-      border: 1.5px solid var(--grey-lt);
-      color: var(--navy);
-    }
+    .tbtn-ghost { background: transparent; border: 1.5px solid var(--grey-lt); color: var(--navy); }
     .tbtn-ghost:hover:not(:disabled) { border-color: var(--navy); }
 
-    /* Status inline */
     #status {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      font-size: .78rem;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 20px;
+      display: none; align-items: center; gap: 7px;
+      font-size: .76rem; font-weight: 500;
+      padding: 5px 13px; border-radius: 17px;
     }
     #status.loading { display: flex; background: var(--lav-bg); color: #5B44A0; }
-    #status.error   { display: flex; background: #FEF2F2; color: var(--red); max-width: 400px; }
-
+    #status.error   { display: flex; background: #FEF2F2; color: var(--red); }
     .spinner {
-      width: 13px; height: 13px;
-      border: 2px solid currentColor;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      flex-shrink: 0;
+      width: 12px; height: 12px;
+      border: 2px solid currentColor; border-top-color: transparent;
+      border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── CONTENT ── */
+    /* CONTENT */
     .content {
-      flex: 1;
-      padding: 28px 32px;
+      flex: 1; padding: 28px 32px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      display: flex; flex-direction: column; gap: 0;
     }
 
-    /* Empty */
+    /* EMPTY */
     #empty {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 10px;
-      color: var(--grey);
-      padding: 60px 20px;
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; gap: 10px; padding: 60px;
     }
-    .empty-icon { font-size: 2.4rem; opacity: .3; margin-bottom: 6px; }
+    .empty-icon { font-size: 2.5rem; opacity: .2; margin-bottom: 8px; }
     .empty-h {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      opacity: .3;
+      font-weight: 800; font-size: 1.1rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      opacity: .25;
     }
-    .empty-p { font-size: .82rem; max-width: 280px; line-height: 1.65; opacity: .6; }
+    .empty-p { font-size: .82rem; max-width: 260px; line-height: 1.6; opacity: .5; }
 
-    /* Results */
-    #results {
-      display: none;
-      flex-direction: column;
-      gap: 18px;
-      animation: fadeUp .35s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(10px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
+    /* RESULTS */
+    #results { display: none; flex-direction: column; gap: 20px; animation: fadeUp .35s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
-    /* Verdict */
-    .verdict-card {
+    /* ── VERDICT ── */
+    .verdict {
       background: var(--navy);
       border-radius: var(--r);
-      padding: 24px 28px;
+      padding: 20px 24px;
       display: flex;
-      gap: 18px;
-      align-items: flex-start;
-      box-shadow: var(--shadow-lg);
+      align-items: center;
+      gap: 16px;
     }
-    .v-emoji { font-size: 2rem; line-height: 1; flex-shrink: 0; }
-    .v-right { flex: 1; }
-    .v-tag {
+    .verdict-badge {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .verdict-content { flex: 1; }
+    .verdict-label {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 600;
-      font-size: .6rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--lav);
-      margin-bottom: 7px;
+      font-size: .58rem; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--lav); margin-bottom: 5px;
     }
-    .v-text {
-      font-size: .95rem;
-      line-height: 1.75;
-      color: rgba(255,255,255,.88);
-      font-weight: 300;
+    .verdict-text {
+      font-size: .92rem; line-height: 1.65;
+      color: rgba(255,255,255,.85); font-weight: 300;
     }
 
-    /* Grid */
-    .grid-2 {
+    /* ── SECTIONS GRID ── */
+    .sections {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
 
-    /* Section card */
     .sec {
       background: var(--white);
       border-radius: var(--r);
       box-shadow: var(--shadow);
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
-    .sec-head {
+
+    .sec-header {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 14px 18px 12px;
-      border-bottom: 1px solid #F0EAE2;
+      gap: 8px;
+      padding: 13px 18px;
+      border-bottom: 1px solid #F2EBE3;
     }
-    .sec-dot {
-      width: 7px; height: 7px;
+
+    .sec-icon {
+      width: 26px; height: 26px;
       border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem;
       flex-shrink: 0;
     }
-    .sec-label {
+
+    .sec-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: .68rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+      font-weight: 700; font-size: .68rem;
+      letter-spacing: .12em; text-transform: uppercase;
       color: var(--grey);
     }
-    .sec-body {
-      padding: 16px 18px;
-      font-size: .87rem;
-      line-height: 1.85;
-      color: #2A2A2A;
-      white-space: pre-wrap;
-      font-weight: 400;
+
+    /* Items list */
+    .sec-items {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .dot-red    { background: #C0392B; }
-    .dot-orange { background: #C0622B; }
-    .dot-lav    { background: var(--lav); }
-    .dot-navy   { background: var(--navy); }
-    .dot-gold   { background: #9B7B1A; }
+    .item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 7px;
+      background: #FDFAF7;
+      border-left: 3px solid transparent;
+      font-size: .84rem;
+      line-height: 1.6;
+      color: #2A2A2A;
+    }
 
-    /* Conseil */
+    .item-bullet {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    /* Couleurs par section */
+    .sec-priority .item { border-color: #F5C6C2; background: #FEF8F7; }
+    .sec-priority .item-bullet { background: var(--red); }
+    .sec-priority .sec-icon { background: #FEE8E6; }
+
+    .sec-doublon .item { border-color: #F5D9C2; background: #FEF9F7; }
+    .sec-doublon .item-bullet { background: var(--orange); }
+    .sec-doublon .sec-icon { background: #FEEEE6; }
+
+    .sec-formul .item { border-color: #DDD6EE; background: #F8F6FD; }
+    .sec-formul .item-bullet { background: var(--lav); }
+    .sec-formul .sec-icon { background: var(--lav-bg); }
+
+    .sec-client .item { border-color: #C2CEDF; background: #F6F8FB; }
+    .sec-client .item-bullet { background: var(--navy); }
+    .sec-client .sec-icon { background: #E8EEF5; }
+
+    /* Formul items spéciaux avant/après */
+    .formul-item { flex-direction: column; gap: 6px; }
+    .formul-before {
+      font-size: .8rem; color: var(--red);
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .formul-after {
+      font-size: .8rem; color: var(--green);
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+
+    /* ── CONSEIL ── */
     .sec-conseil {
       background: var(--lav-bg);
       border: 1.5px solid #D4CCE8;
       border-radius: var(--r);
-      overflow: hidden;
     }
-    .sec-conseil .sec-head {
-      background: transparent;
-      border-bottom: 1px solid #D4CCE8;
+    .sec-conseil .sec-header {
+      border-bottom-color: #D4CCE8;
     }
+    .sec-conseil .sec-icon { background: #DDD6EE; }
+    .sec-conseil .item {
+      background: rgba(255,255,255,.6);
+      border-color: #C8BFE0;
+    }
+    .sec-conseil .item-bullet { background: var(--gold); }
 
-    /* ── FOOTER ── */
+    /* Full width */
+    .full { grid-column: 1 / -1; }
+
+    /* FOOTER */
     footer {
       text-align: center;
-      padding: 10px 28px;
+      padding: 10px;
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: .62rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--grey);
-      border-top: 1px solid var(--grey-lt);
+      font-size: .6rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--grey-lt);
       flex-shrink: 0;
     }
 
     @media (max-width: 800px) {
-      .grid-2 { grid-template-columns: 1fr; }
-      .content { padding: 20px 16px; }
-      .toolbar { padding: 8px 16px; }
-      .header-tag { display: none; }
+      .sections { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      .content { padding: 16px; }
+    }
+    @media (max-width: 560px) {
+      .header-right { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
-  <div class="logo-wrap">
-    <div class="logo-letters">AB<span> RENOV</span></div>
-    <div class="logo-sep"></div>
-    <div class="logo-sub">
-      <span class="logo-sub-top">Aménagement et Rénovation</span>
-      <span class="logo-sub-bot">Vérificateur de devis</span>
-    </div>
+  <div class="logo">
+    AB <span>RENOV</span>
+    <div class="logo-pipe"></div>
+    <span class="logo-sub">Vérificateur de devis</span>
   </div>
-  <div class="header-tag">Outil interne — Contrôle qualité</div>
+  <div class="header-right">Outil interne — Contrôle qualité</div>
 </header>
 
-<!-- TOOLBAR -->
 <div class="toolbar">
-
-  <!-- Sélecteur de fichier -->
   <div class="file-pill" id="file-pill">
     <input type="file" id="file-input" accept=".pdf" />
-    <span class="file-pill-icon">📄</span>
-    <span class="file-pill-text" id="file-pill-text">Choisir un PDF</span>
+    <span class="file-pill-text" id="file-pill-text">📄 Choisir un PDF</span>
   </div>
-
-  <div class="toolbar-sep"></div>
-
-  <!-- Bouton analyser -->
+  <div class="tsep"></div>
   <button class="tbtn tbtn-navy" id="btn-analyze" disabled>
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-      <circle cx="5.5" cy="5.5" r="4" stroke="white" stroke-width="1.3"/>
-      <path d="M9 9 L12 12" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <circle cx="5" cy="5" r="3.8" stroke="white" stroke-width="1.3"/>
+      <path d="M8.5 8.5L11 11" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
     </svg>
     Analyser
   </button>
-
-  <!-- Bouton copier (après analyse) -->
   <button class="tbtn tbtn-lav" id="btn-copy" style="display:none">
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
       <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1" stroke="white" stroke-width="1.2"/>
@@ -407,93 +363,86 @@
     </svg>
     Copier
   </button>
-
-  <!-- Nouvelle analyse -->
-  <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">
-    ↩ Nouvelle analyse
-  </button>
-
-  <!-- Status inline -->
+  <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↩ Nouveau</button>
   <div id="status">
     <div class="spinner"></div>
-    <span id="status-text">Analyse en cours…</span>
+    <span id="status-text">Analyse…</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <div id="empty">
+    <div class="empty-icon">📋</div>
+    <div class="empty-h">Aucun devis chargé</div>
+    <div class="empty-p">Choisissez un PDF et cliquez sur Analyser pour obtenir le compte rendu.</div>
+  </div>
+
+  <div id="results">
+
+    <!-- Verdict -->
+    <div class="verdict">
+      <div class="verdict-badge" id="v-emoji">📊</div>
+      <div class="verdict-content">
+        <div class="verdict-label">Verdict général</div>
+        <div class="verdict-text" id="v-verdict">—</div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="sections">
+
+      <!-- Priorités -->
+      <div class="sec sec-priority">
+        <div class="sec-header">
+          <div class="sec-icon">🔴</div>
+          <div class="sec-title">Points à corriger</div>
+        </div>
+        <div class="sec-items" id="v-priority-list"></div>
+      </div>
+
+      <!-- Doublons -->
+      <div class="sec sec-doublon">
+        <div class="sec-header">
+          <div class="sec-icon">🔁</div>
+          <div class="sec-title">Doublons &amp; incohérences</div>
+        </div>
+        <div class="sec-items" id="v-doublon-list"></div>
+      </div>
+
+      <!-- Formulations -->
+      <div class="sec sec-formul">
+        <div class="sec-header">
+          <div class="sec-icon">✏️</div>
+          <div class="sec-title">Formulations à améliorer</div>
+        </div>
+        <div class="sec-items" id="v-formul-list"></div>
+      </div>
+
+      <!-- Lecture client -->
+      <div class="sec sec-client">
+        <div class="sec-header">
+          <div class="sec-icon">👁️</div>
+          <div class="sec-title">Lecture client</div>
+        </div>
+        <div class="sec-items" id="v-client-list"></div>
+      </div>
+
+      <!-- Conseil -->
+      <div class="sec sec-conseil full">
+        <div class="sec-header">
+          <div class="sec-icon">💡</div>
+          <div class="sec-title">Conseil commercial final</div>
+        </div>
+        <div class="sec-items" id="v-conseil-list"></div>
+      </div>
+
+    </div>
   </div>
 
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-  <!-- Empty state -->
-  <div id="empty">
-    <div class="empty-icon">📋</div>
-    <div class="empty-h">Aucun devis chargé</div>
-    <div class="empty-p">Choisissez un fichier PDF ci-dessus et cliquez sur "Analyser" pour obtenir le compte rendu qualité.</div>
-  </div>
-
-  <!-- Results -->
-  <div id="results">
-
-    <!-- Verdict -->
-    <div class="verdict-card">
-      <div class="v-emoji" id="v-emoji">📊</div>
-      <div class="v-right">
-        <div class="v-tag">Verdict général</div>
-        <div class="v-text" id="v-verdict">—</div>
-      </div>
-    </div>
-
-    <!-- Grid 2x2 -->
-    <div class="grid-2">
-
-      <div class="sec">
-        <div class="sec-head">
-          <div class="sec-dot dot-red"></div>
-          <div class="sec-label">Points à corriger en priorité</div>
-        </div>
-        <div class="sec-body" id="v-priority">—</div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-head">
-          <div class="sec-dot dot-orange"></div>
-          <div class="sec-label">Doublons &amp; incohérences</div>
-        </div>
-        <div class="sec-body" id="v-doublon">—</div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-head">
-          <div class="sec-dot dot-lav"></div>
-          <div class="sec-label">Formulations à améliorer</div>
-        </div>
-        <div class="sec-body" id="v-formul">—</div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-head">
-          <div class="sec-dot dot-navy"></div>
-          <div class="sec-label">Lecture client</div>
-        </div>
-        <div class="sec-body" id="v-client">—</div>
-      </div>
-
-    </div>
-
-    <!-- Conseil full width -->
-    <div class="sec sec-conseil">
-      <div class="sec-head">
-        <div class="sec-dot dot-gold"></div>
-        <div class="sec-label">💡 Conseil commercial final</div>
-      </div>
-      <div class="sec-body" id="v-conseil">—</div>
-    </div>
-
-  </div><!-- /results -->
-
-</div><!-- /content -->
-
-<footer>AB RENOV — Aménagement et Rénovation &nbsp;|&nbsp; Outil interne de contrôle qualité devis &nbsp;|&nbsp; Confidentiel</footer>
+<footer>AB RENOV — Aménagement et Rénovation &nbsp;|&nbsp; Outil interne confidentiel</footer>
 
 <script>
   const AI_MODEL  = "claude-sonnet-4-5";
@@ -502,19 +451,22 @@
 
   const SYSTEM_PROMPT = `Tu es un expert senior en bâtiment, rénovation intérieure, et développement commercial BTP.
 Tu travailles pour AB RENOV (Aménagement et Rénovation, Rennes). Ta mission : analyser les devis avant envoi client.
-Ton objectif est opérationnel : identifier rapidement ce qui peut bloquer la signature, nuire à la crédibilité ou créer des doutes chez le client.
 
-Retourne UNIQUEMENT un objet JSON valide, sans markdown, sans texte avant ou après, sans backticks.
-Structure exacte :
+Retourne UNIQUEMENT un objet JSON valide, sans markdown, sans backticks.
+Structure exacte — chaque champ est un TABLEAU de courtes chaînes (max 2 lignes chacune), sauf emoji et verdict :
 {
-  "emoji": "une seule emoji représentant le niveau global du devis (✅ bon, ⚠️ améliorable, 🔴 problématique)",
-  "verdict": "Résumé synthétique en 3-5 phrases. Impression générale, niveau professionnel, point principal.",
-  "priority": "Liste bullet des corrections prioritaires. Format : • point 1\\n• point 2\\n...",
-  "doublon": "Doublons et incohérences détectés avec localisation. Si aucun : 'Aucun doublon ou incohérence significatif détecté.'",
-  "formul": "Formulations problématiques avec reformulations proposées. Format : ❌ Libellé actuel → ✅ Proposition améliorée.",
-  "client": "Ce que le client risque de comprendre, de mal interpréter ou de ressentir à la lecture. Objections probables.",
-  "conseil": "Un conseil commercial précis et actionnable pour rendre ce devis plus convaincant et faciliter la signature."
-}`;
+  "emoji": "✅ ou ⚠️ ou 🔴",
+  "verdict": "3 phrases max. Direct et synthétique.",
+  "priority": ["correction 1 courte", "correction 2 courte", "..."],
+  "doublon": ["doublon/incohérence 1", "doublon 2", "..."],
+  "formul": [
+    {"avant": "libellé actuel", "apres": "libellé amélioré"},
+    {"avant": "...", "apres": "..."}
+  ],
+  "client": ["ressenti/objection 1", "ressenti 2", "..."],
+  "conseil": ["action concrète 1", "action concrète 2", "action concrète 3"]
+}
+Si une section n'a rien à signaler, mettre un tableau avec un seul élément : ["Aucun problème détecté."]`;
 
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -539,7 +491,8 @@ Structure exacte :
 
   function loadFile(f) {
     currentFile = f;
-    filePillTxt.textContent = "📄 " + (f.name.length > 22 ? f.name.slice(0, 20) + "…" : f.name);
+    const name = f.name.length > 24 ? f.name.slice(0, 22) + "…" : f.name;
+    filePillTxt.textContent = "📄 " + name;
     filePill.classList.add("has-file");
     btnAnalyze.disabled = false;
     hideStatus(); hideResults();
@@ -551,15 +504,15 @@ Structure exacte :
     let text = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      text += content.items.map(item => item.str).join(" ") + "\n";
+      const c = await page.getTextContent();
+      text += c.items.map(x => x.str).join(" ") + "\n";
     }
     return text.trim();
   }
 
   async function callAI(devisText) {
-    const userMsg = `Voici le contenu extrait du devis PDF à analyser pour AB RENOV :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nAnalyse ce devis et retourne le JSON.`;
-    const response = await fetch(PROXY_URL, {
+    const userMsg = `Voici le devis PDF à analyser pour AB RENOV :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
+    const resp = await fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -568,13 +521,13 @@ Structure exacte :
         messages: [{ role: "user", content: userMsg }]
       })
     });
-    const data = await response.json();
+    const data = await resp.json();
     if (data.error) throw new Error(data.error.message || "Erreur API");
     const raw = data.content?.map(b => b.text || "").join("") || "";
-    if (!raw) throw new Error("Réponse vide. Vérifiez la clé API.");
+    if (!raw) throw new Error("Réponse vide.");
     const clean = raw.replace(/```json|```/g, "").trim();
     try { return JSON.parse(clean); }
-    catch { throw new Error("Format inattendu : " + raw.slice(0, 150)); }
+    catch { throw new Error("Format inattendu : " + raw.slice(0, 120)); }
   }
 
   btnAnalyze.addEventListener("click", async () => {
@@ -584,10 +537,10 @@ Structure exacte :
     showStatus("loading", "Lecture du PDF…");
     try {
       const text = await extractPdf(currentFile);
-      if (!text || text.length < 60) throw new Error("PDF vide ou scanné (image uniquement).");
-      showStatus("loading", "Analyse IA en cours… (20-30 sec)");
-      const result = await callAI(text);
-      showResults(result);
+      if (!text || text.length < 60) throw new Error("PDF vide ou scanné.");
+      showStatus("loading", "Analyse IA en cours…");
+      const r = await callAI(text);
+      showResults(r);
       hideStatus();
       btnCopy.style.display  = "flex";
       btnReset.style.display = "flex";
@@ -597,23 +550,64 @@ Structure exacte :
     }
   });
 
+  /* Render helpers */
+  function makeItems(container, items, type) {
+    container.innerHTML = "";
+    if (!Array.isArray(items) || items.length === 0) {
+      items = ["Aucun problème détecté."];
+    }
+
+    if (type === "formul") {
+      items.forEach(item => {
+        if (typeof item === "object" && item.avant) {
+          const div = document.createElement("div");
+          div.className = "item formul-item";
+          div.innerHTML = `
+            <div class="formul-before"><span>❌</span><span>${item.avant}</span></div>
+            <div class="formul-after"><span>✅</span><span>${item.apres || ""}</span></div>
+          `;
+          container.appendChild(div);
+        } else {
+          // fallback texte brut
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `<div class="item-bullet"></div><span>${item}</span>`;
+          container.appendChild(div);
+        }
+      });
+    } else {
+      items.forEach(txt => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<div class="item-bullet"></div><span>${txt}</span>`;
+        container.appendChild(div);
+      });
+    }
+  }
+
   function showResults(r) {
-    document.getElementById("v-emoji").textContent    = r.emoji    || "📊";
-    document.getElementById("v-verdict").textContent  = r.verdict  || "—";
-    document.getElementById("v-priority").textContent = r.priority || "—";
-    document.getElementById("v-doublon").textContent  = r.doublon  || "—";
-    document.getElementById("v-formul").textContent   = r.formul   || "—";
-    document.getElementById("v-client").textContent   = r.client   || "—";
-    document.getElementById("v-conseil").textContent  = r.conseil  || "—";
+    document.getElementById("v-emoji").textContent   = r.emoji   || "📊";
+    document.getElementById("v-verdict").textContent = r.verdict || "—";
+
+    makeItems(document.getElementById("v-priority-list"), r.priority, "list");
+    makeItems(document.getElementById("v-doublon-list"),  r.doublon,  "list");
+    makeItems(document.getElementById("v-formul-list"),   r.formul,   "formul");
+    makeItems(document.getElementById("v-client-list"),   r.client,   "list");
+    makeItems(document.getElementById("v-conseil-list"),  r.conseil,  "list");
+
+    // Plain text for copy
+    const flat = arr => Array.isArray(arr)
+      ? arr.map(x => typeof x === "object" ? `❌ ${x.avant} → ✅ ${x.apres}` : `• ${x}`).join("\n")
+      : arr;
 
     plainText = [
       "COMPTE RENDU D'ANALYSE — AB RENOV", "=".repeat(40), "",
-      "VERDICT GÉNÉRAL", r.verdict, "",
-      "POINTS À CORRIGER EN PRIORITÉ", r.priority, "",
-      "DOUBLONS & INCOHÉRENCES", r.doublon, "",
-      "FORMULATIONS À AMÉLIORER", r.formul, "",
-      "LECTURE CLIENT", r.client, "",
-      "CONSEIL COMMERCIAL FINAL", r.conseil
+      "VERDICT", r.verdict, "",
+      "POINTS À CORRIGER", flat(r.priority), "",
+      "DOUBLONS & INCOHÉRENCES", flat(r.doublon), "",
+      "FORMULATIONS À AMÉLIORER", flat(r.formul), "",
+      "LECTURE CLIENT", flat(r.client), "",
+      "CONSEIL COMMERCIAL", flat(r.conseil)
     ].join("\n");
 
     emptyEl.style.display   = "none";
@@ -632,13 +626,13 @@ Structure exacte :
       const orig = btnCopy.innerHTML;
       btnCopy.innerHTML = "✅ Copié !";
       setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
-    } catch { alert("Sélectionnez manuellement le texte pour copier."); }
+    } catch { alert("Copiez manuellement le texte."); }
   });
 
   btnReset.addEventListener("click", () => {
     currentFile = null; plainText = "";
     fileInput.value = "";
-    filePillTxt.textContent = "Choisir un PDF";
+    filePillTxt.textContent = "📄 Choisir un PDF";
     filePill.classList.remove("has-file");
     btnAnalyze.disabled = true;
     hideStatus(); hideResults();
