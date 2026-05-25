@@ -487,20 +487,20 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 ================================================================ */
 const PROMPTS = {
 
-devis: `Tu es un expert senior en bâtiment et développement commercial BTP pour AB RENOV (Rennes).
-Analyse ce devis client avant envoi. Sois concis, opérationnel, orienté signature.
+devis: `Tu es un expert commercial BTP pour AB RENOV (Rennes).
+Analyse ce devis. Sois ULTRA-BREF. 1 ligne par point maximum. Zéro littérature.
+Uniquement ce qui impacte la signature. Max 3 points par section.
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
   "emoji": "✅ ou ⚠️ ou 🔴",
-  "verdict": "3 phrases max. Direct et synthétique.",
-  "priority": ["correction courte 1", "correction 2", "..."],
-  "doublon": ["doublon 1", "..."],
-  "formul": [{"avant":"libellé actuel","apres":"libellé amélioré"}],
-  "client": ["objection/ressenti 1", "..."],
-  "conseil": ["action commerciale 1", "action 2"]
+  "score": "Prêt à envoyer | À corriger | Ne pas envoyer",
+  "blockers": ["blocage critique 1 — correction", "blocage 2"],
+  "quick_fixes": ["fix rapide 1", "fix 2", "fix 3"],
+  "client_risk": ["objection probable 1", "risque 2"],
+  "closing_tip": "1 phrase unique : le levier principal pour signer."
 }
-Si rien à signaler dans une section : ["Aucun problème détecté."]`,
+Laisse un tableau vide [] si rien à signaler.`,
 
 fourn: `Tu es un expert en chiffrage BTP et revente matériaux pour AB RENOV (Rennes).
 Analyse ce devis fournisseur. Toutes les valeurs doivent être en HT uniquement.
@@ -724,29 +724,83 @@ function renderResults(r) {
 
 /* ── DEVIS CLIENT ── */
 function renderDevis(r) {
-  const verdictClass = "v-devis";
-  let h = `
-    <div class="verdict ${verdictClass}">
-      <div class="verdict-badge">${r.emoji||"📊"}</div>
-      <div class="verdict-content">
-        <div class="verdict-label">Verdict général</div>
-        <div class="verdict-text">${r.verdict||"—"}</div>
+  const scoreColors = {
+    "Prêt à envoyer": "#1E7A4A",
+    "À corriger":     "#C86020",
+    "Ne pas envoyer": "#D0392B"
+  };
+  const scoreColor = scoreColors[r.score] || "var(--grey)";
+
+  const blockers   = Array.isArray(r.blockers)    ? r.blockers    : [];
+  const fixes      = Array.isArray(r.quick_fixes)  ? r.quick_fixes  : [];
+  const risks      = Array.isArray(r.client_risk)  ? r.client_risk  : [];
+  const tip        = r.closing_tip || "—";
+
+  const inlineItem = (txt, color, icon) =>
+    `<div style="display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border-radius:6px;background:#FDFAF7;border-left:3px solid ${color};font-size:.83rem;line-height:1.5;color:#2A2A2A">
+      <span style="flex-shrink:0;margin-top:1px">${icon}</span><span>${txt}</span>
+    </div>`;
+
+  const blockersHtml = blockers.length
+    ? blockers.map(t => inlineItem(t, "var(--red)", "🚫")).join("")
+    : inlineItem("Aucun blocage critique détecté.", "var(--green)", "✅");
+
+  const fixesHtml = fixes.length
+    ? fixes.map(t => inlineItem(t, "var(--orange)", "🔧")).join("")
+    : inlineItem("Aucune correction nécessaire.", "var(--green)", "✅");
+
+  const risksHtml = risks.length
+    ? risks.map(t => inlineItem(t, "var(--lav)", "👁️")).join("")
+    : inlineItem("Aucun risque client identifié.", "var(--green)", "✅");
+
+  return `
+    <!-- Score banner compact -->
+    <div style="background:var(--navy);border-radius:var(--r);padding:16px 22px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-lg)">
+      <div style="font-size:2rem;flex-shrink:0">${r.emoji||"📊"}</div>
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-bottom:4px">Verdict</div>
+        <div style="font-size:1rem;font-weight:700;color:#fff">${r.score||"—"}</div>
       </div>
+      <div style="background:${scoreColor};color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:20px">${r.score||"—"}</div>
     </div>
-    <div class="sections">
-      ${secCard("🔴","Points à corriger","c-red",  listItems(r.priority,"c-red"))}
-      ${secCard("🔁","Doublons & incohérences","c-orange", listItems(r.doublon,"c-orange"))}
-      ${secCard("✏️","Formulations à améliorer","c-lav",  formulItems(r.formul))}
-      ${secCard("👁️","Lecture client","c-navy",  listItems(r.client,"c-navy"))}
-      <div class="sec sec-conseil full">
+
+    <!-- 3 colonnes côte à côte -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+
+      <div class="sec">
         <div class="sec-header">
-          <div class="sec-icon">💡</div>
-          <div class="sec-title">Conseil commercial final</div>
+          <div class="sec-icon" style="background:#FEE8E6">🚫</div>
+          <div class="sec-title">Blocages — À corriger avant envoi</div>
         </div>
-        <div class="sec-items">${listItems(r.conseil,"")}</div>
+        <div class="sec-items">${blockersHtml}</div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-header">
+          <div class="sec-icon" style="background:#FEEEE6">🔧</div>
+          <div class="sec-title">Corrections rapides</div>
+        </div>
+        <div class="sec-items">${fixesHtml}</div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-header">
+          <div class="sec-icon" style="background:var(--lav-bg)">👁️</div>
+          <div class="sec-title">Risques côté client</div>
+        </div>
+        <div class="sec-items">${risksHtml}</div>
+      </div>
+
+    </div>
+
+    <!-- Conseil closing pleine largeur -->
+    <div style="background:var(--navy);border-radius:var(--r);padding:14px 22px;display:flex;align-items:center;gap:14px">
+      <span style="font-size:1.3rem;flex-shrink:0">💡</span>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-bottom:3px">Levier de closing</div>
+        <div style="font-size:.9rem;color:rgba(255,255,255,.9);font-weight:500">${tip}</div>
       </div>
     </div>`;
-  return h;
 }
 
 /* ── FOURNISSEUR ── */
@@ -892,14 +946,13 @@ function formulItems(arr) {
 
 /* ── PLAIN TEXT ── */
 function buildPlainDevis(r) {
-  const flat = a => Array.isArray(a) ? a.map(x=>typeof x==="object"?`❌ ${x.avant} → ✅ ${x.apres}`:`• ${x}`).join("\n") : a;
+  const flat = a => Array.isArray(a) ? a.map(x=>`• ${x}`).join("\n") : (a||"—");
   return ["COMPTE RENDU — AB RENOV VÉRIFICATION DEVIS","=".repeat(44),"",
-    "VERDICT", r.verdict,"",
-    "POINTS À CORRIGER", flat(r.priority),"",
-    "DOUBLONS", flat(r.doublon),"",
-    "FORMULATIONS", flat(r.formul),"",
-    "LECTURE CLIENT", flat(r.client),"",
-    "CONSEIL COMMERCIAL", flat(r.conseil)].join("\n");
+    `Verdict : ${r.score||"—"}  ${r.emoji||""}`, "",
+    "BLOCAGES CRITIQUES", flat(r.blockers),"",
+    "CORRECTIONS RAPIDES", flat(r.quick_fixes),"",
+    "RISQUES CLIENT", flat(r.client_risk),"",
+    "LEVIER DE CLOSING", r.closing_tip||"—"].join("\n");
 }
 
 function buildPlainFourn(r) {
