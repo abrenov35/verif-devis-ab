@@ -903,9 +903,8 @@ table.price-table th{
   cursor:not-allowed !important;
 }
 
-/* ===== HISTORIQUE RECHERCHES ===== */
-.t-histo .tab-dot { background: var(--green); }
-.tab.active.t-histo { border-bottom-color: var(--green); color: var(--green); }
+
+/* ===== HISTORIQUE RECHERCHES HORIZONTAL ===== */
 
 .history-wrap{
   display:flex;
@@ -939,65 +938,71 @@ table.price-table th{
 }
 
 .history-list{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-  gap:12px;
-}
-
-.history-card{
-  background:#fff;
-  border-radius:var(--r);
-  border:1px solid #E8E0D8;
-  padding:14px;
-  box-shadow:var(--shadow);
   display:flex;
   flex-direction:column;
   gap:10px;
 }
 
-.history-card-top{
+.history-card{
+  background:#fff;
+  border-radius:14px;
+  border:1px solid #E5DDD4;
+  padding:14px 16px;
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-columns:180px 1fr auto;
+  align-items:center;
+  gap:18px;
+}
+
+.history-left{
   display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
+  flex-direction:column;
+  gap:4px;
 }
 
 .history-type{
   font-family:'Barlow Condensed',sans-serif;
   font-weight:800;
-  font-size:.78rem;
-  letter-spacing:.1em;
+  font-size:.76rem;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  color:var(--navy);
+  color:var(--grey);
 }
 
 .history-file{
   font-weight:800;
+  font-size:1.05rem;
   color:#071D35;
-  line-height:1.25;
+  line-height:1.15;
   overflow-wrap:anywhere;
 }
 
 .history-date{
   font-size:.78rem;
   color:#7F7A76;
-  white-space:nowrap;
 }
 
 .history-summary{
-  font-size:.9rem;
-  line-height:1.35;
+  font-size:.95rem;
+  line-height:1.4;
   color:#1E2630;
-  background:#FDFAF7;
+  background:#FCFAF8;
   border-left:4px solid var(--lav);
-  padding:9px 10px;
-  border-radius:7px;
+  padding:10px 12px;
+  border-radius:8px;
 }
 
 .history-actions{
   display:flex;
+  align-items:center;
   gap:8px;
   flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.history-actions .tbtn{
+  min-width:max-content;
 }
 
 .history-empty{
@@ -1009,7 +1014,19 @@ table.price-table th{
   border:1px dashed #D8CEC5;
 }
 
+@media (max-width:980px){
 
+  .history-card{
+    grid-template-columns:1fr;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .history-actions{
+    justify-content:flex-start;
+  }
+
+}
 /* ===== AFFINAGE APRES ANALYSE ===== */
 .refine-box{
   margin-top:2px;
