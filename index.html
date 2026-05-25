@@ -70,52 +70,90 @@
 
     /* ── TABS ── */
     .tabs {
-      background: var(--white);
-      border-bottom: 1px solid var(--grey-lt);
+      background: var(--navy-dk);
+      border-bottom: none;
       display: flex;
-      justify-content: center;
-      padding: 0 28px;
+      align-items: center;
+      padding: 0 0 0 28px;
       gap: 0;
       flex-shrink: 0;
+      height: 46px;
     }
     .tab {
       display: flex; align-items: center; gap: 7px;
-      padding: 0 20px;
+      padding: 0 18px;
       height: 46px;
       border: none;
       border-bottom: 3px solid transparent;
       background: transparent;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .72rem;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: var(--grey);
+      font-weight: 700; font-size: .7rem;
+      letter-spacing: .09em; text-transform: uppercase;
+      color: rgba(255,255,255,.38);
       transition: all .15s;
       white-space: nowrap;
     }
-    .tab:hover { color: var(--navy); }
-    .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
-    .tab.active.t-fourn { border-bottom-color: var(--orange); color: var(--orange); }
-    .tab.active.t-presta { border-bottom-color: var(--lav); color: var(--lav); }
+    .tab:hover { color: rgba(255,255,255,.75); }
+    .tab.active { color: var(--white); border-bottom-color: var(--lav); }
+    .tab.active.t-fourn { border-bottom-color: var(--orange); }
+    .tab.active.t-presta { border-bottom-color: var(--lav); }
+    .tab.active.t-devis  { border-bottom-color: #FF7070; }
     .tab-dot {
-      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; opacity: .7;
     }
-    .t-devis .tab-dot  { background: var(--red); }
+    .t-devis .tab-dot  { background: #FF7070; }
     .t-fourn .tab-dot  { background: var(--orange); }
     .t-presta .tab-dot { background: var(--lav); }
-
-    /* ── TOOLBAR ── */
-    .toolbar {
-      background: var(--navy);
-      border-bottom: none;
-      padding: 0 28px;
-      height: 48px;
+    /* toolbar intégrée à droite des onglets */
+    .tabs-actions {
+      margin-left: auto;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: nowrap;
-      flex-shrink: 0;
+      gap: 8px;
+      padding: 0 20px;
+      height: 100%;
+      border-left: 1px solid rgba(255,255,255,.08);
+    }
+    .tabs-actions .file-pill {
+      height: 28px; padding: 0 12px;
+      border: 1.5px dashed rgba(255,255,255,.28);
+      border-radius: 14px; background: rgba(255,255,255,.07);
+    }
+    .tabs-actions .file-pill:hover { border-color: var(--lav); background: rgba(164,149,195,.18); }
+    .tabs-actions .file-pill.has-file { border-style:solid; border-color:#4FBF7F; background:rgba(79,191,127,.13); }
+    .tabs-actions .file-pill-text { color: rgba(255,255,255,.7); font-size:.68rem; }
+    .tabs-actions .file-pill.has-file .file-pill-text { color: #4FBF7F; }
+    .tabs-actions .field-input {
+      height: 28px; padding: 0 12px;
+      border: 1.5px solid rgba(255,255,255,.18);
+      border-radius: 14px;
+      background: rgba(255,255,255,.09);
+      color: var(--white); font-size:.78rem;
+    }
+    .tabs-actions .field-input:focus { border-color: var(--lav); background: rgba(255,255,255,.14); }
+    .tabs-actions .field-input::placeholder { color: rgba(255,255,255,.3); }
+    .tabs-actions .field-input.w-lot { width: 130px; }
+    .tabs-actions .field-input.w-context { width: 260px; min-width: unset; max-width: unset; }
+    .tabs-actions .tbtn { height: 28px; padding: 0 13px; border-radius: 14px; font-size: .68rem; }
+    .tabs-actions .tbtn-navy { background: var(--lav); color: #fff; border: none; }
+    .tabs-actions .tbtn-navy:hover:not(:disabled) { background: #8F7FB0; }
+    .tabs-actions .tbtn-lav { background: rgba(255,255,255,.13); border: 1.5px solid rgba(255,255,255,.22); color: #fff; }
+    .tabs-actions .tbtn-lav:hover:not(:disabled) { background: rgba(255,255,255,.2); }
+    .tabs-actions .tbtn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,.18); color: rgba(255,255,255,.65); }
+    .tabs-actions .tbtn-ghost:hover:not(:disabled) { border-color: rgba(255,255,255,.45); color: #fff; }
+    .tabs-actions #status { padding: 3px 10px; border-radius: 14px; font-size:.72rem; }
+    .tabs-actions #status.loading { background: rgba(164,149,195,.25); color: var(--lav); }
+    .tabs-actions #status.error { background: rgba(208,57,43,.22); color: #FF8878; max-width: 280px; }
+    @media (max-width: 900px) {
+      .tabs { flex-wrap: wrap; height: auto; }
+      .tabs-actions { border-left: none; border-top: 1px solid rgba(255,255,255,.08); width: 100%; padding: 8px 16px; flex-wrap: wrap; }
+      .tabs-actions .field-input.w-context { width: 100%; }
+    }
+
+    /* ── TOOLBAR (caché, remplacé par tabs-actions) ── */
+    .toolbar {
+      display: none !important;
     }
 
     .file-pill {
@@ -246,7 +284,7 @@
     .verdict.v-presta .verdict-label { color: var(--lav); }
     .verdict-text {
       font-size:.9rem; line-height:1.65;
-      color:rgba(255,255,255,.85); font-weight:300;
+      color:rgba(255,255,255,.92); font-weight:400;
     }
 
     /* Sections grid */
@@ -272,17 +310,18 @@
     }
     .sec-title {
       font-family:'Barlow Condensed',sans-serif;
-      font-weight:700; font-size:.66rem;
-      letter-spacing:.12em; text-transform:uppercase; color:var(--grey);
+      font-weight:800; font-size:.7rem;
+      letter-spacing:.13em; text-transform:uppercase; color:#6A7080;
     }
 
     .sec-items { padding:12px 16px; display:flex; flex-direction:column; gap:8px; }
 
     .item {
-      display:flex; gap:9px; align-items:flex-start;
-      padding: 9px 11px; border-radius:7px;
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px 13px; border-radius:8px;
       background:#FDFAF7; border-left:3px solid transparent;
-      font-size:.83rem; line-height:1.6; color:#2A2A2A;
+      font-size:.9rem; line-height:1.55; color:#141E2B;
+      font-weight: 450;
     }
     .item-bullet {
       width:6px; height:6px; border-radius:50%;
@@ -1164,7 +1203,7 @@ table.price-table th{
   <div class="header-right">Outil interne — Confidentiel</div>
 </header>
 
-<!-- TABS -->
+<!-- TABS + ACTIONS sur une seule bande navy -->
 <div class="tabs">
   <button class="tab t-devis active" data-tab="devis">
     <div class="tab-dot"></div>
@@ -1180,52 +1219,50 @@ table.price-table th{
   </button>
   <button class="tab t-histo" data-tab="historique">
     <div class="tab-dot"></div>
-    Historique recherches
+    Historique
   </button>
+
+  <!-- ACTIONS intégrées à droite -->
+  <div class="tabs-actions">
+    <div class="file-pill" id="file-pill">
+      <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
+      <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
+    </div>
+
+    <div class="extra-fields" id="extra-fourn"></div>
+
+    <div class="extra-fields" id="extra-presta">
+      <input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot…" />
+      <input type="text" class="field-input w-context" id="inp-note" placeholder="Contexte : surface, étage, accès, contraintes, nom client…" />
+    </div>
+
+    <button class="tbtn tbtn-navy" id="btn-analyze" disabled>
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+        <circle cx="5" cy="5" r="3.8" stroke="white" stroke-width="1.4"/>
+        <path d="M8.5 8.5L11 11" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      Analyser
+    </button>
+
+    <button class="tbtn tbtn-lav" id="btn-copy" style="display:none">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+        <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1" stroke="white" stroke-width="1.3"/>
+        <path d="M2 8.5V2A1 1 0 013 1H8.5" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      Copier
+    </button>
+
+    <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↗ Nouveau</button>
+
+    <div id="status">
+      <div class="spinner"></div>
+      <span id="status-text">Analyse…</span>
+    </div>
+  </div>
 </div>
 
-<!-- TOOLBAR -->
-<div class="toolbar">
-  <div class="file-pill" id="file-pill">
-    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
-    <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
-  </div>
-
-  <!-- Champs contexte par onglet -->
-<div class="extra-fields" id="extra-fourn">
-    <!-- Pas de champ avant analyse : l'affinage se fait après résultat -->
-  </div>
-
-  <div class="extra-fields" id="extra-presta">
-    <input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot (ex: faïence, plomberie…)" />
-    <input type="text" class="field-input w-context" id="inp-note" placeholder="Contexte chantier : surface, étage, accès, support, contraintes, nom client, accord oral, budget max, remarques terrain…" />
-  </div>
-
-  <div class="tsep"></div>
-
-  <button class="tbtn tbtn-navy" id="btn-analyze" disabled>
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <circle cx="5" cy="5" r="3.8" stroke="white" stroke-width="1.3"/>
-      <path d="M8.5 8.5L11 11" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
-    </svg>
-    Analyser
-  </button>
-
-  <button class="tbtn tbtn-lav" id="btn-copy" style="display:none">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1" stroke="white" stroke-width="1.2"/>
-      <path d="M2 8.5V2A1 1 0 013 1H8.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-    </svg>
-    Copier
-  </button>
-
-  <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↗ Nouvelle analyse</button>
-
-  <div id="status">
-    <div class="spinner"></div>
-    <span id="status-text">Analyse…</span>
-  </div>
-</div>
+<!-- TOOLBAR (legacy, masqué) -->
+<div class="toolbar"></div>
 
 <!-- CONTENT -->
 <div class="content">
