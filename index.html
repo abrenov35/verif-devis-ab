@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AB RENOV — Vérificateur de Devis</title>
+  <title>AB RENOV — Outil d'analyse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -19,11 +19,12 @@
       --grey:    #9A9A9A;
       --grey-lt: #E8E0D8;
       --red:     #D0392B;
-      --orange:  #D0622B;
+      --orange:  #C86020;
       --green:   #1E7A4A;
       --gold:    #9B7B1A;
       --r: 10px;
       --shadow: 0 2px 16px rgba(22,45,73,.07);
+      --shadow-lg: 0 6px 28px rgba(22,45,73,.13);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -36,7 +37,7 @@
       flex-direction: column;
     }
 
-    /* HEADER */
+    /* ── HEADER ── */
     header {
       background: var(--navy);
       height: 54px;
@@ -48,72 +49,118 @@
     }
     .logo {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: 1.35rem;
-      color: var(--white);
-      letter-spacing: .02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-weight: 800; font-size: 1.35rem;
+      color: var(--white); letter-spacing: .02em;
+      display: flex; align-items: center; gap: 10px;
     }
     .logo span { color: var(--lav); }
     .logo-pipe { width:1px; height:22px; background:rgba(255,255,255,.18); }
     .logo-sub {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--lav);
-      opacity: .8;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--lav); opacity: .85;
     }
     .header-right {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: .6rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.25);
+      font-size: .6rem; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.25);
     }
 
-    /* TOOLBAR */
-    .toolbar {
+    /* ── TABS ── */
+    .tabs {
       background: var(--white);
       border-bottom: 1px solid var(--grey-lt);
-      padding: 9px 28px;
+      display: flex;
+      padding: 0 28px;
+      gap: 0;
+      flex-shrink: 0;
+    }
+    .tab {
+      display: flex; align-items: center; gap: 7px;
+      padding: 0 20px;
+      height: 46px;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: .72rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--grey);
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--navy); }
+    .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+    .tab.active.t-fourn { border-bottom-color: var(--orange); color: var(--orange); }
+    .tab.active.t-presta { border-bottom-color: var(--lav); color: var(--lav); }
+    .tab-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .t-devis .tab-dot  { background: var(--red); }
+    .t-fourn .tab-dot  { background: var(--orange); }
+    .t-presta .tab-dot { background: var(--lav); }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      background: #FDFAF7;
+      border-bottom: 1px solid var(--grey-lt);
+      padding: 10px 28px;
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
       flex-shrink: 0;
     }
 
     .file-pill {
       position: relative;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      height: 34px;
-      padding: 0 14px;
+      display: flex; align-items: center; gap: 6px;
+      height: 34px; padding: 0 14px;
       border: 1.5px dashed var(--grey-lt);
-      border-radius: 17px;
-      cursor: pointer;
-      transition: all .2s;
-      background: #FDFAF7;
+      border-radius: 17px; cursor: pointer;
+      transition: all .2s; background: var(--white);
     }
     .file-pill:hover { border-color: var(--lav); background: var(--lav-bg); }
-    .file-pill.has-file { border-style: solid; border-color: var(--green); background: #F0FAF5; }
-    .file-pill input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .file-pill.has-file { border-style:solid; border-color: var(--green); background: #F0FAF5; }
+    .file-pill input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     .file-pill-text {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: .72rem;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--navy);
-      white-space: nowrap;
+      font-weight: 700; font-size: .72rem;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--navy); white-space: nowrap;
     }
     .file-pill.has-file .file-pill-text { color: var(--green); }
 
-    .tsep { width: 1px; height: 20px; background: var(--grey-lt); }
+    /* Extra fields (for tabs 2 & 3) */
+    .extra-fields {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .extra-fields.show { display: flex; }
+
+    .field-input {
+      height: 34px;
+      border: 1.5px solid var(--grey-lt);
+      border-radius: 17px;
+      padding: 0 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: .8rem;
+      color: var(--navy);
+      background: var(--white);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .field-input:focus { border-color: var(--lav); }
+    .field-input::placeholder { color: var(--grey); }
+    .field-input.w-lot { width: 180px; }
+    .field-input.w-presta { width: 160px; }
+    .field-input.w-note { width: 200px; }
+
+    .tsep { width:1px; height:20px; background:var(--grey-lt); }
 
     .tbtn {
       display: flex; align-items: center; gap: 6px;
@@ -126,11 +173,11 @@
       transition: all .15s; white-space: nowrap;
     }
     .tbtn:active { transform: scale(.97); }
-    .tbtn:disabled { opacity: .32; cursor: not-allowed; transform: none; }
-    .tbtn-navy { background: var(--navy); color: var(--white); }
-    .tbtn-navy:hover:not(:disabled) { background: var(--navy-dk); }
-    .tbtn-lav  { background: var(--lav); color: var(--white); }
-    .tbtn-lav:hover:not(:disabled) { background: #8F7FB0; }
+    .tbtn:disabled { opacity:.32; cursor:not-allowed; transform:none; }
+    .tbtn-navy  { background: var(--navy); color: var(--white); }
+    .tbtn-navy:hover:not(:disabled)  { background: var(--navy-dk); }
+    .tbtn-lav   { background: var(--lav); color: var(--white); }
+    .tbtn-lav:hover:not(:disabled)   { background: #8F7FB0; }
     .tbtn-ghost { background: transparent; border: 1.5px solid var(--grey-lt); color: var(--navy); }
     .tbtn-ghost:hover:not(:disabled) { border-color: var(--navy); }
 
@@ -139,216 +186,254 @@
       font-size: .76rem; font-weight: 500;
       padding: 5px 13px; border-radius: 17px;
     }
-    #status.loading { display: flex; background: var(--lav-bg); color: #5B44A0; }
-    #status.error   { display: flex; background: #FEF2F2; color: var(--red); }
+    #status.loading { display:flex; background:var(--lav-bg); color:#5B44A0; }
+    #status.error   { display:flex; background:#FEF2F2; color:var(--red); max-width:360px; }
     .spinner {
-      width: 12px; height: 12px;
-      border: 2px solid currentColor; border-top-color: transparent;
-      border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
+      width:12px; height:12px;
+      border:2px solid currentColor; border-top-color:transparent;
+      border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* CONTENT */
+    /* ── CONTENT ── */
     .content {
-      flex: 1; padding: 28px 32px;
+      flex:1; padding: 24px 28px;
       overflow-y: auto;
-      display: flex; flex-direction: column; gap: 0;
+      display: flex; flex-direction: column;
     }
 
     /* EMPTY */
     #empty {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; gap: 10px; padding: 60px;
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; gap:10px; padding:60px;
     }
-    .empty-icon { font-size: 2.5rem; opacity: .2; margin-bottom: 8px; }
+    .empty-icon { font-size:2.4rem; opacity:.2; margin-bottom:8px; }
     .empty-h {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; font-size: 1.1rem;
-      letter-spacing: .08em; text-transform: uppercase;
-      opacity: .25;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:800; font-size:1.1rem;
+      letter-spacing:.08em; text-transform:uppercase; opacity:.25;
     }
-    .empty-p { font-size: .82rem; max-width: 260px; line-height: 1.6; opacity: .5; }
+    .empty-p { font-size:.82rem; max-width:280px; line-height:1.6; opacity:.5; }
 
     /* RESULTS */
-    #results { display: none; flex-direction: column; gap: 20px; animation: fadeUp .35s ease; }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    #results { display:none; flex-direction:column; gap:16px; animation:fadeUp .35s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
 
-    /* ── VERDICT ── */
+    /* Verdict banner */
     .verdict {
-      background: var(--navy);
       border-radius: var(--r);
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: var(--shadow-lg);
     }
-    .verdict-badge {
-      font-size: 1.8rem;
-      flex-shrink: 0;
-    }
-    .verdict-content { flex: 1; }
+    .verdict.v-devis  { background: var(--navy); }
+    .verdict.v-fourn  { background: #3D1F08; }
+    .verdict.v-presta { background: #1E1233; }
+
+    .verdict-badge { font-size:1.8rem; flex-shrink:0; }
+    .verdict-content { flex:1; }
     .verdict-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: .58rem; font-weight: 600;
-      letter-spacing: .18em; text-transform: uppercase;
-      color: var(--lav); margin-bottom: 5px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.58rem; font-weight:600;
+      letter-spacing:.18em; text-transform:uppercase;
+      color:var(--lav); margin-bottom:5px;
     }
+    .verdict.v-fourn  .verdict-label { color: #F0A060; }
+    .verdict.v-presta .verdict-label { color: var(--lav); }
     .verdict-text {
-      font-size: .92rem; line-height: 1.65;
-      color: rgba(255,255,255,.85); font-weight: 300;
+      font-size:.9rem; line-height:1.65;
+      color:rgba(255,255,255,.85); font-weight:300;
     }
 
-    /* ── SECTIONS GRID ── */
-    .sections {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    /* Sections grid */
+    .sections { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
     .sec {
       background: var(--white);
       border-radius: var(--r);
       box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
     }
+    .sec.full { grid-column: 1 / -1; }
 
     .sec-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 18px;
+      display:flex; align-items:center; gap:8px;
+      padding: 12px 16px;
       border-bottom: 1px solid #F2EBE3;
     }
-
     .sec-icon {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .85rem;
-      flex-shrink: 0;
+      width:24px; height:24px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.8rem; flex-shrink:0;
     }
-
     .sec-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .68rem;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: var(--grey);
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700; font-size:.66rem;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--grey);
     }
 
-    /* Items list */
-    .sec-items {
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .sec-items { padding:12px 16px; display:flex; flex-direction:column; gap:8px; }
 
     .item {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 10px 12px;
-      border-radius: 7px;
-      background: #FDFAF7;
-      border-left: 3px solid transparent;
-      font-size: .84rem;
-      line-height: 1.6;
-      color: #2A2A2A;
+      display:flex; gap:9px; align-items:flex-start;
+      padding: 9px 11px; border-radius:7px;
+      background:#FDFAF7; border-left:3px solid transparent;
+      font-size:.83rem; line-height:1.6; color:#2A2A2A;
     }
-
     .item-bullet {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      margin-top: 7px;
-      flex-shrink: 0;
+      width:6px; height:6px; border-radius:50%;
+      margin-top:7px; flex-shrink:0;
     }
 
-    /* Couleurs par section */
-    .sec-priority .item { border-color: #F5C6C2; background: #FEF8F7; }
-    .sec-priority .item-bullet { background: var(--red); }
-    .sec-priority .sec-icon { background: #FEE8E6; }
+    /* Formul avant/après */
+    .item.formul-item { flex-direction:column; gap:5px; background:#F8F6FD; border-color:#DDD6EE; }
+    .formul-before { font-size:.79rem; color:var(--red); display:flex; gap:5px; align-items:flex-start; }
+    .formul-after  { font-size:.79rem; color:var(--green); display:flex; gap:5px; align-items:flex-start; }
 
-    .sec-doublon .item { border-color: #F5D9C2; background: #FEF9F7; }
-    .sec-doublon .item-bullet { background: var(--orange); }
-    .sec-doublon .sec-icon { background: #FEEEE6; }
-
-    .sec-formul .item { border-color: #DDD6EE; background: #F8F6FD; }
-    .sec-formul .item-bullet { background: var(--lav); }
-    .sec-formul .sec-icon { background: var(--lav-bg); }
-
-    .sec-client .item { border-color: #C2CEDF; background: #F6F8FB; }
-    .sec-client .item-bullet { background: var(--navy); }
-    .sec-client .sec-icon { background: #E8EEF5; }
-
-    /* Formul items spéciaux avant/après */
-    .formul-item { flex-direction: column; gap: 6px; }
-    .formul-before {
-      font-size: .8rem; color: var(--red);
-      display: flex; gap: 6px; align-items: flex-start;
+    /* Table pour fournisseur */
+    .price-table {
+      width:100%; border-collapse:collapse;
+      font-size:.82rem;
     }
-    .formul-after {
-      font-size: .8rem; color: var(--green);
-      display: flex; gap: 6px; align-items: flex-start;
+    .price-table th {
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:700; font-size:.64rem;
+      letter-spacing:.1em; text-transform:uppercase;
+      color:var(--grey); text-align:left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--grey-lt);
+      background: #FDFAF7;
+    }
+    .price-table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid #F2EBE3;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .price-table tr:last-child td { border-bottom: none; }
+    .price-table tr:hover td { background: #FDFAF7; }
+    .tag {
+      display:inline-block;
+      padding: 2px 8px; border-radius: 10px;
+      font-size:.7rem; font-weight:600;
+    }
+    .tag-ok     { background:#D4EDD8; color:#1A6A30; }
+    .tag-high   { background:#FEE8E6; color:#C0392B; }
+    .tag-low    { background:#FFF4D4; color:#8A6010; }
+    .tag-check  { background:#EDE9F5; color:#5B44A0; }
+    .coeff      { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:.95rem; color:var(--navy); }
+
+    /* Alert items */
+    .alert-item {
+      display:flex; gap:8px; align-items:flex-start;
+      padding:9px 11px; border-radius:7px;
+      background:#FEF2F2; border-left:3px solid var(--red);
+      font-size:.82rem; line-height:1.55; color:#8B0000;
     }
 
-    /* ── CONSEIL ── */
-    .sec-conseil {
-      background: var(--lav-bg);
-      border: 1.5px solid #D4CCE8;
-      border-radius: var(--r);
-    }
-    .sec-conseil .sec-header {
-      border-bottom-color: #D4CCE8;
-    }
-    .sec-conseil .sec-icon { background: #DDD6EE; }
-    .sec-conseil .item {
-      background: rgba(255,255,255,.6);
-      border-color: #C8BFE0;
-    }
-    .sec-conseil .item-bullet { background: var(--gold); }
+    /* Color themes per section */
+    .c-red    .item { border-color:#F5C6C2; background:#FEF8F7; }
+    .c-red    .item-bullet { background:var(--red); }
+    .c-red    .sec-icon { background:#FEE8E6; }
 
-    /* Full width */
-    .full { grid-column: 1 / -1; }
+    .c-orange .item { border-color:#F5D9C2; background:#FEF9F7; }
+    .c-orange .item-bullet { background:var(--orange); }
+    .c-orange .sec-icon { background:#FEEEE6; }
+
+    .c-lav    .item { border-color:#DDD6EE; background:#F8F6FD; }
+    .c-lav    .item-bullet { background:var(--lav); }
+    .c-lav    .sec-icon { background:var(--lav-bg); }
+
+    .c-navy   .item { border-color:#C2CEDF; background:#F6F8FB; }
+    .c-navy   .item-bullet { background:var(--navy); }
+    .c-navy   .sec-icon { background:#E8EEF5; }
+
+    .c-green  .item { border-color:#C2E0CC; background:#F4FBF6; }
+    .c-green  .item-bullet { background:var(--green); }
+    .c-green  .sec-icon { background:#D4EDD8; }
+
+    .c-gold   .item { border-color:#E0D0A0; background:#FBF7E8; }
+    .c-gold   .item-bullet { background:var(--gold); }
+    .c-gold   .sec-icon { background:#F0E8C0; }
+
+    /* Conseil */
+    .sec-conseil { background:var(--lav-bg); border:1.5px solid #D4CCE8; }
+    .sec-conseil .sec-header { border-bottom-color:#D4CCE8; }
+    .sec-conseil .item { background:rgba(255,255,255,.6); border-color:#C8BFE0; }
+    .sec-conseil .item-bullet { background:var(--gold); }
 
     /* FOOTER */
     footer {
-      text-align: center;
-      padding: 10px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: .6rem; letter-spacing: .08em; text-transform: uppercase;
-      color: var(--grey); border-top: 1px solid var(--grey-lt);
-      flex-shrink: 0;
+      text-align:center; padding:10px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--grey); border-top:1px solid var(--grey-lt); flex-shrink:0;
     }
 
-    @media (max-width: 800px) {
-      .sections { grid-template-columns: 1fr; }
-      .full { grid-column: auto; }
-      .content { padding: 16px; }
+    @media (max-width:800px) {
+      .sections { grid-template-columns:1fr; }
+      .sec.full { grid-column:auto; }
+      .content { padding:16px; }
+      .toolbar { padding:8px 16px; }
+      .tabs { padding:0 16px; }
+      .tab { padding:0 12px; font-size:.65rem; }
+      .field-input.w-lot, .field-input.w-presta, .field-input.w-note { width:140px; }
     }
-    @media (max-width: 560px) {
-      .header-right { display: none; }
+    @media (max-width:560px) {
+      .header-right { display:none; }
+      .tab { padding:0 8px; }
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <div class="logo">
     AB <span>RENOV</span>
     <div class="logo-pipe"></div>
-    <span class="logo-sub">Vérificateur de devis</span>
+    <span class="logo-sub">Outil d'analyse</span>
   </div>
-  <div class="header-right">Outil interne — Contrôle qualité</div>
+  <div class="header-right">Outil interne — Confidentiel</div>
 </header>
 
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab t-devis active" data-tab="devis">
+    <div class="tab-dot"></div>
+    Vérification devis client
+  </button>
+  <button class="tab t-fourn" data-tab="fourn">
+    <div class="tab-dot"></div>
+    Devis fournisseur / Revente
+  </button>
+  <button class="tab t-presta" data-tab="presta">
+    <div class="tab-dot"></div>
+    Prestataire main-d'œuvre
+  </button>
+</div>
+
+<!-- TOOLBAR -->
 <div class="toolbar">
   <div class="file-pill" id="file-pill">
-    <input type="file" id="file-input" accept=".pdf" />
-    <span class="file-pill-text" id="file-pill-text">📄 Choisir un PDF</span>
+    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" />
+    <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
   </div>
+
+  <!-- Champs extra tabs 2 & 3 -->
+  <div class="extra-fields" id="extra-fourn">
+    <!-- Pas de champ supplémentaire pour fournisseur -->
+  </div>
+
+  <div class="extra-fields" id="extra-presta">
+    <input type="text" class="field-input w-lot"    id="inp-lot"    placeholder="Lot (ex: faïence, plomberie…)" />
+    <input type="text" class="field-input w-presta" id="inp-presta" placeholder="Nom du prestataire" />
+    <input type="text" class="field-input w-note"   id="inp-note"   placeholder="Notes libres…" />
+  </div>
+
   <div class="tsep"></div>
+
   <button class="tbtn tbtn-navy" id="btn-analyze" disabled>
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
       <circle cx="5" cy="5" r="3.8" stroke="white" stroke-width="1.3"/>
@@ -356,6 +441,7 @@
     </svg>
     Analyser
   </button>
+
   <button class="tbtn tbtn-lav" id="btn-copy" style="display:none">
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
       <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1" stroke="white" stroke-width="1.2"/>
@@ -363,288 +449,523 @@
     </svg>
     Copier
   </button>
+
   <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↩ Nouveau</button>
+
   <div id="status">
     <div class="spinner"></div>
     <span id="status-text">Analyse…</span>
   </div>
 </div>
 
+<!-- CONTENT -->
 <div class="content">
-
   <div id="empty">
-    <div class="empty-icon">📋</div>
-    <div class="empty-h">Aucun devis chargé</div>
-    <div class="empty-p">Choisissez un PDF et cliquez sur Analyser pour obtenir le compte rendu.</div>
+    <div class="empty-icon" id="empty-icon">📋</div>
+    <div class="empty-h" id="empty-h">Aucun fichier chargé</div>
+    <div class="empty-p" id="empty-p">Choisissez un fichier et cliquez sur Analyser.</div>
   </div>
 
-  <div id="results">
-
-    <!-- Verdict -->
-    <div class="verdict">
-      <div class="verdict-badge" id="v-emoji">📊</div>
-      <div class="verdict-content">
-        <div class="verdict-label">Verdict général</div>
-        <div class="verdict-text" id="v-verdict">—</div>
-      </div>
-    </div>
-
-    <!-- Grid -->
-    <div class="sections">
-
-      <!-- Priorités -->
-      <div class="sec sec-priority">
-        <div class="sec-header">
-          <div class="sec-icon">🔴</div>
-          <div class="sec-title">Points à corriger</div>
-        </div>
-        <div class="sec-items" id="v-priority-list"></div>
-      </div>
-
-      <!-- Doublons -->
-      <div class="sec sec-doublon">
-        <div class="sec-header">
-          <div class="sec-icon">🔁</div>
-          <div class="sec-title">Doublons &amp; incohérences</div>
-        </div>
-        <div class="sec-items" id="v-doublon-list"></div>
-      </div>
-
-      <!-- Formulations -->
-      <div class="sec sec-formul">
-        <div class="sec-header">
-          <div class="sec-icon">✏️</div>
-          <div class="sec-title">Formulations à améliorer</div>
-        </div>
-        <div class="sec-items" id="v-formul-list"></div>
-      </div>
-
-      <!-- Lecture client -->
-      <div class="sec sec-client">
-        <div class="sec-header">
-          <div class="sec-icon">👁️</div>
-          <div class="sec-title">Lecture client</div>
-        </div>
-        <div class="sec-items" id="v-client-list"></div>
-      </div>
-
-      <!-- Conseil -->
-      <div class="sec sec-conseil full">
-        <div class="sec-header">
-          <div class="sec-icon">💡</div>
-          <div class="sec-title">Conseil commercial final</div>
-        </div>
-        <div class="sec-items" id="v-conseil-list"></div>
-      </div>
-
-    </div>
-  </div>
-
+  <div id="results"></div>
 </div>
 
 <footer>AB RENOV — Aménagement et Rénovation &nbsp;|&nbsp; Outil interne confidentiel</footer>
 
 <script>
-  const AI_MODEL  = "claude-sonnet-4-5";
-  const AI_TOKENS = 2000;
-  const PROXY_URL = "https://cool-cell-9dbd.abrenov35.workers.dev";
+/* ================================================================
+   CONFIG
+================================================================ */
+const PROXY_URL = "https://cool-cell-9dbd.abrenov35.workers.dev";
+const AI_MODEL  = "claude-sonnet-4-5";
+const AI_TOKENS = 2500;
 
-  const SYSTEM_PROMPT = `Tu es un expert senior en bâtiment, rénovation intérieure, et développement commercial BTP.
-Tu travailles pour AB RENOV (Aménagement et Rénovation, Rennes). Ta mission : analyser les devis avant envoi client.
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-Retourne UNIQUEMENT un objet JSON valide, sans markdown, sans backticks.
-Structure exacte — chaque champ est un TABLEAU de courtes chaînes (max 2 lignes chacune), sauf emoji et verdict :
+/* ================================================================
+   PROMPTS PAR TAB
+================================================================ */
+const PROMPTS = {
+
+devis: `Tu es un expert senior en bâtiment et développement commercial BTP pour AB RENOV (Rennes).
+Analyse ce devis client avant envoi. Sois concis, opérationnel, orienté signature.
+
+Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
   "emoji": "✅ ou ⚠️ ou 🔴",
   "verdict": "3 phrases max. Direct et synthétique.",
-  "priority": ["correction 1 courte", "correction 2 courte", "..."],
-  "doublon": ["doublon/incohérence 1", "doublon 2", "..."],
-  "formul": [
-    {"avant": "libellé actuel", "apres": "libellé amélioré"},
-    {"avant": "...", "apres": "..."}
-  ],
-  "client": ["ressenti/objection 1", "ressenti 2", "..."],
-  "conseil": ["action concrète 1", "action concrète 2", "action concrète 3"]
+  "priority": ["correction courte 1", "correction 2", "..."],
+  "doublon": ["doublon 1", "..."],
+  "formul": [{"avant":"libellé actuel","apres":"libellé amélioré"}],
+  "client": ["objection/ressenti 1", "..."],
+  "conseil": ["action commerciale 1", "action 2"]
 }
-Si une section n'a rien à signaler, mettre un tableau avec un seul élément : ["Aucun problème détecté."]`;
+Si rien à signaler dans une section : ["Aucun problème détecté."]`,
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+fourn: `Tu es un expert en chiffrage BTP et revente matériaux pour AB RENOV (Rennes).
+Analyse ce devis fournisseur. Toutes les valeurs doivent être en HT uniquement.
+Ne travaille jamais en TTC. Si tu n'es pas sûr d'un prix, indique une fourchette prudente.
+Protège toujours la marge AB RENOV.
 
-  const filePill    = document.getElementById("file-pill");
-  const filePillTxt = document.getElementById("file-pill-text");
-  const fileInput   = document.getElementById("file-input");
-  const btnAnalyze  = document.getElementById("btn-analyze");
-  const btnCopy     = document.getElementById("btn-copy");
-  const btnReset    = document.getElementById("btn-reset");
-  const statusEl    = document.getElementById("status");
-  const statusText  = document.getElementById("status-text");
-  const emptyEl     = document.getElementById("empty");
-  const resultsEl   = document.getElementById("results");
+Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
+{
+  "emoji": "✅ ou ⚠️ ou 🔴",
+  "verdict": "2-3 phrases. Synthèse globale du devis fournisseur.",
+  "lignes": [
+    {
+      "produit": "nom du produit/lot",
+      "prix_achat_ht": "montant HT ou fourchette",
+      "appreciation": "correct|élevé|bas|à vérifier",
+      "prix_marche_ht": "fourchette marché HT",
+      "prix_vente_ht": "prix de vente conseillé AB RENOV HT",
+      "coeff": "x2.5",
+      "pose_ht": "estimation pose HT ou N/A",
+      "a_prevoir": "accessoires/compléments à prévoir"
+    }
+  ],
+  "alertes": ["alerte 1", "alerte 2"],
+  "conseil": ["recommandation 1", "recommandation 2"]
+}`,
 
-  let currentFile = null;
-  let plainText   = "";
+presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (Rennes).
+Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
+Toutes les valeurs doivent être en HT uniquement. Protège toujours la marge AB RENOV.
+Contexte fourni par l'utilisateur (lot, prestataire, notes) : {CONTEXT}
 
-  fileInput.addEventListener("change", () => {
-    if (fileInput.files[0]) loadFile(fileInput.files[0]);
+Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
+{
+  "emoji": "✅ ou ⚠️ ou 🔴",
+  "verdict": "2-3 phrases. Synthèse de la situation.",
+  "lot": "nom du lot analysé",
+  "montant_client_ht": "montant HT total vendu au client pour ce lot",
+  "fourniture_ht": "part fourniture estimée HT",
+  "mo_ht": "part main-d'œuvre estimée HT",
+  "presta_fourchette": "fourchette basse – haute conseillée HT",
+  "presta_max": "montant maximum à ne pas dépasser HT",
+  "marge_estimee": "marge AB RENOV estimée si respecté",
+  "alertes": ["alerte marge 1", "point à clarifier 1"],
+  "a_clarifier": ["point à clarifier avant validation 1", "..."],
+  "conseil": ["recommandation 1", "recommandation 2"]
+}`
+
+};
+
+/* ================================================================
+   STATE
+================================================================ */
+let currentTab  = "devis";
+let currentFile = null;
+let plainText   = "";
+
+/* ================================================================
+   DOM
+================================================================ */
+const filePill    = document.getElementById("file-pill");
+const filePillTxt = document.getElementById("file-pill-text");
+const fileInput   = document.getElementById("file-input");
+const btnAnalyze  = document.getElementById("btn-analyze");
+const btnCopy     = document.getElementById("btn-copy");
+const btnReset    = document.getElementById("btn-reset");
+const statusEl    = document.getElementById("status");
+const statusText  = document.getElementById("status-text");
+const emptyEl     = document.getElementById("empty");
+const resultsEl   = document.getElementById("results");
+
+/* ================================================================
+   TABS
+================================================================ */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentTab = tab.dataset.tab;
+    updateEmptyState();
+    // Extra fields
+    document.getElementById("extra-fourn").classList.toggle("show",  currentTab === "fourn");
+    document.getElementById("extra-presta").classList.toggle("show", currentTab === "presta");
+    hideResults(); hideStatus();
   });
+});
 
-  function loadFile(f) {
-    currentFile = f;
-    const name = f.name.length > 24 ? f.name.slice(0, 22) + "…" : f.name;
-    filePillTxt.textContent = "📄 " + name;
-    filePill.classList.add("has-file");
-    btnAnalyze.disabled = false;
-    hideStatus(); hideResults();
+function updateEmptyState() {
+  const icons = { devis:"📋", fourn:"🧾", presta:"🔧" };
+  const titles = { devis:"Aucun devis chargé", fourn:"Aucun devis fournisseur", presta:"Aucun devis chargé" };
+  const subs = {
+    devis:  "Chargez un devis client PDF et cliquez Analyser.",
+    fourn:  "Chargez un devis fournisseur PDF et cliquez Analyser.",
+    presta: "Chargez un devis AB RENOV, précisez le lot et cliquez Analyser."
+  };
+  document.getElementById("empty-icon").textContent = icons[currentTab];
+  document.getElementById("empty-h").textContent    = titles[currentTab];
+  document.getElementById("empty-p").textContent    = subs[currentTab];
+}
+
+/* ================================================================
+   FILE LOAD
+================================================================ */
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0]) loadFile(fileInput.files[0]);
+});
+
+function loadFile(f) {
+  currentFile = f;
+  const name = f.name.length > 26 ? f.name.slice(0, 24) + "…" : f.name;
+  filePillTxt.textContent = "📄 " + name;
+  filePill.classList.add("has-file");
+  btnAnalyze.disabled = false;
+  hideStatus(); hideResults();
+}
+
+/* ================================================================
+   EXTRACT TEXT FROM PDF
+================================================================ */
+async function extractPdf(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let text = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const c = await page.getTextContent();
+    text += c.items.map(x => x.str).join(" ") + "\n";
+  }
+  return text.trim();
+}
+
+/* ================================================================
+   CALL AI
+================================================================ */
+async function callAI(devisText) {
+  let systemPrompt = PROMPTS[currentTab];
+
+  // Inject context for presta tab
+  if (currentTab === "presta") {
+    const lot    = document.getElementById("inp-lot").value.trim();
+    const presta = document.getElementById("inp-presta").value.trim();
+    const note   = document.getElementById("inp-note").value.trim();
+    const ctx = [
+      lot    ? `Lot : ${lot}`         : "",
+      presta ? `Prestataire : ${presta}` : "",
+      note   ? `Notes : ${note}`      : ""
+    ].filter(Boolean).join(" | ") || "Aucun contexte fourni.";
+    systemPrompt = systemPrompt.replace("{CONTEXT}", ctx);
   }
 
-  async function extractPdf(file) {
-    const buf = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  const userMsg = `Voici le contenu du document à analyser :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
+
+  const resp = await fetch(PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: AI_MODEL, max_tokens: AI_TOKENS,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMsg }]
+    })
+  });
+
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message || "Erreur API");
+  const raw = data.content?.map(b => b.text || "").join("") || "";
+  if (!raw) throw new Error("Réponse vide.");
+  const clean = raw.replace(/```json|```/g, "").trim();
+  try { return JSON.parse(clean); }
+  catch { throw new Error("Format inattendu : " + raw.slice(0, 120)); }
+}
+
+/* ================================================================
+   ANALYZE
+================================================================ */
+btnAnalyze.addEventListener("click", async () => {
+  if (!currentFile) return;
+  btnAnalyze.disabled = true;
+  hideResults();
+  showStatus("loading", "Lecture du fichier…");
+  try {
     let text = "";
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const c = await page.getTextContent();
-      text += c.items.map(x => x.str).join(" ") + "\n";
-    }
-    return text.trim();
-  }
-
-  async function callAI(devisText) {
-    const userMsg = `Voici le devis PDF à analyser pour AB RENOV :\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
-    const resp = await fetch(PROXY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: AI_MODEL, max_tokens: AI_TOKENS,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: "user", content: userMsg }]
-      })
-    });
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error.message || "Erreur API");
-    const raw = data.content?.map(b => b.text || "").join("") || "";
-    if (!raw) throw new Error("Réponse vide.");
-    const clean = raw.replace(/```json|```/g, "").trim();
-    try { return JSON.parse(clean); }
-    catch { throw new Error("Format inattendu : " + raw.slice(0, 120)); }
-  }
-
-  btnAnalyze.addEventListener("click", async () => {
-    if (!currentFile) return;
-    btnAnalyze.disabled = true;
-    hideResults();
-    showStatus("loading", "Lecture du PDF…");
-    try {
-      const text = await extractPdf(currentFile);
-      if (!text || text.length < 60) throw new Error("PDF vide ou scanné.");
-      showStatus("loading", "Analyse IA en cours…");
-      const r = await callAI(text);
-      showResults(r);
-      hideStatus();
-      btnCopy.style.display  = "flex";
-      btnReset.style.display = "flex";
-    } catch (err) {
-      showError(err.message);
-      btnAnalyze.disabled = false;
-    }
-  });
-
-  /* Render helpers */
-  function makeItems(container, items, type) {
-    container.innerHTML = "";
-    if (!Array.isArray(items) || items.length === 0) {
-      items = ["Aucun problème détecté."];
-    }
-
-    if (type === "formul") {
-      items.forEach(item => {
-        if (typeof item === "object" && item.avant) {
-          const div = document.createElement("div");
-          div.className = "item formul-item";
-          div.innerHTML = `
-            <div class="formul-before"><span>❌</span><span>${item.avant}</span></div>
-            <div class="formul-after"><span>✅</span><span>${item.apres || ""}</span></div>
-          `;
-          container.appendChild(div);
-        } else {
-          // fallback texte brut
-          const div = document.createElement("div");
-          div.className = "item";
-          div.innerHTML = `<div class="item-bullet"></div><span>${item}</span>`;
-          container.appendChild(div);
-        }
-      });
+    if (currentFile.type === "application/pdf") {
+      text = await extractPdf(currentFile);
+      if (!text || text.length < 30) throw new Error("PDF vide ou scanné en image.");
     } else {
-      items.forEach(txt => {
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<div class="item-bullet"></div><span>${txt}</span>`;
-        container.appendChild(div);
-      });
+      text = "[Image jointe — le document est une image, analyse visuelle demandée]";
     }
+    showStatus("loading", "Analyse IA en cours… (20-30 sec)");
+    const result = await callAI(text);
+    renderResults(result);
+    hideStatus();
+    btnCopy.style.display  = "flex";
+    btnReset.style.display = "flex";
+  } catch (err) {
+    showError(err.message);
+    btnAnalyze.disabled = false;
+  }
+});
+
+/* ================================================================
+   RENDER RESULTS
+================================================================ */
+function renderResults(r) {
+  let html = "";
+  plainText = "";
+
+  if (currentTab === "devis") {
+    html = renderDevis(r);
+    plainText = buildPlainDevis(r);
+  } else if (currentTab === "fourn") {
+    html = renderFourn(r);
+    plainText = buildPlainFourn(r);
+  } else {
+    html = renderPresta(r);
+    plainText = buildPlainPresta(r);
   }
 
-  function showResults(r) {
-    document.getElementById("v-emoji").textContent   = r.emoji   || "📊";
-    document.getElementById("v-verdict").textContent = r.verdict || "—";
+  emptyEl.style.display   = "none";
+  resultsEl.style.display = "flex";
+  resultsEl.innerHTML = html;
+}
 
-    makeItems(document.getElementById("v-priority-list"), r.priority, "list");
-    makeItems(document.getElementById("v-doublon-list"),  r.doublon,  "list");
-    makeItems(document.getElementById("v-formul-list"),   r.formul,   "formul");
-    makeItems(document.getElementById("v-client-list"),   r.client,   "list");
-    makeItems(document.getElementById("v-conseil-list"),  r.conseil,  "list");
+/* ── DEVIS CLIENT ── */
+function renderDevis(r) {
+  const verdictClass = "v-devis";
+  let h = `
+    <div class="verdict ${verdictClass}">
+      <div class="verdict-badge">${r.emoji||"📊"}</div>
+      <div class="verdict-content">
+        <div class="verdict-label">Verdict général</div>
+        <div class="verdict-text">${r.verdict||"—"}</div>
+      </div>
+    </div>
+    <div class="sections">
+      ${secCard("🔴","Points à corriger","c-red",  listItems(r.priority,"c-red"))}
+      ${secCard("🔁","Doublons & incohérences","c-orange", listItems(r.doublon,"c-orange"))}
+      ${secCard("✏️","Formulations à améliorer","c-lav",  formulItems(r.formul))}
+      ${secCard("👁️","Lecture client","c-navy",  listItems(r.client,"c-navy"))}
+      <div class="sec sec-conseil full">
+        <div class="sec-header">
+          <div class="sec-icon">💡</div>
+          <div class="sec-title">Conseil commercial final</div>
+        </div>
+        <div class="sec-items">${listItems(r.conseil,"")}</div>
+      </div>
+    </div>`;
+  return h;
+}
 
-    // Plain text for copy
-    const flat = arr => Array.isArray(arr)
-      ? arr.map(x => typeof x === "object" ? `❌ ${x.avant} → ✅ ${x.apres}` : `• ${x}`).join("\n")
-      : arr;
+/* ── FOURNISSEUR ── */
+function renderFourn(r) {
+  const lignes = Array.isArray(r.lignes) ? r.lignes : [];
+  const appTags = { "correct":"tag-ok","élevé":"tag-high","bas":"tag-low","à vérifier":"tag-check" };
 
-    plainText = [
-      "COMPTE RENDU D'ANALYSE — AB RENOV", "=".repeat(40), "",
-      "VERDICT", r.verdict, "",
-      "POINTS À CORRIGER", flat(r.priority), "",
-      "DOUBLONS & INCOHÉRENCES", flat(r.doublon), "",
-      "FORMULATIONS À AMÉLIORER", flat(r.formul), "",
-      "LECTURE CLIENT", flat(r.client), "",
-      "CONSEIL COMMERCIAL", flat(r.conseil)
-    ].join("\n");
+  const tableRows = lignes.map(l => `
+    <tr>
+      <td><strong>${l.produit||"—"}</strong></td>
+      <td>${l.prix_achat_ht||"—"}</td>
+      <td><span class="tag ${appTags[l.appreciation]||"tag-check"}">${l.appreciation||"—"}</span></td>
+      <td>${l.prix_marche_ht||"—"}</td>
+      <td><strong>${l.prix_vente_ht||"—"}</strong></td>
+      <td><span class="coeff">${l.coeff||"—"}</span></td>
+      <td>${l.pose_ht||"—"}</td>
+      <td style="color:var(--grey);font-size:.78rem">${l.a_prevoir||"—"}</td>
+    </tr>`).join("");
 
-    emptyEl.style.display   = "none";
-    resultsEl.style.display = "flex";
-  }
+  return `
+    <div class="verdict v-fourn">
+      <div class="verdict-badge">${r.emoji||"🧾"}</div>
+      <div class="verdict-content">
+        <div class="verdict-label">Analyse fournisseur — Revente HT</div>
+        <div class="verdict-text">${r.verdict||"—"}</div>
+      </div>
+    </div>
+    <div class="sec full">
+      <div class="sec-header">
+        <div class="sec-icon" style="background:#FEEEE6">📦</div>
+        <div class="sec-title">Tableau de revente conseillé (HT)</div>
+      </div>
+      <div style="overflow-x:auto;padding:12px 16px">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Produit / Lot</th>
+              <th>Achat HT</th>
+              <th>Appréciation</th>
+              <th>Marché HT</th>
+              <th>Vente conseillée HT</th>
+              <th>Coeff.</th>
+              <th>Pose HT</th>
+              <th>À prévoir</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows || "<tr><td colspan='8' style='color:var(--grey);padding:16px'>Aucune ligne extraite.</td></tr>"}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sections">
+      ${secCard("⚠️","Alertes & points d'attention","c-red", listItems(r.alertes,"c-red"))}
+      <div class="sec sec-conseil">
+        <div class="sec-header">
+          <div class="sec-icon">💡</div>
+          <div class="sec-title">Recommandations</div>
+        </div>
+        <div class="sec-items">${listItems(r.conseil,"")}</div>
+      </div>
+    </div>`;
+}
 
-  function hideResults() {
-    resultsEl.style.display = "none";
-    emptyEl.style.display   = "flex";
-    btnCopy.style.display = btnReset.style.display = "none";
-  }
+/* ── PRESTATAIRE ── */
+function renderPresta(r) {
+  const kv = [
+    ["Lot analysé",              r.lot||"—"],
+    ["Montant vendu client HT",  r.montant_client_ht||"—"],
+    ["Part fourniture estimée",  r.fourniture_ht||"—"],
+    ["Part main-d'œuvre estimée",r.mo_ht||"—"],
+    ["Fourchette prestataire",   r.presta_fourchette||"—"],
+    ["Maximum à ne pas dépasser",r.presta_max||"—"],
+    ["Marge AB RENOV estimée",   r.marge_estimee||"—"],
+  ];
 
-  btnCopy.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(plainText);
-      const orig = btnCopy.innerHTML;
-      btnCopy.innerHTML = "✅ Copié !";
-      setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
-    } catch { alert("Copiez manuellement le texte."); }
+  const kvHtml = kv.map(([k,v]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid #F2EBE3">
+      <span style="font-size:.82rem;color:var(--grey)">${k}</span>
+      <span style="font-size:.88rem;font-weight:600;color:var(--navy)">${v}</span>
+    </div>`).join("");
+
+  return `
+    <div class="verdict v-presta">
+      <div class="verdict-badge">${r.emoji||"🔧"}</div>
+      <div class="verdict-content">
+        <div class="verdict-label">Analyse prestataire — Main-d'œuvre HT</div>
+        <div class="verdict-text">${r.verdict||"—"}</div>
+      </div>
+    </div>
+    <div class="sections">
+      <div class="sec">
+        <div class="sec-header">
+          <div class="sec-icon" style="background:#E8EEF5">📊</div>
+          <div class="sec-title">Synthèse financière HT</div>
+        </div>
+        <div>${kvHtml}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${secCard("⚠️","Alertes marge","c-red", listItems(r.alertes,"c-red"))}
+        ${secCard("❓","Points à clarifier","c-lav", listItems(r.a_clarifier,"c-lav"))}
+      </div>
+    </div>
+    <div class="sec sec-conseil full">
+      <div class="sec-header">
+        <div class="sec-icon">💡</div>
+        <div class="sec-title">Recommandations avant validation</div>
+      </div>
+      <div class="sec-items">${listItems(r.conseil,"")}</div>
+    </div>`;
+}
+
+/* ── HELPERS HTML ── */
+function secCard(icon, title, colorClass, itemsHtml) {
+  return `<div class="sec ${colorClass}">
+    <div class="sec-header">
+      <div class="sec-icon">${icon}</div>
+      <div class="sec-title">${title}</div>
+    </div>
+    <div class="sec-items">${itemsHtml}</div>
+  </div>`;
+}
+
+function listItems(arr, cls) {
+  if (!Array.isArray(arr) || arr.length === 0) arr = ["Aucun élément détecté."];
+  return arr.map(txt => `
+    <div class="item">
+      <div class="item-bullet"></div>
+      <span>${txt}</span>
+    </div>`).join("");
+}
+
+function formulItems(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return `<div class="item"><div class="item-bullet" style="background:var(--lav)"></div><span>Aucune reformulation nécessaire.</span></div>`;
+  return arr.map(item => {
+    if (typeof item === "object" && item.avant) {
+      return `<div class="item formul-item">
+        <div class="formul-before"><span>❌</span><span>${item.avant}</span></div>
+        <div class="formul-after"><span>✅</span><span>${item.apres||""}</span></div>
+      </div>`;
+    }
+    return `<div class="item"><div class="item-bullet" style="background:var(--lav)"></div><span>${item}</span></div>`;
+  }).join("");
+}
+
+/* ── PLAIN TEXT ── */
+function buildPlainDevis(r) {
+  const flat = a => Array.isArray(a) ? a.map(x=>typeof x==="object"?`❌ ${x.avant} → ✅ ${x.apres}`:`• ${x}`).join("\n") : a;
+  return ["COMPTE RENDU — AB RENOV VÉRIFICATION DEVIS","=".repeat(44),"",
+    "VERDICT", r.verdict,"",
+    "POINTS À CORRIGER", flat(r.priority),"",
+    "DOUBLONS", flat(r.doublon),"",
+    "FORMULATIONS", flat(r.formul),"",
+    "LECTURE CLIENT", flat(r.client),"",
+    "CONSEIL COMMERCIAL", flat(r.conseil)].join("\n");
+}
+
+function buildPlainFourn(r) {
+  const lignes = Array.isArray(r.lignes) ? r.lignes.map(l =>
+    `• ${l.produit||"?"} | Achat: ${l.prix_achat_ht||"?"} | ${l.appreciation||"?"} | Marché: ${l.prix_marche_ht||"?"} | Vente: ${l.prix_vente_ht||"?"} | Coeff: ${l.coeff||"?"} | Pose: ${l.pose_ht||"?"} | À prévoir: ${l.a_prevoir||"?"}`
+  ).join("\n") : "";
+  return ["ANALYSE FOURNISSEUR — AB RENOV","=".repeat(44),"",
+    "VERDICT", r.verdict,"",
+    "TABLEAU HT", lignes,"",
+    "ALERTES", (r.alertes||[]).map(x=>`• ${x}`).join("\n"),"",
+    "RECOMMANDATIONS", (r.conseil||[]).map(x=>`• ${x}`).join("\n")].join("\n");
+}
+
+function buildPlainPresta(r) {
+  return ["ANALYSE PRESTATAIRE — AB RENOV","=".repeat(44),"",
+    `Lot : ${r.lot||"—"}`,
+    `Montant client HT : ${r.montant_client_ht||"—"}`,
+    `Fourniture HT : ${r.fourniture_ht||"—"}`,
+    `Main-d'œuvre HT : ${r.mo_ht||"—"}`,
+    `Fourchette prestataire : ${r.presta_fourchette||"—"}`,
+    `Maximum à ne pas dépasser : ${r.presta_max||"—"}`,
+    `Marge AB RENOV : ${r.marge_estimee||"—"}`,"",
+    "ALERTES", (r.alertes||[]).map(x=>`• ${x}`).join("\n"),"",
+    "À CLARIFIER", (r.a_clarifier||[]).map(x=>`• ${x}`).join("\n"),"",
+    "RECOMMANDATIONS", (r.conseil||[]).map(x=>`• ${x}`).join("\n")].join("\n");
+}
+
+/* ================================================================
+   UI HELPERS
+================================================================ */
+function hideResults() {
+  resultsEl.style.display = "none";
+  resultsEl.innerHTML = "";
+  emptyEl.style.display   = "flex";
+  btnCopy.style.display = btnReset.style.display = "none";
+}
+
+btnCopy.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(plainText);
+    const orig = btnCopy.innerHTML;
+    btnCopy.innerHTML = "✅ Copié !";
+    setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
+  } catch { alert("Copiez manuellement le texte."); }
+});
+
+btnReset.addEventListener("click", () => {
+  currentFile = null; plainText = "";
+  fileInput.value = "";
+  filePillTxt.textContent = "📄 Choisir un fichier";
+  filePill.classList.remove("has-file");
+  btnAnalyze.disabled = true;
+  ["inp-lot","inp-presta","inp-note"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
   });
+  hideStatus(); hideResults();
+});
 
-  btnReset.addEventListener("click", () => {
-    currentFile = null; plainText = "";
-    fileInput.value = "";
-    filePillTxt.textContent = "📄 Choisir un PDF";
-    filePill.classList.remove("has-file");
-    btnAnalyze.disabled = true;
-    hideStatus(); hideResults();
-  });
-
-  function showStatus(type, msg) {
-    statusEl.className = type;
-    statusText.textContent = msg;
-    statusEl.style.display = "flex";
-  }
-  function hideStatus() { statusEl.style.display = "none"; }
-  function showError(msg) { showStatus("error", "⚠ " + msg); }
+function showStatus(type, msg) {
+  statusEl.className = type;
+  statusText.textContent = msg;
+  statusEl.style.display = "flex";
+}
+function hideStatus() { statusEl.style.display = "none"; }
+function showError(msg) { showStatus("error", "⚠ " + msg); }
 </script>
 </body>
 </html>
