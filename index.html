@@ -363,6 +363,166 @@
     .sec-conseil .item { background:rgba(255,255,255,.6); border-color:#C8BFE0; }
     .sec-conseil .item-bullet { background:var(--gold); }
 
+
+    /* ── VERSION LISIBILITÉ RENFORCÉE ── */
+    .content {
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 22px;
+    }
+    #results { gap: 14px; }
+    .read-banner {
+      background: var(--navy);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-lg);
+    }
+    .read-emoji { font-size: 2.1rem; flex-shrink: 0; }
+    .read-label {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--lav);
+      margin-bottom:4px;
+    }
+    .read-score {
+      font-size:1.42rem;
+      line-height:1.15;
+      font-weight:800;
+      color:#fff;
+    }
+    .read-score-pill {
+      background: var(--orange);
+      color:#fff;
+      font-family:'Barlow Condensed',sans-serif;
+      font-weight:800;
+      font-size:.9rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:8px 18px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .read-grid {
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:14px;
+    }
+    .read-card {
+      background:var(--white);
+      border-radius:14px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      border:1px solid rgba(22,45,73,.06);
+    }
+    .read-card-head {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:13px 16px;
+      border-bottom:1px solid #F2EBE3;
+      min-height:52px;
+    }
+    .read-card-icon {
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1rem;
+      flex-shrink:0;
+    }
+    .read-card-title {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.82rem;
+      font-weight:800;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--navy);
+    }
+    .read-items {
+      padding:13px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .read-item {
+      display:grid;
+      grid-template-columns:26px 1fr;
+      gap:9px;
+      align-items:start;
+      padding:11px 12px;
+      border-radius:9px;
+      background:#FDFAF7;
+      border-left:4px solid var(--grey-lt);
+      font-size:1rem;
+      line-height:1.35;
+      color:#1E2630;
+      font-weight:500;
+    }
+    .read-item span:first-child {
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.92rem;
+      margin-top:1px;
+      flex-shrink:0;
+    }
+    .read-red { border-left-color:var(--red); }
+    .read-orange { border-left-color:var(--orange); }
+    .read-lav { border-left-color:var(--lav); }
+    .read-ok { border-left-color:var(--green); }
+    .read-closing {
+      background:var(--navy);
+      border-radius:14px;
+      padding:15px 20px;
+      display:grid;
+      grid-template-columns:34px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    .read-closing-icon { font-size:1.5rem; }
+    .read-closing-title {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:.76rem;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--lav);
+      margin-bottom:4px;
+    }
+    .read-closing-text {
+      font-size:1.08rem;
+      color:#fff;
+      font-weight:700;
+      line-height:1.35;
+    }
+
+    @media (min-width:1500px) {
+      .content { max-width: 1380px; }
+    }
+    @media (max-width:1100px) {
+      .read-grid { grid-template-columns:1fr; }
+      .read-score-pill { display:none; }
+    }
+    @media (max-width:560px) {
+      .content { padding:12px; }
+      .read-banner { padding:14px; }
+      .read-score { font-size:1.2rem; }
+      .read-item { font-size:.95rem; }
+      .read-closing-text { font-size:1rem; }
+    }
+
     /* FOOTER */
     footer {
       text-align:center; padding:10px;
@@ -725,9 +885,9 @@ function renderResults(r) {
 /* ── DEVIS CLIENT ── */
 function renderDevis(r) {
   const scoreColors = {
-    "Prêt à envoyer": "#1E7A4A",
-    "À corriger":     "#C86020",
-    "Ne pas envoyer": "#D0392B"
+    "Prêt à envoyer": "var(--green)",
+    "À corriger":     "var(--orange)",
+    "Ne pas envoyer": "var(--red)"
   };
   const scoreColor = scoreColors[r.score] || "var(--grey)";
 
@@ -736,69 +896,65 @@ function renderDevis(r) {
   const risks      = Array.isArray(r.client_risk)  ? r.client_risk  : [];
   const tip        = r.closing_tip || "—";
 
-  const inlineItem = (txt, color, icon) =>
-    `<div style="display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border-radius:6px;background:#FDFAF7;border-left:3px solid ${color};font-size:.83rem;line-height:1.5;color:#2A2A2A">
-      <span style="flex-shrink:0;margin-top:1px">${icon}</span><span>${txt}</span>
+  const readItem = (txt, colorClass, icon) =>
+    `<div class="read-item ${colorClass}">
+      <span>${icon}</span>
+      <strong>${txt}</strong>
     </div>`;
 
   const blockersHtml = blockers.length
-    ? blockers.map(t => inlineItem(t, "var(--red)", "🚫")).join("")
-    : inlineItem("Aucun blocage critique détecté.", "var(--green)", "✅");
+    ? blockers.map(t => readItem(t, "read-red", "×")).join("")
+    : readItem("Aucun blocage critique détecté.", "read-ok", "✓");
 
   const fixesHtml = fixes.length
-    ? fixes.map(t => inlineItem(t, "var(--orange)", "🔧")).join("")
-    : inlineItem("Aucune correction nécessaire.", "var(--green)", "✅");
+    ? fixes.map(t => readItem(t, "read-orange", "→")).join("")
+    : readItem("Aucune correction nécessaire.", "read-ok", "✓");
 
   const risksHtml = risks.length
-    ? risks.map(t => inlineItem(t, "var(--lav)", "👁️")).join("")
-    : inlineItem("Aucun risque client identifié.", "var(--green)", "✅");
+    ? risks.map(t => readItem(t, "read-lav", "!")).join("")
+    : readItem("Aucun risque client identifié.", "read-ok", "✓");
 
   return `
-    <!-- Score banner compact -->
-    <div style="background:var(--navy);border-radius:var(--r);padding:16px 22px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-lg)">
-      <div style="font-size:2rem;flex-shrink:0">${r.emoji||"📊"}</div>
+    <div class="read-banner">
+      <div class="read-emoji">${r.emoji||"📊"}</div>
       <div style="flex:1">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-bottom:4px">Verdict</div>
-        <div style="font-size:1rem;font-weight:700;color:#fff">${r.score||"—"}</div>
+        <div class="read-label">Verdict</div>
+        <div class="read-score">${r.score||"—"}</div>
       </div>
-      <div style="background:${scoreColor};color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:20px">${r.score||"—"}</div>
+      <div class="read-score-pill" style="background:${scoreColor}">${r.score||"—"}</div>
     </div>
 
-    <!-- 3 colonnes côte à côte -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-
-      <div class="sec">
-        <div class="sec-header">
-          <div class="sec-icon" style="background:#FEE8E6">🚫</div>
-          <div class="sec-title">Blocages — À corriger avant envoi</div>
+    <div class="read-grid">
+      <div class="read-card">
+        <div class="read-card-head">
+          <div class="read-card-icon" style="background:#FEE8E6">×</div>
+          <div class="read-card-title">Blocages à corriger</div>
         </div>
-        <div class="sec-items">${blockersHtml}</div>
+        <div class="read-items">${blockersHtml}</div>
       </div>
 
-      <div class="sec">
-        <div class="sec-header">
-          <div class="sec-icon" style="background:#FEEEE6">🔧</div>
-          <div class="sec-title">Corrections rapides</div>
+      <div class="read-card">
+        <div class="read-card-head">
+          <div class="read-card-icon" style="background:#FEEEE6">→</div>
+          <div class="read-card-title">Corrections rapides</div>
         </div>
-        <div class="sec-items">${fixesHtml}</div>
+        <div class="read-items">${fixesHtml}</div>
       </div>
 
-      <div class="sec">
-        <div class="sec-header">
-          <div class="sec-icon" style="background:var(--lav-bg)">👁️</div>
-          <div class="sec-title">Risques côté client</div>
+      <div class="read-card">
+        <div class="read-card-head">
+          <div class="read-card-icon" style="background:var(--lav-bg)">!</div>
+          <div class="read-card-title">Risques client</div>
         </div>
-        <div class="sec-items">${risksHtml}</div>
+        <div class="read-items">${risksHtml}</div>
       </div>
-
     </div>
 
-    <!-- Conseil closing pleine largeur -->
-    <div style="background:var(--navy);border-radius:var(--r);padding:14px 22px;display:flex;align-items:center;gap:14px">
-      <span style="font-size:1.3rem;flex-shrink:0">💡</span>
+    <div class="read-closing">
+      <div class="read-closing-icon">◆</div>
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--lav);margin-bottom:3px">Levier de closing</div>
-        <div style="font-size:.9rem;color:rgba(255,255,255,.9);font-weight:500">${tip}</div>
+        <div class="read-closing-title">Levier de closing</div>
+        <div class="read-closing-text">${tip}</div>
       </div>
     </div>`;
 }
