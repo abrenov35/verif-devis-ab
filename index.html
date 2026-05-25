@@ -780,13 +780,44 @@ table.price-table th{
 }
 
 
-/* ===== UPLOAD PROPRE ET STABLE ===== */
+
+/* ===== MULTI ONGLETS ===== */
+.multi-session-info{
+  padding:8px 24px 0 24px;
+  font-size:.78rem;
+  color:#7B746E;
+  letter-spacing:.03em;
+}
+
+
+/* ===== SMS PRESTATAIRE ===== */
+.sms-box{
+  background:#FFFFFF !important;
+  border-left-color:var(--green) !important;
+  font-size:1rem !important;
+  font-weight:700 !important;
+  color:#0C1E33 !important;
+}
+.sms-copy-btn{
+  width:max-content !important;
+  margin-left:14px !important;
+  margin-bottom:4px !important;
+}
+
+
+/* ===== SIGNAL BTN ===== */
+.signal-btn{
+  opacity:.55 !important;
+  cursor:not-allowed !important;
+}
+
+
+/* ===== CORRECTION FINALE AB RENOV ===== */
 .file-pill{
   position:relative !important;
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
-  gap:6px !important;
   height:34px !important;
   padding:0 16px !important;
   border:1.5px dashed var(--grey-lt) !important;
@@ -794,26 +825,49 @@ table.price-table th{
   cursor:pointer !important;
   background:var(--white) !important;
   z-index:1 !important;
-  overflow:visible !important;
 }
-
 .file-pill.has-file{
   border-style:solid !important;
   border-color:var(--green) !important;
   background:#F0FAF5 !important;
 }
-
+.file-pill.has-file .file-pill-text{
+  color:var(--green) !important;
+}
 .file-pill-text{
   pointer-events:none !important;
   white-space:nowrap !important;
 }
-
 #file-input{
-  display:none !important;
+  position:absolute !important;
+  left:-9999px !important;
+  width:1px !important;
+  height:1px !important;
+  opacity:0 !important;
 }
-
-.toolbar > *{
-  flex-shrink:0 !important;
+#btn-analyze:not(:disabled){
+  opacity:1 !important;
+  pointer-events:auto !important;
+  cursor:pointer !important;
+  background:var(--navy) !important;
+  color:#fff !important;
+}
+.extra-fields.show{
+  display:flex !important;
+}
+.sms-box{
+  background:#FFFFFF !important;
+  border-left-color:var(--green) !important;
+  font-size:1rem !important;
+  font-weight:700 !important;
+  color:#0C1E33 !important;
+}
+.sms-copy-btn{
+  width:max-content !important;
+}
+.signal-btn{
+  opacity:.55 !important;
+  cursor:not-allowed !important;
 }
 
 </style>
@@ -851,7 +905,7 @@ table.price-table th{
   <label class="file-pill" id="file-pill" for="file-input">
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
   </label>
-  <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="display:none" />
+  <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
 
   <!-- Champs extra tabs 2 & 3 -->
   <div class="extra-fields" id="extra-fourn">
@@ -1013,7 +1067,9 @@ Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
   "marge_estimee": "marge AB RENOV estimée si respecté",
   "alertes": ["alerte marge 1", "point à clarifier 1"],
   "a_clarifier": ["point à clarifier avant validation 1", "..."],
-  "conseil": ["recommandation 1", "recommandation 2"]
+  "conseil": ["recommandation 1", "recommandation 2"],
+  "sms_prestataire": "Bonjour, au vu du dossier, je peux vous proposer le lot faïence sur une base de 850 € HT main-d'œuvre seule, suivant descriptif transmis. Pouvez-vous me confirmer si cela vous convient ?",
+  "offre_basse_ht": "montant bas HT conseillé"
 }`
 
 };
@@ -1071,17 +1127,26 @@ function updateEmptyState() {
 /* ================================================================
    FILE LOAD
 ================================================================ */
+
+
+
 fileInput.addEventListener("change", () => {
-  if (fileInput.files[0]) loadFile(fileInput.files[0]);
+  if (fileInput.files && fileInput.files.length > 0) {
+    loadFile(fileInput.files[0]);
+  }
 });
 
 function loadFile(f) {
   currentFile = f;
-  const name = f.name.length > 26 ? f.name.slice(0, 24) + "…" : f.name;
+  const name = f.name.length > 30 ? f.name.slice(0, 28) + "…" : f.name;
   filePillTxt.textContent = "📄 " + name;
   filePill.classList.add("has-file");
   btnAnalyze.disabled = false;
-  hideStatus(); hideResults();
+  btnAnalyze.removeAttribute("disabled");
+  btnAnalyze.style.opacity = "1";
+  btnAnalyze.style.pointerEvents = "auto";
+  hideStatus();
+  hideResults();
 }
 
 /* ================================================================
@@ -1166,7 +1231,13 @@ async function callAI(devisText) {
    ANALYZE
 ================================================================ */
 btnAnalyze.addEventListener("click", async () => {
-  if (!currentFile) return;
+  if (!currentFile && fileInput.files && fileInput.files.length > 0) {
+    currentFile = fileInput.files[0];
+  }
+  if (!currentFile) {
+    showError("Aucun fichier sélectionné.");
+    return;
+  }
   btnAnalyze.disabled = true;
   hideResults();
   showStatus("loading", "Lecture du fichier…");
@@ -1404,6 +1475,7 @@ const lignes = Array.isArray(r.lignes) ? r.lignes : [];
 
 /* ── PRESTATAIRE ── */
 
+
 function renderPresta(r) {
 
   const kv = [
@@ -1421,6 +1493,19 @@ function renderPresta(r) {
       <span style="font-size:.82rem;color:var(--grey)">${k}</span>
       <span style="font-size:.95rem;font-weight:700;color:var(--navy)">${v}</span>
     </div>`).join("");
+
+  const lotTxt = r.lot || "le lot concerné";
+  const offreTxt = r.offre_basse_ht || r.presta_fourchette || r.presta_max || "la base basse indiquée";
+  const clientNom = r.client || r.nom_client || "NOM CLIENT";
+  const smsTxt = r.sms_prestataire || `Bonjour,
+
+Suite à l’étude du dossier ${clientNom}, nous pouvons vous proposer ce lot sur une base de ${offreTxt} HT en main-d’œuvre seule.
+
+Descriptif visible sur l’application Vertuoza.
+
+Hors prestations complémentaires ou imprévus éventuels.
+
+Dites-moi si cela peut vous convenir.`;
 
   return `
     <div class="verdict v-presta">
@@ -1471,27 +1556,44 @@ function renderPresta(r) {
         <div class="item">
           <div class="item-bullet"></div>
           <span>
-            Au vu du devis signé, proposer une offre simple et sécurisée,
-            avec descriptif sommaire et prix volontairement bas,
-            afin de conserver une marge de manœuvre chantier.
+            Offre basse à privilégier : ${offreTxt} HT, main-d'œuvre seule.
+            Garder les fournitures, reprises imprévues, supports lourds, déchets et modifications client hors périmètre.
           </span>
         </div>
 
         <div class="item">
           <div class="item-bullet"></div>
           <span>
-            Ne pas intégrer :
-            fournitures, reprises imprévues, modifications client,
-            reprises supports lourdes ou prestations non visibles.
+            Objectif : proposer le prix le plus bas acceptable pour préserver une marge de manœuvre chantier.
           </span>
         </div>
 
-        <div class="item">
+      </div>
+
+    </div>
+
+    <div class="sec sec-conseil full">
+
+      <div class="sec-header">
+        <div class="sec-icon">📱</div>
+        <div class="sec-title">SMS offre basse à copier</div>
+      </div>
+
+      <div class="sec-items">
+
+        <div class="item sms-box">
           <div class="item-bullet"></div>
-          <span>
-            Base conseillée :
-            privilégier la fourchette basse compatible avec un chantier propre.
-          </span>
+          <span id="sms-presta">${smsTxt}</span>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px 14px">
+          <button class="tbtn tbtn-navy sms-copy-btn" onclick="copySmsPresta()">
+            Copier le SMS
+          </button>
+
+          <button class="tbtn tbtn-ghost signal-btn" disabled>
+            ↗ Envoyer via Signal
+          </button>
         </div>
 
       </div>
@@ -1515,6 +1617,7 @@ function renderPresta(r) {
 
 
 /* ── HELPERS HTML ── */
+
 function secCard(icon, title, colorClass, itemsHtml) {
   return `<div class="sec ${colorClass}">
     <div class="sec-header">
@@ -1583,6 +1686,13 @@ function buildPlainPresta(r) {
     "RECOMMANDATIONS", (r.conseil||[]).map(x=>`• ${x}`).join("\n")].join("\n");
 }
 
+
+function copySmsPresta() {
+  const el = document.getElementById("sms-presta");
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText || el.textContent || "");
+}
+
 /* ================================================================
    UI HELPERS
 ================================================================ */
@@ -1621,46 +1731,6 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 <!-- Correctif bouton prestataire + nouvelle analyse nouvel onglet -->
 
 
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const fileInput = document.getElementById("file-input");
-  const fileText = document.getElementById("file-pill-text");
-  const btnAnalyze = document.getElementById("btn-analyze");
-
-  if(fileInput){
-
-    fileInput.addEventListener("change", () => {
-
-      if(fileInput.files && fileInput.files.length > 0){
-
-        const name = fileInput.files[0].name;
-
-        if(fileText){
-          fileText.textContent = "📄 " + name;
-        }
-
-        const pill = document.getElementById("file-pill");
-        if(pill){
-          pill.classList.add("has-file");
-        }
-
-        if(btnAnalyze){
-          btnAnalyze.disabled = false;
-          btnAnalyze.style.opacity = "1";
-          btnAnalyze.style.pointerEvents = "auto";
-        }
-
-      }
-
-    });
-
-  }
-
-});
-</script>
 
 </body>
 </html>
