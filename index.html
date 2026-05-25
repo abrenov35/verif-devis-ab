@@ -625,6 +625,147 @@ table.price-table th{
 
 }
 
+
+/* ===== CORRECTION LISIBILITÉ TEXTE + ALIGNEMENTS ===== */
+
+.content{
+  max-width:1280px !important;
+  padding:18px 24px !important;
+}
+
+.verdict{
+  padding:16px 20px !important;
+  align-items:flex-start !important;
+}
+
+.verdict-badge{
+  width:36px !important;
+  min-width:36px !important;
+  text-align:center !important;
+  line-height:1 !important;
+  margin-top:4px !important;
+}
+
+.verdict-content{
+  max-width:1100px !important;
+}
+
+.verdict-label{
+  font-size:.72rem !important;
+  letter-spacing:.14em !important;
+  margin-bottom:7px !important;
+}
+
+.verdict-text{
+  font-size:1rem !important;
+  line-height:1.45 !important;
+  font-weight:500 !important;
+  max-width:1050px !important;
+}
+
+.sections{
+  gap:14px !important;
+  align-items:start !important;
+}
+
+.sec{
+  overflow:hidden !important;
+}
+
+.sec-header{
+  min-height:54px !important;
+  padding:12px 16px !important;
+}
+
+.sec-title{
+  font-size:.74rem !important;
+  letter-spacing:.12em !important;
+  line-height:1.2 !important;
+}
+
+.sec-items{
+  padding:12px 14px !important;
+  gap:9px !important;
+}
+
+.item{
+  font-size:.92rem !important;
+  line-height:1.38 !important;
+  padding:10px 12px !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:9px !important;
+  word-break:normal !important;
+  overflow-wrap:anywhere !important;
+}
+
+.item span{
+  flex:1 !important;
+}
+
+.item-bullet{
+  width:7px !important;
+  height:7px !important;
+  margin-top:7px !important;
+  flex:0 0 7px !important;
+}
+
+.sec > div:not(.sec-header){
+  font-size:.92rem !important;
+}
+
+/* Tableau synthèse prestataire : meilleure lecture des libellés et montants */
+.sec div[style*="justify-content:space-between"]{
+  display:grid !important;
+  grid-template-columns:165px minmax(0, 1fr) !important;
+  gap:14px !important;
+  align-items:start !important;
+  padding:11px 16px !important;
+}
+
+.sec div[style*="justify-content:space-between"] span:first-child{
+  font-size:.82rem !important;
+  color:#7F7A76 !important;
+  line-height:1.25 !important;
+}
+
+.sec div[style*="justify-content:space-between"] span:last-child{
+  font-size:.95rem !important;
+  font-weight:800 !important;
+  color:#071D35 !important;
+  line-height:1.35 !important;
+  text-align:right !important;
+  overflow-wrap:anywhere !important;
+}
+
+/* En grand écran : la synthèse ne doit pas écraser le texte à droite */
+@media (min-width:1100px){
+  .sections{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+
+/* Mobile : tout passe vertical */
+@media (max-width:900px){
+  .sections{
+    display:flex !important;
+    flex-direction:column !important;
+  }
+
+  .sec div[style*="justify-content:space-between"]{
+    grid-template-columns:1fr !important;
+    gap:4px !important;
+  }
+
+  .sec div[style*="justify-content:space-between"] span:last-child{
+    text-align:left !important;
+  }
+
+  .verdict-text{
+    font-size:.95rem !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -691,7 +832,7 @@ table.price-table th{
     Copier
   </button>
 
-  <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↩ Nouveau</button>
+  <button class="tbtn tbtn-ghost" id="btn-reset" style="display:none">↗ Nouvelle analyse</button>
 
   <div id="status">
     <div class="spinner"></div>
@@ -986,16 +1127,25 @@ btnAnalyze.addEventListener("click", async () => {
 
       if (!text || text.length < 20) {
         showStatus("loading", "PDF scanné détecté — OCR…");
+        try {
         text = await extractImageText(currentFile);
+      } catch (ocrErr) {
+        text = "[OCR impossible. Analyse à partir des informations disponibles et du contexte saisi.]";
+      }
       }
     } else {
       showStatus("loading", "Lecture OCR image…");
-      text = await extractImageText(currentFile);
+      try {
+        text = await extractImageText(currentFile);
+      } catch (ocrErr) {
+        text = "[OCR impossible. Analyse à partir des informations disponibles et du contexte saisi.]";
+      }
     }
     showStatus("loading", "Analyse IA en cours… (20-30 sec)");
     const result = await callAI(text);
     renderResults(result);
     hideStatus();
+    btnAnalyze.disabled = false;
     btnCopy.style.display  = "flex";
     btnReset.style.display = "flex";
   } catch (err) {
@@ -1403,15 +1553,9 @@ btnCopy.addEventListener("click", async () => {
 });
 
 btnReset.addEventListener("click", () => {
-  currentFile = null; plainText = "";
-  fileInput.value = "";
-  filePillTxt.textContent = "📄 Choisir un fichier";
-  filePill.classList.remove("has-file");
-  btnAnalyze.disabled = true;
-  ["inp-lot","inp-presta","inp-note"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = "";
-  });
+  const newWindow = window.open(window.location.href, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.focus();
+});
   hideStatus(); hideResults();
 });
 
@@ -1423,5 +1567,7 @@ function showStatus(type, msg) {
 function hideStatus() { statusEl.style.display = "none"; }
 function showError(msg) { showStatus("error", "⚠ " + msg); }
 </script>
+
+<!-- Correctif bouton prestataire + nouvelle analyse nouvel onglet -->
 </body>
 </html>
