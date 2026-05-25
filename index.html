@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
   <style>
     :root {
       --navy:    #162D49;
@@ -791,6 +792,18 @@ async function extractPdf(file) {
   return text.trim();
 }
 
+
+async function extractImageText(file) {
+
+  const result = await Tesseract.recognize(
+    file,
+    'fra'
+  );
+
+  return result.data.text;
+}
+
+
 /* ================================================================
    CALL AI
 ================================================================ */
@@ -799,9 +812,13 @@ async function callAI(devisText) {
 
   // Inject context for presta tab
   if (currentTab === "presta") {
-    const lot    = document.getElementById("inp-lot").value.trim();
-    const presta = document.getElementById("inp-presta").value.trim();
-    const note   = document.getElementById("inp-note").value.trim();
+    const lotEl = document.getElementById("inp-lot");
+    const prestaEl = document.getElementById("inp-presta");
+    const noteEl = document.getElementById("inp-note");
+
+    const lot = lotEl ? lotEl.value.trim() : "";
+    const presta = prestaEl ? prestaEl.value.trim() : "";
+    const note = noteEl ? noteEl.value.trim() : "";
     const ctx = [
       lot    ? `Lot : ${lot}`         : "",
       presta ? `Prestataire : ${presta}` : "",
@@ -843,9 +860,14 @@ btnAnalyze.addEventListener("click", async () => {
     let text = "";
     if (currentFile.type === "application/pdf") {
       text = await extractPdf(currentFile);
-      if (!text || text.length < 30) throw new Error("PDF vide ou scanné en image.");
+
+      if (!text || text.length < 20) {
+        showStatus("loading", "PDF scanné détecté — OCR…");
+        text = await extractImageText(currentFile);
+      }
     } else {
-      text = "[Image jointe — le document est une image, analyse visuelle demandée]";
+      showStatus("loading", "Lecture OCR image…");
+      text = await extractImageText(currentFile);
     }
     showStatus("loading", "Analyse IA en cours… (20-30 sec)");
     const result = await callAI(text);
