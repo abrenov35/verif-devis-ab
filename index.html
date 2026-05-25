@@ -545,7 +545,87 @@
       .header-right { display:none; }
       .tab { padding:0 8px; }
     }
-  </style>
+  
+/* ===== ALIGNEMENTS PRESTATAIRE ===== */
+
+.sections{
+  align-items:start !important;
+}
+
+.sec{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  height:100%;
+}
+
+.sec-header{
+  min-height:62px;
+  display:flex;
+  align-items:center;
+}
+
+.sec-title{
+  line-height:1.2;
+}
+
+.sec-items{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+}
+
+.item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  line-height:1.45;
+}
+
+.item span{
+  flex:1;
+}
+
+.verdict{
+  align-items:flex-start !important;
+}
+
+.verdict-content{
+  padding-top:2px;
+}
+
+.verdict-text{
+  line-height:1.5;
+}
+
+table.price-table td,
+table.price-table th{
+  vertical-align:top;
+  line-height:1.4;
+}
+
+@media (min-width: 1100px){
+
+  .sections{
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    align-items:start;
+  }
+
+}
+
+@media (max-width: 900px){
+
+  .sections{
+    display:flex !important;
+    flex-direction:column;
+  }
+
+}
+
+</style>
 </head>
 <body>
 
@@ -648,45 +728,81 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 ================================================================ */
 const PROMPTS = {
 
-devis: `Tu es un expert commercial BTP pour AB RENOV (Rennes).
-Analyse ce devis. Sois ULTRA-BREF. 1 ligne par point maximum. Zéro littérature.
-Uniquement ce qui impacte la signature. Max 3 points par section.
+devis: `Tu es conducteur de travaux et analyste chiffrage BTP à Rennes.
 
-Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
+Tu relis un devis client AB RENOV.
+
+Objectif :
+- détecter incohérences
+- détecter prix anormalement bas ou hauts
+- détecter oublis visibles
+- détecter doublons
+- détecter risque marge faible
+- comparer au marché Rennes
+- donner un avis chantier direct
+
+Réponse :
+- phrases courtes
+- style télégraphique
+- aucune littérature
+- uniquement du concret métier
+
+Retourne UNIQUEMENT un JSON valide :
+
 {
-  "emoji": "✅ ou ⚠️ ou 🔴",
-  "score": "Prêt à envoyer | À corriger | Ne pas envoyer",
-  "blockers": ["blocage critique 1 — correction", "blocage 2"],
-  "quick_fixes": ["fix rapide 1", "fix 2", "fix 3"],
-  "client_risk": ["objection probable 1", "risque 2"],
-  "closing_tip": "1 phrase unique : le levier principal pour signer."
+  "emoji": "🟠",
+  "avis_global": "Positionnement marché correct Rennes.",
+  "position_marche": "correct",
+  "marge": "correcte",
+  "points_surveillance": [
+    "Faïence probablement sous-chiffrée."
+  ],
+  "risques": [
+    "Temps plomberie sous-estimé."
+  ],
+  "points_positifs": [
+    "Cuisine cohérente marché Rennes."
+  ]
 }
-Laisse un tableau vide [] si rien à signaler.`,
 
-fourn: `Tu es un expert en chiffrage BTP et revente matériaux pour AB RENOV (Rennes).
-Analyse ce devis fournisseur. Toutes les valeurs doivent être en HT uniquement.
-Ne travaille jamais en TTC. Si tu n'es pas sûr d'un prix, indique une fourchette prudente.
-Protège toujours la marge AB RENOV.
+Retourne uniquement le JSON.`,
 
-Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
+fourn: `Tu es expert chiffrage BTP et revente matériaux à Rennes pour AB RENOV.
+
+Tu analyses un devis fournisseur.
+
+Objectif :
+- vérifier cohérence prix achat
+- comparer au marché Rennes
+- proposer prix de vente AB RENOV
+- proposer coefficient multiplicateur réaliste
+- proposer estimation pose HT
+- détecter oublis accessoires
+- détecter produits risqués SAV
+
+Retourne UNIQUEMENT un JSON valide :
+
 {
-  "emoji": "✅ ou ⚠️ ou 🔴",
-  "verdict": "2-3 phrases. Synthèse globale du devis fournisseur.",
+  "emoji": "🟢",
+  "verdict": "Prix cohérent marché Rennes.",
   "lignes": [
     {
-      "produit": "nom du produit/lot",
-      "prix_achat_ht": "montant HT ou fourchette",
-      "appreciation": "correct|élevé|bas|à vérifier",
-      "prix_marche_ht": "fourchette marché HT",
-      "prix_vente_ht": "prix de vente conseillé AB RENOV HT",
-      "coeff": "x2.5",
-      "pose_ht": "estimation pose HT ou N/A",
-      "a_prevoir": "accessoires/compléments à prévoir"
+      "produit": "Faïence",
+      "prix_achat_ht": "24 €/m²",
+      "prix_vente_ht": "59 €/m²",
+      "coeff": "x2.4",
+      "pose_ht": "55 €/m²"
     }
   ],
-  "alertes": ["alerte 1", "alerte 2"],
-  "conseil": ["recommandation 1", "recommandation 2"]
-}`,
+  "alertes": [
+    "Accessoires probablement absents."
+  ],
+  "conseil": [
+    "Marge correcte."
+  ]
+}
+
+Retourne uniquement le JSON.`,
 
 presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (Rennes).
 Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
@@ -915,7 +1031,25 @@ function renderResults(r) {
 
 function renderDevis(r) {
 
-  const surveillances = Array.isArray(r.points_surveillance)
+  
+if (!r.points_surveillance && r.blockers) {
+  r.points_surveillance = r.blockers;
+}
+
+if (!r.risques && r.client_risk) {
+  r.risques = r.client_risk;
+}
+
+if (!r.points_positifs && r.quick_fixes) {
+  r.points_positifs = r.quick_fixes;
+}
+
+if (!r.avis_global && r.score) {
+  r.avis_global = r.score;
+}
+
+const surveillances = Array.isArray(r.points_surveillance)
+
     ? r.points_surveillance.map(x => `
       <div class="item">
         <div class="item-bullet"></div>
@@ -993,7 +1127,13 @@ function renderDevis(r) {
 
 function renderFourn(r) {
 
-  const lignes = Array.isArray(r.lignes) ? r.lignes : [];
+  
+if (!r.lignes && r.items) {
+  r.lignes = r.items;
+}
+
+const lignes = Array.isArray(r.lignes) ? r.lignes : [];
+
 
   const rows = lignes.map(l => `
     <tr>
