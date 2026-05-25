@@ -73,6 +73,7 @@
       background: var(--white);
       border-bottom: 1px solid var(--grey-lt);
       display: flex;
+      justify-content: center;
       padding: 0 28px;
       gap: 0;
       flex-shrink: 0;
@@ -157,9 +158,8 @@
     }
     .field-input:focus { border-color: var(--lav); }
     .field-input::placeholder { color: var(--grey); }
-    .field-input.w-lot { width: 180px; }
-    .field-input.w-presta { width: 160px; }
-    .field-input.w-note { width: 200px; }
+    .field-input.w-lot { width: 160px; }
+    .field-input.w-context { flex: 1; min-width: 260px; max-width: 520px; }
 
     .tsep { width:1px; height:20px; background:var(--grey-lt); }
 
@@ -539,7 +539,8 @@
       .toolbar { padding:8px 16px; }
       .tabs { padding:0 16px; }
       .tab { padding:0 12px; font-size:.65rem; }
-      .field-input.w-lot, .field-input.w-presta, .field-input.w-note { width:140px; }
+      .field-input.w-lot { width:130px; }
+      .field-input.w-context { min-width:180px; max-width:100%; }
     }
     @media (max-width:560px) {
       .header-right { display:none; }
@@ -1192,9 +1193,8 @@ table.price-table th{
   </div>
 
   <div class="extra-fields" id="extra-presta">
-    <input type="text" class="field-input w-lot"    id="inp-lot"    placeholder="Lot (ex: faïence, plomberie…)" />
-    <input type="text" class="field-input w-presta" id="inp-presta" placeholder="Nom du prestataire" />
-    <input type="text" class="field-input w-note"   id="inp-note"   placeholder="Infos utiles : surface, étage, support, accès, contraintes…" />
+    <input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot (ex: faïence, plomberie…)" />
+    <input type="text" class="field-input w-context" id="inp-note" placeholder="Contexte chantier : surface, étage, accès, support, contraintes, nom client, accord oral, budget max, remarques terrain…" />
   </div>
 
   <div class="tsep"></div>
@@ -1478,17 +1478,14 @@ async function callAI(devisText) {
 
   if (currentTab === "presta") {
     const lotEl = document.getElementById("inp-lot");
-    const prestaEl = document.getElementById("inp-presta");
     const noteEl = document.getElementById("inp-note");
 
     const lot = lotEl ? lotEl.value.trim() : "";
-    const presta = prestaEl ? prestaEl.value.trim() : "";
     const note = noteEl ? noteEl.value.trim() : "";
 
     userContext = [
       lot ? `Lot : ${lot}` : "",
-      presta ? `Prestataire : ${presta}` : "",
-      note ? `Informations complémentaires : ${note}` : ""
+      note ? `Contexte chantier : ${note}` : ""
     ].filter(Boolean).join(" | ");
 
     systemPrompt = systemPrompt.replace("{CONTEXT}", userContext || "Aucun contexte fourni.");
@@ -1566,6 +1563,11 @@ btnAnalyze.addEventListener("click", async () => {
     btnAnalyze.disabled = false;
     btnCopy.style.display  = "flex";
     btnReset.style.display = "flex";
+    // Vider champs contexte après analyse
+    const _lot = document.getElementById("inp-lot");
+    const _ctx = document.getElementById("inp-note");
+    if (_lot) _lot.value = "";
+    if (_ctx) _ctx.value = "";
   } catch (err) {
     showError(err.message);
     btnAnalyze.disabled = false;
@@ -2202,7 +2204,6 @@ function renderHistory() {
               </div>
             </div>
             <div class="history-summary">${h.summary}</div>
-            ${h.refinementNote ? `<div class="history-refine-note">✏️ ${h.refinementNote}</div>` : ''}
             <div class="history-actions">
               <button class="tbtn tbtn-navy" onclick="openHistoryItem('${h.id}')">Ouvrir + Recalculer</button>
               <button class="tbtn tbtn-lav" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
