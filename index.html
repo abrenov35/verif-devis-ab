@@ -860,6 +860,13 @@ table.price-table th{
   cursor:not-allowed !important;
 }
 
+
+/* ===== SIGNAL BOUTON FUTUR ===== */
+.signal-btn{
+  opacity:.55 !important;
+  cursor:not-allowed !important;
+}
+
 </style>
 </head>
 <body>
@@ -1119,6 +1126,8 @@ function updateEmptyState() {
 ================================================================ */
 
 
+
+
 fileInput.addEventListener("change", () => {
   if (fileInput.files && fileInput.files[0]) {
     loadFile(fileInput.files[0]);
@@ -1131,6 +1140,9 @@ function loadFile(f) {
   filePillTxt.textContent = "📄 " + name;
   filePill.classList.add("has-file");
   btnAnalyze.disabled = false;
+  btnAnalyze.removeAttribute("disabled");
+  btnAnalyze.style.opacity = "1";
+  btnAnalyze.style.pointerEvents = "auto";
   hideStatus();
   hideResults();
 }
@@ -1202,22 +1214,21 @@ async function callAI(devisText) {
   const raw = data.content?.map(b => b.text || "").join("") || "";
   if (!raw) throw new Error("Réponse vide.");
   const clean = raw.replace(/```json|```/g, "").trim();
-  try { console.log(clean);
 
-      try {
-        return JSON.parse(clean);
-      } catch(e) {
-        console.error("JSON invalide :", clean);
-        throw e;
-      } }
-  catch { throw new Error("Format inattendu : " + raw.slice(0, 120)); }
+  try {
+    console.log(clean);
+    return JSON.parse(clean);
+  } catch (e) {
+    console.error("JSON invalide :", clean);
+    throw new Error("Format JSON inattendu : " + raw.slice(0, 160));
+  }
 }
 
 /* ================================================================
    ANALYZE
 ================================================================ */
 btnAnalyze.addEventListener("click", async () => {
-  if (!currentFile && fileInput.files && fileInput.files.length > 0) {
+  if (!currentFile && fileInput.files && fileInput.files[0]) {
     currentFile = fileInput.files[0];
   }
   if (!currentFile) {
@@ -1482,7 +1493,16 @@ function renderPresta(r) {
 
   const lotTxt = r.lot || "le lot concerné";
   const offreTxt = r.offre_basse_ht || r.presta_fourchette || r.presta_max || "la base basse indiquée";
-  const smsTxt = r.sms_prestataire || `Bonjour, au vu du devis signé, je peux vous proposer ${lotTxt} sur une base de ${offreTxt} HT, main-d'œuvre seule, suivant descriptif transmis. Merci de me confirmer si cela peut vous convenir.`;
+  const clientNom = r.client || r.nom_client || "NOM CLIENT";
+  const smsTxt = r.sms_prestataire || `Bonjour,
+
+Suite à l’étude du dossier ${clientNom}, nous pouvons vous proposer ce lot sur une base de ${offreTxt} HT en main-d’œuvre seule.
+
+Descriptif visible sur l’application Vertuoza.
+
+Hors prestations complémentaires ou imprévus éventuels.
+
+Dites-moi si cela peut vous convenir.`;
 
   return `
     <div class="verdict v-presta">
@@ -1563,9 +1583,15 @@ function renderPresta(r) {
           <span id="sms-presta">${smsTxt}</span>
         </div>
 
-        <button class="tbtn tbtn-navy sms-copy-btn" onclick="copySmsPresta()">
-          Copier le SMS
-        </button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px 14px">
+          <button class="tbtn tbtn-navy sms-copy-btn" onclick="copySmsPresta()">
+            Copier le SMS
+          </button>
+
+          <button class="tbtn tbtn-ghost signal-btn" disabled>
+            ↗ Envoyer via Signal
+          </button>
+        </div>
 
       </div>
 
