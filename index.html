@@ -766,6 +766,31 @@ table.price-table th{
   }
 }
 
+
+/* ===== CORRECTIF ZONES CLIQUABLES ===== */
+.file-pill{
+  position:relative !important;
+  cursor:pointer !important;
+}
+
+.file-pill input[type="file"]{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  opacity:0 !important;
+  cursor:pointer !important;
+  z-index:5 !important;
+}
+
+.extra-fields.show{
+  display:flex !important;
+}
+
+.field-input{
+  min-width:150px !important;
+}
+
 </style>
 </head>
 <body>
@@ -1569,5 +1594,59 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 </script>
 
 <!-- Correctif bouton prestataire + nouvelle analyse nouvel onglet -->
+
+<script>
+/* ===== CORRECTIF UPLOAD + CHAMPS PRESTATAIRE ===== */
+(function(){
+
+  const filePillFix = document.getElementById("file-pill");
+  const fileInputFix = document.getElementById("file-input");
+
+  if (filePillFix && fileInputFix) {
+    filePillFix.addEventListener("click", function(e){
+      if (e.target !== fileInputFix) {
+        fileInputFix.click();
+      }
+    });
+  }
+
+  function ensurePrestaFields(){
+    const extraPresta = document.getElementById("extra-presta");
+    if (!extraPresta) return;
+
+    if (!document.getElementById("inp-lot")) {
+      extraPresta.insertAdjacentHTML("beforeend",
+        '<input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot(s) : faïence, sol, peinture…" />'
+      );
+    }
+
+    if (!document.getElementById("inp-presta")) {
+      extraPresta.insertAdjacentHTML("beforeend",
+        '<input type="text" class="field-input w-presta" id="inp-presta" placeholder="Prestataire" />'
+      );
+    }
+
+    if (!document.getElementById("inp-note")) {
+      extraPresta.insertAdjacentHTML("beforeend",
+        '<input type="text" class="field-input w-note" id="inp-note" placeholder="Notes : contraintes, étage, surface…" />'
+      );
+    }
+  }
+
+  ensurePrestaFields();
+
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      ensurePrestaFields();
+      const extraPresta = document.getElementById("extra-presta");
+      if (extraPresta) {
+        extraPresta.classList.toggle("show", tab.dataset.tab === "presta");
+      }
+    });
+  });
+
+})();
+</script>
+
 </body>
 </html>
