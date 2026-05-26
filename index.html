@@ -1301,6 +1301,8 @@ IMPORTANT : chaque élément des tableaux points_surveillance, risques et points
 - ✅ point positif ou cohérent
 - 💡 conseil ou observation utile
 
+Génère aussi un champ "sms_client" : un message court et humain destiné au client final (pas à un artisan). Ton naturel, rassurant, professionnel. Pas administratif. Signature : "Équipe travaux AB RENOV 35".
+
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1319,7 +1321,8 @@ Retourne UNIQUEMENT un JSON valide :
   "points_positifs": [
     "✅ Cuisine cohérente marché Rennes.",
     "✅ TVA bien appliquée."
-  ]
+  ],
+  "sms_client": "Bonjour [prénom client], je me permets de revenir vers vous au sujet de votre chantier. Suite à notre devis, je voulais vous confirmer que tout est bien pris en compte. N'hésitez pas si vous avez des questions. À bientôt, Équipe travaux AB RENOV 35"
 }
 
 Retourne uniquement le JSON.`,
@@ -1343,6 +1346,8 @@ IMPORTANT : chaque élément des tableaux alertes et conseil doit commencer par 
 - ✅ point cohérent ou bon rapport qualité/prix
 - 💡 conseil ou opportunité commerciale
 
+Génère aussi un champ "sms_client" : un message court et humain destiné au client final. Ton naturel, rassurant, professionnel. Signature : "Équipe travaux AB RENOV 35".
+
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1364,7 +1369,8 @@ Retourne UNIQUEMENT un JSON valide :
   "conseil": [
     "✅ Marge correcte sur la porte coulissante.",
     "💡 Prévoir joint de dilatation à chiffrer en option."
-  ]
+  ],
+  "sms_client": "Bonjour [prénom client], votre commande est bien notée et en cours de préparation. Je reviens vers vous rapidement pour confirmer les détails. À bientôt, Équipe travaux AB RENOV 35"
 }
 
 Retourne uniquement le JSON.`,
