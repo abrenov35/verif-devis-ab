@@ -1900,15 +1900,20 @@ function renderPresta(r) {
   const lotTxt = r.lot || "le lot concerné";
   const offreTxt = r.offre_basse_ht || r.presta_fourchette || r.presta_max || "la base basse indiquée";
   const clientNom = r.client || r.nom_client || "NOM CLIENT";
-  const smsTxt = r.sms_prestataire || `Bonjour,
+  const adresse   = r.adresse_chantier || "";
+  const descriptif = r.descriptif_rapide || lotTxt;
+  const fournitures = r.fournitures_abrenov || "fournitures fournies par AB RENOV";
+  const smsTxt = r.sms_prestataire || `Chantier ${clientNom}${adresse ? " — " + adresse : ""}
 
-Pour le dossier ${clientNom}, je peux proposer ${offreTxt} HT pour ce lot en main-d’œuvre seule, suivant descriptif visible sur Vertuoza.
+Lot : ${descriptif}
+Fournitures AB RENOV : ${fournitures}
+Pose seule à votre charge.
 
-Fournitures fournies par AB RENOV.
+Montant proposé : ${offreTxt} HT, main-d'oeuvre seule.
 
-Hors sujétions imprévues et prestations non prévues au descriptif.
+Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin.
 
-Accord ?`;
+Équipe travaux AB RENOV 35`;
 
   return `
     <div class="verdict v-presta">
