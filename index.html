@@ -70,130 +70,125 @@
 
     /* ── TABS ── */
     .tabs {
-      background: var(--navy-dk);
-      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: var(--white);
+      border-bottom: 1px solid var(--grey-lt);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 24px;
+      padding: 0 28px;
       gap: 0;
       flex-shrink: 0;
-      height: 42px;
     }
     .tab {
-      display: flex; align-items: center; gap: 6px;
-      padding: 0 16px;
-      height: 42px;
+      display: flex; align-items: center; gap: 7px;
+      padding: 0 20px;
+      height: 46px;
       border: none;
-      border-bottom: 2px solid transparent;
+      border-bottom: 3px solid transparent;
       background: transparent;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 700; font-size: .72rem;
-      letter-spacing: .09em; text-transform: uppercase;
-      color: rgba(255,255,255,.42);
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--grey);
       transition: all .15s;
       white-space: nowrap;
     }
-    .tab:hover { color: rgba(255,255,255,.8); }
-    .tab.active { color: var(--white); border-bottom-color: var(--lav); }
-    .tab.active.t-fourn  { border-bottom-color: var(--orange); }
-    .tab.active.t-presta { border-bottom-color: var(--lav); }
-    .tab.active.t-devis  { border-bottom-color: #FF7070; }
-    .tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; opacity: .65; }
-    .t-devis .tab-dot  { background: #FF7070; }
+    .tab:hover { color: var(--navy); }
+    .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+    .tab.active.t-fourn { border-bottom-color: var(--orange); color: var(--orange); }
+    .tab.active.t-presta { border-bottom-color: var(--lav); color: var(--lav); }
+    .tab-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .t-devis .tab-dot  { background: var(--red); }
     .t-fourn .tab-dot  { background: var(--orange); }
     .t-presta .tab-dot { background: var(--lav); }
 
     /* ── TOOLBAR ── */
     .toolbar {
-      background: var(--navy);
-      border-bottom: 1px solid rgba(255,255,255,.07);
-      padding: 0 28px;
-      height: 46px;
+      background: #FDFAF7;
+      border-bottom: 1px solid var(--grey-lt);
+      padding: 10px 28px;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       flex-shrink: 0;
     }
-    .tabs-actions { display: none !important; }
 
-    /* pill fichier */
     .file-pill {
       position: relative;
-      display: flex; align-items: center; gap: 7px;
-      height: 32px; padding: 0 14px;
-      border: 1.5px solid rgba(255,255,255,.22);
-      border-radius: 4px; cursor: pointer;
-      transition: all .2s; background: rgba(255,255,255,.06);
+      display: flex; align-items: center; gap: 6px;
+      height: 34px; padding: 0 14px;
+      border: 1.5px dashed var(--grey-lt);
+      border-radius: 17px; cursor: pointer;
+      transition: all .2s; background: var(--white);
     }
-    .file-pill:hover { border-color: var(--lav); background: rgba(164,149,195,.18); }
-    .file-pill.has-file { border-color: #4FBF7F; background: rgba(79,191,127,.12); }
+    .file-pill:hover { border-color: var(--lav); background: var(--lav-bg); }
+    .file-pill.has-file { border-style:solid; border-color: var(--green); background: #F0FAF5; }
     .file-pill input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     .file-pill-text {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 700; font-size: .72rem;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: rgba(255,255,255,.8); white-space: nowrap;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--navy); white-space: nowrap;
     }
-    .file-pill.has-file .file-pill-text { color: #4FBF7F; }
+    .file-pill.has-file .file-pill-text { color: var(--green); }
 
-    /* champs contexte */
+    /* Extra fields (for tabs 2 & 3) */
     .extra-fields {
-      display: none; align-items: center;
-      gap: 8px; flex-wrap: nowrap;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .extra-fields.show { display: flex; }
 
     .field-input {
-      height: 32px;
-      border: 1.5px solid rgba(255,255,255,.2);
-      border-radius: 4px;
-      padding: 0 12px;
+      height: 34px;
+      border: 1.5px solid var(--grey-lt);
+      border-radius: 17px;
+      padding: 0 14px;
       font-family: 'Barlow', sans-serif;
-      font-size: .82rem;
-      color: #fff;
-      background: rgba(255,255,255,.08);
+      font-size: .8rem;
+      color: var(--navy);
+      background: var(--white);
       outline: none;
-      transition: border-color .15s, background .15s;
+      transition: border-color .15s;
     }
-    .field-input:focus { border-color: var(--lav); background: rgba(255,255,255,.13); }
-    .field-input::placeholder { color: rgba(255,255,255,.3); font-size:.8rem; }
-    .field-input.w-lot { width: 130px; }
-    .field-input.w-context { width: 320px; }
+    .field-input:focus { border-color: var(--lav); }
+    .field-input::placeholder { color: var(--grey); }
+    .field-input.w-lot { width: 180px; }
+    .field-input.w-presta { width: 160px; }
+    .field-input.w-note { width: 200px; }
 
-    .tsep { width:1px; height:20px; background: rgba(255,255,255,.15); margin: 0 2px; }
+    .tsep { width:1px; height:20px; background:var(--grey-lt); }
 
-    /* boutons toolbar */
     .tbtn {
       display: flex; align-items: center; gap: 6px;
-      height: 32px; padding: 0 16px;
-      border: 1.5px solid transparent;
-      border-radius: 4px;
+      height: 34px; padding: 0 16px;
+      border: none; border-radius: 17px;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; font-size: .72rem;
-      letter-spacing: .12em; text-transform: uppercase;
+      font-weight: 700; font-size: .72rem;
+      letter-spacing: .08em; text-transform: uppercase;
       transition: all .15s; white-space: nowrap;
     }
     .tbtn:active { transform: scale(.97); }
-    .tbtn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
-    .tbtn-navy  { background: var(--lav); color: #fff; border-color: var(--lav); }
-    .tbtn-navy:hover:not(:disabled)  { background: #8A74B8; border-color: #8A74B8; }
-    .tbtn-lav   { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.28); }
-    .tbtn-lav:hover:not(:disabled)   { background: rgba(255,255,255,.18); }
-    .tbtn-ghost { background: transparent; border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.75); }
-    .tbtn-ghost:hover:not(:disabled) { border-color: rgba(255,255,255,.5); color: #fff; }
+    .tbtn:disabled { opacity:.32; cursor:not-allowed; transform:none; }
+    .tbtn-navy  { background: var(--navy); color: var(--white); }
+    .tbtn-navy:hover:not(:disabled)  { background: var(--navy-dk); }
+    .tbtn-lav   { background: var(--lav); color: var(--white); }
+    .tbtn-lav:hover:not(:disabled)   { background: #8F7FB0; }
+    .tbtn-ghost { background: transparent; border: 1.5px solid var(--grey-lt); color: var(--navy); }
+    .tbtn-ghost:hover:not(:disabled) { border-color: var(--navy); }
 
     #status {
       display: none; align-items: center; gap: 7px;
-      font-size: .72rem; font-weight: 600;
-      padding: 4px 12px; border-radius: 4px;
+      font-size: .76rem; font-weight: 500;
+      padding: 5px 13px; border-radius: 17px;
     }
-    #status.loading { display:flex; background: rgba(164,149,195,.25); color: #C8BCDF; }
-    #status.error   { display:flex; background: rgba(208,57,43,.22); color: #FF8878; max-width:340px; }
+    #status.loading { display:flex; background:var(--lav-bg); color:#5B44A0; }
+    #status.error   { display:flex; background:#FEF2F2; color:var(--red); max-width:360px; }
     .spinner {
       width:12px; height:12px;
       border:2px solid currentColor; border-top-color:transparent;
@@ -249,7 +244,7 @@
     .verdict.v-presta .verdict-label { color: var(--lav); }
     .verdict-text {
       font-size:.9rem; line-height:1.65;
-      color:rgba(255,255,255,.92); font-weight:400;
+      color:rgba(255,255,255,.85); font-weight:300;
     }
 
     /* Sections grid */
@@ -275,18 +270,17 @@
     }
     .sec-title {
       font-family:'Barlow Condensed',sans-serif;
-      font-weight:800; font-size:.7rem;
-      letter-spacing:.13em; text-transform:uppercase; color:#6A7080;
+      font-weight:700; font-size:.66rem;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--grey);
     }
 
     .sec-items { padding:12px 16px; display:flex; flex-direction:column; gap:8px; }
 
     .item {
-      display:flex; gap:10px; align-items:flex-start;
-      padding: 10px 13px; border-radius:8px;
+      display:flex; gap:9px; align-items:flex-start;
+      padding: 9px 11px; border-radius:7px;
       background:#FDFAF7; border-left:3px solid transparent;
-      font-size:.9rem; line-height:1.55; color:#141E2B;
-      font-weight: 450;
+      font-size:.83rem; line-height:1.6; color:#2A2A2A;
     }
     .item-bullet {
       width:6px; height:6px; border-radius:50%;
@@ -542,11 +536,10 @@
       .sections { grid-template-columns:1fr; }
       .sec.full { grid-column:auto; }
       .content { padding:16px; }
-      .toolbar { padding:0 12px; height:48px; }
+      .toolbar { padding:8px 16px; }
       .tabs { padding:0 16px; }
       .tab { padding:0 12px; font-size:.65rem; }
-      .field-input.w-lot { width:130px; }
-      .field-input.w-context { min-width:180px; max-width:100%; }
+      .field-input.w-lot, .field-input.w-presta, .field-input.w-note { width:140px; }
     }
     @media (max-width:560px) {
       .header-right { display:none; }
@@ -804,18 +797,17 @@ table.price-table th{
 
 
 /* ===== STABILISATION BOUTONS ===== */
-/* file-pill override — toolbar navy */
 .file-pill {
   position: relative !important;
   display: flex !important;
   align-items: center !important;
-  gap: 7px !important;
-  height: 32px !important;
+  gap: 6px !important;
+  height: 34px !important;
   padding: 0 14px !important;
-  border: 1.5px solid rgba(255,255,255,.22) !important;
-  border-radius: 4px !important;
+  border: 1.5px dashed var(--grey-lt) !important;
+  border-radius: 17px !important;
   cursor: pointer !important;
-  background: rgba(255,255,255,.06) !important;
+  background: var(--white) !important;
   overflow: hidden !important;
 }
 .file-pill input[type="file"] {
@@ -831,18 +823,14 @@ table.price-table th{
   pointer-events:none !important;
   position:relative !important;
   z-index:1 !important;
-  font-size:.72rem !important;
-  font-weight:700 !important;
-  letter-spacing:.1em !important;
-  text-transform:uppercase !important;
-  color: rgba(255,255,255,.8) !important;
 }
 .file-pill.has-file {
-  border-color: #4FBF7F !important;
-  background: rgba(79,191,127,.12) !important;
+  border-style:solid !important;
+  border-color:var(--green) !important;
+  background:#F0FAF5 !important;
 }
 .file-pill.has-file .file-pill-text {
-  color: #4FBF7F !important;
+  color:var(--green) !important;
 }
 #btn-analyze:not(:disabled) {
   opacity:1 !important;
@@ -959,20 +947,12 @@ table.price-table th{
   background:#fff;
   border-radius:14px;
   border:1px solid #E5DDD4;
-  padding:14px 18px;
+  padding:14px 16px;
   box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:row;
+  display:grid;
+  grid-template-columns:180px 1fr auto;
   align-items:center;
-  gap:16px;
-}
-.history-card-body{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  gap:14px;
+  gap:18px;
 }
 
 .history-left{
@@ -998,50 +978,31 @@ table.price-table th{
   overflow-wrap:anywhere;
 }
 
-.history-card-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-}
-.history-card-meta{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  flex-shrink:0;
-  min-width:120px;
-}
 .history-date{
-  font-size:.7rem;
-  color:#B0A8A0;
-  white-space:nowrap;
-  flex-shrink:0;
-  margin-left:6px;
+  font-size:.78rem;
+  color:#7F7A76;
 }
 
 .history-summary{
-  font-size:.92rem;
-  line-height:1.45;
+  font-size:.95rem;
+  line-height:1.4;
   color:#1E2630;
-  background:#EDE8F0;
+  background:#FCFAF8;
   border-left:4px solid var(--lav);
-  padding:10px 14px;
+  padding:10px 12px;
   border-radius:8px;
-  font-weight:500;
 }
 
 .history-actions{
   display:flex;
   align-items:center;
   gap:8px;
-  flex-shrink:0;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
+
 .history-actions .tbtn{
-  min-width:auto;
-  justify-content:center;
-}
-.history-actions .tbtn-navy{
-  margin-left:auto;
+  min-width:max-content;
 }
 
 .history-empty{
@@ -1056,123 +1017,129 @@ table.price-table th{
 @media (max-width:980px){
 
   .history-card{
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
+    grid-template-columns:1fr;
+    align-items:flex-start;
+    gap:12px;
   }
-  .history-card-body{ flex-direction:column; }
+
   .history-actions{
-    flex-wrap:wrap;
+    justify-content:flex-start;
   }
-  .history-actions .tbtn-navy{ margin-left:0; }
 
 }
-/* ===== BARRE RECALCUL IA ===== */
-.recalcul-bar{
+/* ===== AFFINAGE APRES ANALYSE ===== */
+.refine-box{
+  margin-top:2px;
+  border:1.5px solid #D4CCE8;
   background:#F8F6FD;
-  border:2px solid #CFC4E6;
-  border-radius:12px;
-  padding:14px 16px;
+}
+
+.refine-body{
+  padding:14px;
   display:flex;
   flex-direction:column;
   gap:10px;
 }
-.recalcul-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:.68rem;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  color:var(--lav);
-}
-.recalcul-chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
-.recalcul-chip{
-  padding:4px 11px;
-  border:1.5px solid #D4CCE8;
-  border-radius:20px;
-  background:#fff;
-  font-family:'Barlow',sans-serif;
-  font-size:.76rem;
-  color:#6B5A9A;
-  cursor:pointer;
-  transition:all .15s;
-  white-space:nowrap;
-  user-select:none;
-}
-.recalcul-chip:hover,.recalcul-chip.on{
-  background:var(--lav);
-  border-color:var(--lav);
-  color:#fff;
-}
-.recalcul-row{
-  display:flex;
-  gap:10px;
-  align-items:flex-end;
-}
-.recalcul-textarea{
-  flex:1;
-  min-height:52px;
-  max-height:110px;
+
+.refine-textarea{
+  width:100%;
+  min-height:82px;
   resize:vertical;
   border:1.5px solid #D4CCE8;
   border-radius:10px;
-  padding:10px 13px;
-  font-family:'Barlow',sans-serif;
-  font-size:.9rem;
+  padding:12px 14px;
+  font-family:'Barlow', sans-serif;
+  font-size:.95rem;
   color:var(--navy);
   background:#fff;
   outline:none;
-  line-height:1.45;
-  transition:border-color .15s;
 }
-.recalcul-textarea:focus{ border-color:var(--lav); }
-.recalcul-textarea::placeholder{ color:#B5AEC8; font-size:.85rem; }
-.recalcul-btn{
-  flex-shrink:0;
-  height:42px;
-  padding:0 18px;
-  background:var(--navy);
-  color:#fff;
-  border:none;
-  border-radius:21px;
-  cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;
-  font-size:.7rem;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  transition:background .15s;
-}
-.recalcul-btn:hover:not(:disabled){ background:var(--navy-dk); }
-.recalcul-btn:disabled{ opacity:.35; cursor:not-allowed; }
-.recalcul-note{ font-size:.74rem; color:#9A8EAA; }
-/* badge historique */
-.hbadge{
-  display:inline-block;
-  padding:2px 7px;
-  border-radius:7px;
-  font-size:.62rem;
-  font-weight:700;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  margin-left:5px;
-  vertical-align:middle;
-}
-.hbadge-refined{ background:#EDE9F5; color:#6B5A9A; }
-.history-refine-note{
-  font-size:.78rem;
-  color:#7F7A76;
-  background:#F8F6FD;
-  border-left:3px solid var(--lav);
-  border-radius:6px;
-  padding:6px 10px;
-}
-.history-actions .tbtn{ min-width:110px; justify-content:center; }
 
+.refine-textarea:focus{
+  border-color:var(--lav);
+}
+
+.refine-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.refine-help{
+  font-size:.82rem;
+  color:#7F7A76;
+}
+
+
+/* ===== AFFINAGE GRAND CHAMP REDACTION ===== */
+.refine-box{
+  border:2px solid #CFC4E6 !important;
+  background:#F8F6FD !important;
+}
+
+.refine-body{
+  padding:16px !important;
+}
+
+.refine-textarea{
+  min-height:170px !important;
+  font-size:1rem !important;
+  line-height:1.45 !important;
+  padding:14px 16px !important;
+  border-radius:12px !important;
+}
+
+.refine-actions .tbtn{
+  height:38px !important;
+  padding:0 20px !important;
+  font-size:.78rem !important;
+}
+
+.refine-help{
+  max-width:760px !important;
+  line-height:1.35 !important;
+}
+
+
+/* ===== RELANCE HISTORIQUE ===== */
+.history-actions .tbtn{
+  min-width:max-content !important;
+}
+
+.sms-client-bar {
+  background: #EEF4FC;
+  border: 1.5px solid #BDD4EE;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.sms-client-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: .62rem;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: #3A6EA5; margin-bottom: 5px;
+}
+.sms-client-text {
+  flex: 1; min-width: 200px;
+  font-size: .87rem; color: #1E3050; line-height: 1.55;
+  white-space: pre-wrap;
+}
+.sms-client-btn {
+  flex-shrink: 0; height: 32px; padding: 0 15px;
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 6px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: .68rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: background .15s; white-space: nowrap;
+  align-self: flex-start;
+}
+.sms-client-btn:hover { background: var(--navy-dk); }
 </style>
 </head>
 <body>
@@ -1191,19 +1158,19 @@ table.price-table th{
 <div class="tabs">
   <button class="tab t-devis active" data-tab="devis">
     <div class="tab-dot"></div>
-    Devis client
+    Vérification devis client
   </button>
   <button class="tab t-fourn" data-tab="fourn">
     <div class="tab-dot"></div>
-    Devis fournisseur
+    Devis fournisseur / Revente
   </button>
   <button class="tab t-presta" data-tab="presta">
     <div class="tab-dot"></div>
-    Prestataire
+    Prestataire main-d'œuvre
   </button>
   <button class="tab t-histo" data-tab="historique">
     <div class="tab-dot"></div>
-    Historique
+    Historique recherches
   </button>
 </div>
 
@@ -1214,11 +1181,15 @@ table.price-table th{
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
   </div>
 
-  <div class="extra-fields" id="extra-fourn"></div>
+  <!-- Champs contexte par onglet -->
+<div class="extra-fields" id="extra-fourn">
+    <!-- Pas de champ avant analyse : l'affinage se fait après résultat -->
+  </div>
 
   <div class="extra-fields" id="extra-presta">
-    <input type="text" class="field-input w-lot" id="inp-lot" placeholder="Lot…" />
-    <input type="text" class="field-input w-context" id="inp-note" placeholder="Contexte : surface, étage, accès, contraintes, nom client…" />
+    <input type="text" class="field-input w-lot"    id="inp-lot"    placeholder="Lot (ex: faïence, plomberie…)" />
+    <input type="text" class="field-input w-presta" id="inp-presta" placeholder="Nom du prestataire" />
+    <input type="text" class="field-input w-note"   id="inp-note"   placeholder="Infos utiles : surface, étage, support, accès, contraintes…" />
   </div>
 
   <div class="tsep"></div>
@@ -1295,14 +1266,6 @@ Réponse :
 - aucune littérature
 - uniquement du concret métier
 
-IMPORTANT : chaque élément des tableaux points_surveillance, risques et points_positifs doit commencer par un emoji adapté :
-- 🔴 point critique bloquant
-- ⚠️ vigilance ou incohérence
-- ✅ point positif ou cohérent
-- 💡 conseil ou observation utile
-
-Génère aussi un champ "sms_client" : un message court et humain destiné au client final (pas à un artisan). Ton naturel, rassurant, professionnel. Pas administratif. Signature : "Équipe travaux AB RENOV 35".
-
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1311,18 +1274,14 @@ Retourne UNIQUEMENT un JSON valide :
   "position_marche": "correct",
   "marge": "correcte",
   "points_surveillance": [
-    "⚠️ Faïence probablement sous-chiffrée.",
-    "🔴 Poste dépose non prévu au devis."
+    "Faïence probablement sous-chiffrée."
   ],
   "risques": [
-    "⚠️ Temps plomberie sous-estimé.",
-    "🔴 Absence de réserve imprévus."
+    "Temps plomberie sous-estimé."
   ],
   "points_positifs": [
-    "✅ Cuisine cohérente marché Rennes.",
-    "✅ TVA bien appliquée."
-  ],
-  "sms_client": "Bonjour [prénom client], je me permets de revenir vers vous au sujet de votre chantier. Suite à notre devis, je voulais vous confirmer que tout est bien pris en compte. N'hésitez pas si vous avez des questions. À bientôt, Équipe travaux AB RENOV 35"
+    "Cuisine cohérente marché Rennes."
+  ]
 }
 
 Retourne uniquement le JSON.`,
@@ -1340,14 +1299,6 @@ Objectif :
 - détecter oublis accessoires
 - détecter produits risqués SAV
 
-IMPORTANT : chaque élément des tableaux alertes et conseil doit commencer par un emoji adapté :
-- 🔴 problème critique ou prix aberrant
-- ⚠️ vigilance, oubli probable ou risque SAV
-- ✅ point cohérent ou bon rapport qualité/prix
-- 💡 conseil ou opportunité commerciale
-
-Génère aussi un champ "sms_client" : un message court et humain destiné au client final. Ton naturel, rassurant, professionnel. Signature : "Équipe travaux AB RENOV 35".
-
 Retourne UNIQUEMENT un JSON valide :
 
 {
@@ -1363,72 +1314,37 @@ Retourne UNIQUEMENT un JSON valide :
     }
   ],
   "alertes": [
-    "⚠️ Accessoires probablement absents.",
-    "🔴 Coeff trop bas sur carrelage grand format."
+    "Accessoires probablement absents."
   ],
   "conseil": [
-    "✅ Marge correcte sur la porte coulissante.",
-    "💡 Prévoir joint de dilatation à chiffrer en option."
-  ],
-  "sms_client": "Bonjour [prénom client], votre commande est bien notée et en cours de préparation. Je reviens vers vous rapidement pour confirmer les détails. À bientôt, Équipe travaux AB RENOV 35"
+    "Marge correcte."
+  ]
 }
 
 Retourne uniquement le JSON.`,
 
-presta: `Tu es un expert en rentabilité chantier pour AB RENOV (Rennes).
-Tu analyses ce devis pour calculer ce qu'AB RENOV peut proposer à un prestataire en main-d'oeuvre seule.
-
-RÈGLE FONDAMENTALE :
-AB RENOV assure TOUT : commercial, logistique, fournitures, relation client, SAV, coordination, risques chantier.
-Le prestataire ne fait QUE la pose avec ses propres outils. Il ne fournit RIEN.
-
-FORMULE DE CALCUL OBLIGATOIRE :
-1. Montant HT total du lot vendu au client
-2. Déduire les fournitures HT
-3. MO nette HT = montant client HT - fournitures HT
-4. RÉPARTITION PROTECTRICE :
-   - Part prestataire : 42% à 55% MAX de la MO nette HT
-   - Part AB RENOV sur MO : 45% à 58% MINIMUM
-   - Chantier difficile (étage, accès, support mauvais) : 40-45% au prestataire
-   - Lot simple et rapide : 50-55% max au prestataire, JAMAIS plus
-   - Offre basse à envoyer en 1er : 42-45% de la MO nette HT
-   - Maximum absolu : 55% de la MO nette HT
-
-JUSTIFICATION : AB RENOV a trouvé le client, chiffré, géré le planning, livré les matériaux, assuré la logistique et porte la responsabilité finale. Le prestataire n'apporte que sa main-d'oeuvre et ses outils de base.
-
-Contexte utilisateur : {CONTEXT}
-
-IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit commencer par un emoji :
-- 🔴 risque critique marge ou dépassement
-- ⚠️ vigilance ou point flou
-- ❓ question à clarifier avant validation
-- ✅ point favorable ou confirmé
-- 💡 conseil terrain ou optimisation
+presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (Rennes).
+Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
+Toutes les valeurs doivent être en HT uniquement. Protège toujours la marge AB RENOV.
+Contexte fourni par l'utilisateur (lot, prestataire, notes) : {CONTEXT}
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
   "emoji": "✅ ou ⚠️ ou 🔴",
-  "verdict": "2-3 phrases. Synthèse avec % MO appliqué et justification courte.",
+  "verdict": "2-3 phrases. Synthèse de la situation.",
   "lot": "nom du lot analysé",
-  "montant_client_ht": "montant HT total vendu au client",
-  "fourniture_ht": "part fourniture HT estimée",
-  "mo_nette_ht": "MO nette HT = montant client - fournitures",
-  "mo_ht": "identique à mo_nette_ht",
-  "part_presta_pct": "% appliqué au prestataire (42-55% max)",
-  "part_abrenov_pct": "% conservé par AB RENOV sur MO (45-58%)",
-  "presta_fourchette": "fourchette basse - haute HT proposée au prestataire",
-  "presta_max": "maximum absolu à ne jamais dépasser HT",
-  "marge_abrenov_mo": "part AB RENOV sur MO HT",
-  "marge_estimee": "marge totale AB RENOV estimée (fourniture + MO AB RENOV)",
-  "alertes": ["🔴 si % trop élevé", "⚠️ vigilance"],
-  "a_clarifier": ["❓ point à clarifier"],
-  "conseil": ["✅ validation", "💡 conseil négociation"],
+  "montant_client_ht": "montant HT total vendu au client pour ce lot",
+  "fourniture_ht": "part fourniture estimée HT",
+  "mo_ht": "part main-d'œuvre estimée HT",
+  "presta_fourchette": "fourchette basse – haute conseillée HT",
+  "presta_max": "montant maximum à ne pas dépasser HT",
+  "marge_estimee": "marge AB RENOV estimée si respecté",
+  "alertes": ["alerte marge 1", "point à clarifier 1"],
+  "a_clarifier": ["point à clarifier avant validation 1", "..."],
+  "conseil": ["recommandation 1", "recommandation 2"],
   "client": "nom du client si visible dans le devis, sinon NOM CLIENT",
-  "adresse_chantier": "adresse du chantier si visible dans le devis, sinon ADRESSE CHANTIER",
-  "descriptif_rapide": "2-3 lignes résumant les prestations : type de pose, surface, matériaux prévus, particularités",
-  "fournitures_abrenov": "liste courte des fournitures fournies par AB RENOV pour ce lot",
-  "sms_prestataire": "Rédige un SMS destiné à un artisan du bâtiment. TON : terrain, professionnel, humain, direct. PAS de formulations froides, administratives ou IA. Le SMS doit contenir dans l'ordre : 1) Nom du chantier et adresse. 2) Description rapide des prestations (pose, surface, type). 3) Fournitures prévues par AB RENOV. 4) Ce qui est inclus dans le prix (ex : pose droite/diagonale, jointement, nettoyage). 5) Montant HT proposé en offre basse, suivi de : 'Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin.' 6) Signature : 'Équipe travaux AB RENOV 35'. Format lisible sur téléphone, phrases courtes, retours à la ligne entre les parties. Utilise le nom du client, l'adresse, le lot, le montant offre basse HT et les fournitures déduits du devis.",
-  "offre_basse_ht": "montant offre basse HT (42-45% MO nette)"
+  "sms_prestataire": "Bonjour, pour le dossier NOM CLIENT, je peux proposer 1500 € HT pour le lot concerné en main-d'œuvre seule, suivant descriptif visible sur Vertuoza. Fournitures fournies par AB RENOV. Hors sujétions imprévues et prestations non prévues au descriptif. Accord ?",
+  "offre_basse_ht": "montant bas HT conseillé"
 }`
 
 };
@@ -1557,14 +1473,17 @@ async function callAI(devisText) {
 
   if (currentTab === "presta") {
     const lotEl = document.getElementById("inp-lot");
+    const prestaEl = document.getElementById("inp-presta");
     const noteEl = document.getElementById("inp-note");
 
     const lot = lotEl ? lotEl.value.trim() : "";
+    const presta = prestaEl ? prestaEl.value.trim() : "";
     const note = noteEl ? noteEl.value.trim() : "";
 
     userContext = [
       lot ? `Lot : ${lot}` : "",
-      note ? `Contexte chantier : ${note}` : ""
+      presta ? `Prestataire : ${presta}` : "",
+      note ? `Informations complémentaires : ${note}` : ""
     ].filter(Boolean).join(" | ");
 
     systemPrompt = systemPrompt.replace("{CONTEXT}", userContext || "Aucun contexte fourni.");
@@ -1642,11 +1561,6 @@ btnAnalyze.addEventListener("click", async () => {
     btnAnalyze.disabled = false;
     btnCopy.style.display  = "flex";
     btnReset.style.display = "flex";
-    // Vider champs contexte après analyse
-    const _lot = document.getElementById("inp-lot");
-    const _ctx = document.getElementById("inp-note");
-    if (_lot) _lot.value = "";
-    if (_ctx) _ctx.value = "";
   } catch (err) {
     showError(err.message);
     btnAnalyze.disabled = false;
@@ -1656,7 +1570,7 @@ btnAnalyze.addEventListener("click", async () => {
 /* ================================================================
    RENDER RESULTS
 ================================================================ */
-function renderResults(r, refinementNote) {
+function renderResults(r) {
   let html = "";
   plainText = "";
 
@@ -1675,12 +1589,11 @@ function renderResults(r, refinementNote) {
   emptyEl.style.display   = "none";
   resultsEl.style.display = "flex";
 
-  const bar = (currentTab !== "historique") ? renderRecalculBar(false, null) : "";
-  const finalHtml = html + bar;
+  const finalHtml = currentTab !== "historique" ? html + renderRefineBox() : html;
   resultsEl.innerHTML = finalHtml;
 
   if (currentTab !== "historique") {
-    saveHistoryItem(r, finalHtml, plainText, refinementNote || null);
+    saveHistoryItem(r, finalHtml, plainText);
   }
 }
 
@@ -1735,7 +1648,7 @@ const surveillances = Array.isArray(r.points_surveillance)
       <div class="verdict-badge">${r.emoji || "🟠"}</div>
 
       <div class="verdict-content">
-        <div class="verdict-label">Devis client</div>
+        <div class="verdict-label">Vérification devis client</div>
         <div class="verdict-text">${r.avis_global || "Analyse terminée"}</div>
       </div>
     </div>
@@ -1856,7 +1769,8 @@ const lignes = Array.isArray(r.lignes) ? r.lignes : [];
       </div>
 
     </div>
-  `;
+    ${r.sms_client ? '<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-fourn">' + r.sms_client + '</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,\'sms-client-fourn\')">📋 Copier</button></div>' : ""}
+`;
 }
 
 
@@ -1868,14 +1782,11 @@ function renderPresta(r) {
   const kv = [
     ["Lot analysé", r.lot||"—"],
     ["Montant client HT", r.montant_client_ht||"—"],
-    ["Fourniture HT", r.fourniture_ht||"—"],
-    ["MO nette HT", r.mo_nette_ht||r.mo_ht||"—"],
-    ["Part prestataire", r.part_presta_pct ? r.part_presta_pct+" de la MO" : "—"],
-    ["Part AB RENOV / MO", r.part_abrenov_pct ? r.part_abrenov_pct+" de la MO" : "—"],
-    ["Offre basse conseillée", r.offre_basse_ht||"—"],
+    ["Fourniture estimée", r.fourniture_ht||"—"],
+    ["Main-d'œuvre estimée", r.mo_ht||"—"],
     ["Fourchette presta", r.presta_fourchette||"—"],
-    ["Maximum absolu", r.presta_max||"—"],
-    ["Marge AB RENOV estimée", r.marge_estimee||"—"]
+    ["Maximum conseillé", r.presta_max||"—"],
+    ["Marge estimée", r.marge_estimee||"—"]
   ];
 
   const kvHtml = kv.map(([k,v]) => `
@@ -2097,118 +2008,76 @@ function copySmsPresta() {
 
 
 /* ================================================================
-   BARRE DE RECALCUL IA
+   AFFINAGE APRES ANALYSE
 ================================================================ */
-
-const CHIPS = {
-  devis:  ["chantier au 3e sans ascenseur","surface réelle 32 m²","prévoir ragréage","rajouter marge sécurité","nom client : Dupont","prix déjà négocié"],
-  fourn:  ["client fournit le carrelage","prix fournisseur déjà remisé","livraison incluse","quantité à revoir","gamme haut de gamme","commande urgente"],
-  presta: ["prestataire pose uniquement","chantier au 3e sans ascenseur","prévoir ragréage","fournitures par le client","surface réelle 28 m²","accord oral à 900 € HT"]
-};
-
-function renderRecalculBar(fromHistory, historyId) {
-  const tab = (currentTab === "historique") ? "devis" : currentTab;
-  const chips = (CHIPS[tab] || CHIPS.devis)
-    .map(c => `<span class="recalcul-chip" onclick="chipClick(this)">${c}</span>`)
-    .join("");
-
-  const callFn = fromHistory
-    ? `recalculFromHistory(${JSON.stringify(historyId)})`
-    : "recalculCurrent()";
-
-  const noteHisto = fromHistory
-    ? `<span class="recalcul-note">🗂️ La nouvelle version sera ajoutée à l'historique — l'originale est conservée.</span>`
-    : `<span class="recalcul-note">💾 Le résultat recalculé sera enregistré dans l'historique.</span>`;
-
+function renderRefineBox() {
   return `
-<div class="recalcul-bar" id="recalcul-bar">
-  <span class="recalcul-label">🔄 Recalculer avec des précisions</span>
-  <div class="recalcul-chips">${chips}</div>
-  <div class="recalcul-row">
-    <textarea id="recalcul-input" class="recalcul-textarea"
-      placeholder="Ex : chantier au 3e sans ascenseur • surface réelle 32 m² • client fournit le carrelage • nom client : Martin…"
-    ></textarea>
-    <button class="recalcul-btn" id="recalcul-btn" onclick="${callFn}">↗ Recalculer</button>
-  </div>
-  ${noteHisto}
-</div>`;
+    <div class="sec full refine-box">
+      <div class="sec-header">
+        <div class="sec-icon">✍️</div>
+        <div class="sec-title">Compléter l’analyse</div>
+      </div>
+
+      <div class="refine-body">
+        <textarea id="refine-input" class="refine-textarea" placeholder="Ajoutez ici vos informations utiles pour corriger ou compléter l’analyse : nom client, contrainte chantier, surface réelle, accès, support, étage, gamme produit, budget prestataire, accord oral, point oublié, doute sur une ligne, remarque terrain…"></textarea>
+
+        <div class="refine-actions">
+          <button class="tbtn tbtn-navy" onclick="refineCurrentAnalysis()">Améliorer l’analyse</button>
+          <span class="refine-help">L’IA reprend l’analyse affichée, intègre vos informations utiles et réécrit le résultat.</span>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-function chipClick(el) {
-  const inp = document.getElementById("recalcul-input");
-  if (!inp) return;
-  const txt = el.textContent.trim();
-  el.classList.toggle("on");
-  let val = inp.value.trim();
-  if (el.classList.contains("on")) {
-    inp.value = val ? val + " • " + txt : txt;
-  } else {
-    // retire le chip du texte
-    val = val.replace("• " + txt, "").replace(txt + " •", "").replace(txt, "");
-    inp.value = val.replace(/^[\s•]+|[\s•]+$/g, "").trim();
+async function refineCurrentAnalysis() {
+  const input = document.getElementById("refine-input");
+  const note = input ? input.value.trim() : "";
+
+  if (!note) {
+    showError("Ajoutez une précision avant d'améliorer l’analyse.");
+    return;
   }
-}
 
-function buildRefinePrompt(prevJson, note, sourceText) {
-  return `Analyse précédente :
-${prevJson}
+  if (!lastResult) {
+    showError("Aucune analyse à améliorer.");
+    return;
+  }
 
-Précisions ajoutées par l'utilisateur :
+  showStatus("loading", "Amélioration de l’analyse…");
+
+  try {
+    const previous = JSON.stringify(lastResult);
+    const sourceText = lastExtractedText || "";
+
+    const refineText = `
+Analyse précédente :
+${previous}
+
+Informations utiles ajoutées par l’utilisateur :
 ${note}
 
 Document initial :
 ${sourceText.slice(0, 12000)}
 
-Instructions :
-- Refais l'analyse complète en intégrant OBLIGATOIREMENT les précisions de l'utilisateur.
-- Si une précision corrige l'analyse précédente, corrige-la clairement.
-- Si elle ajoute un risque, une contrainte ou une remarque terrain, fais-la apparaître dans la section adaptée.
-- Style court, télégraphique, concret métier.
-- Retourne uniquement le même format JSON que l'analyse précédente.`;
-}
+Tu dois refaire l’analyse du même onglet.
+Tu dois obligatoirement intégrer les informations utiles ajoutées par l’utilisateur dans le raisonnement et dans les résultats visibles.
+Si ces informations corrigent ou contredisent l’analyse précédente, corrige clairement l’analyse.
+Si elles ajoutent une réserve, un complément, un risque ou une précision, fais-la apparaître dans la section adaptée.
+Conserve un style court, terrain, concret.
+Retourne uniquement le même format JSON que demandé au départ.
+`;
 
-async function recalculCurrent() {
-  const inp = document.getElementById("recalcul-input");
-  const note = inp ? inp.value.trim() : "";
-  if (!note) { showError("Ajoutez au moins une précision avant de recalculer."); return; }
-  if (!lastResult) { showError("Aucune analyse disponible."); return; }
-  const btn = document.getElementById("recalcul-btn");
-  if (btn) btn.disabled = true;
-  showStatus("loading", "Recalcul IA en cours…");
-  try {
-    const improved = await callAI(buildRefinePrompt(JSON.stringify(lastResult), note, lastExtractedText || ""));
-    renderResults(improved, note);
+    const improved = await callAI(refineText);
+    renderResults(improved);
     hideStatus();
     btnCopy.style.display = "flex";
     btnReset.style.display = "flex";
   } catch (err) {
     showError(err.message);
-    if (btn) btn.disabled = false;
   }
 }
 
-async function recalculFromHistory(historyId) {
-  const inp = document.getElementById("recalcul-input");
-  const note = inp ? inp.value.trim() : "";
-  if (!note) { showError("Ajoutez au moins une précision avant de recalculer."); return; }
-  const item = getHistory().find(h => h.id === historyId);
-  if (!item) { showError("Analyse introuvable."); return; }
-  const btn = document.getElementById("recalcul-btn");
-  if (btn) btn.disabled = true;
-  currentTab = item.tab || "devis";
-  lastExtractedText = item.sourceText || "";
-  showStatus("loading", "Recalcul IA à partir de l'historique…");
-  try {
-    const improved = await callAI(buildRefinePrompt(JSON.stringify(item.result), note, item.sourceText || ""));
-    renderResults(improved, note);
-    hideStatus();
-    btnCopy.style.display = "flex";
-    btnReset.style.display = "flex";
-  } catch (err) {
-    showError(err.message);
-    if (btn) btn.disabled = false;
-  }
-}
 /* ================================================================
    HISTORIQUE LOCAL
 ================================================================ */
@@ -2222,7 +2091,7 @@ function getHistory() {
   }
 }
 
-function saveHistoryItem(result, htmlResult, textResult, refinementNote) {
+function saveHistoryItem(result, htmlResult, textResult) {
   const history = getHistory();
 
   const labels = {
@@ -2248,9 +2117,7 @@ function saveHistoryItem(result, htmlResult, textResult, refinementNote) {
     result: result,
     html: htmlResult,
     plain: textResult || "",
-    sourceText: lastExtractedText || "",
-    refinementNote: refinementNote || null,
-    isRefined: !!refinementNote
+    sourceText: lastExtractedText || ""
   };
 
   history.unshift(item);
@@ -2290,18 +2157,21 @@ function renderHistory() {
       <div class="history-list">
         ${history.map(h => `
           <div class="history-card">
-            <div class="history-card-body">
-              <div class="history-card-meta">
+            <div class="history-card-top">
+              <div>
                 <div class="history-type">${h.type}</div>
                 <div class="history-file">${h.file}</div>
               </div>
-              <div class="history-summary">${h.summary}</div>
+              <div class="history-date">${h.date}</div>
             </div>
+
+            <div class="history-summary">${h.summary}</div>
+
             <div class="history-actions">
-              <button class="tbtn tbtn-lav" onclick="openHistoryItem('${h.id}')">Voir l'analyse</button>
+              <button class="tbtn tbtn-navy" onclick="openHistoryItem('${h.id}')">Ouvrir</button>
+              <button class="tbtn tbtn-lav" onclick="rerunHistoryItem('${h.id}')">Relancer analyse</button>
+              <button class="tbtn tbtn-lav" onclick="copyHistoryItem('${h.id}')">Copier</button>
               <button class="tbtn tbtn-ghost" onclick="deleteHistoryItem('${h.id}')">Supprimer</button>
-              <span class="history-date">${h.date}</span>
-              <button class="tbtn tbtn-navy" onclick="rerunHistoryItem('${h.id}')">Relancer IA</button>
             </div>
           </div>
         `).join("")}
@@ -2313,16 +2183,10 @@ function openHistoryItem(id) {
   const item = getHistory().find(h => h.id === id);
   if (!item) return;
 
-  currentTab        = item.tab || "devis";
-  lastResult        = item.result || null;
-  lastExtractedText = item.sourceText || "";
-  plainText         = item.plain || "";
-
   emptyEl.style.display = "none";
   resultsEl.style.display = "flex";
-
-  resultsEl.innerHTML = item.html + renderRecalculBar(true, id);
-
+  resultsEl.innerHTML = item.html;
+  plainText = item.plain || "";
   btnCopy.style.display = "flex";
   btnReset.style.display = "flex";
 }
@@ -2337,7 +2201,6 @@ async function rerunHistoryItem(id) {
   }
 
   currentTab = item.tab || "devis";
-  lastExtractedText = item.sourceText || "";
 
   document.querySelectorAll(".tab").forEach(t => {
     t.classList.toggle("active", t.dataset.tab === currentTab);
@@ -2430,5 +2293,4 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 
 
 </body>
-</html
-  ${r.sms_client ? '<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-fourn">' + r.sms_client + '</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,\'sms-client-fourn\')">📋 Copier</button></div>' : ""}
+</html>
