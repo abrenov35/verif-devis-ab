@@ -1379,28 +1379,73 @@ Retourne UNIQUEMENT un JSON valide :
 
 Retourne uniquement le JSON.`,
 
-presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (Rennes).
-Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
-Toutes les valeurs doivent être en HT uniquement. Protège toujours la marge AB RENOV.
-Contexte fourni par l'utilisateur (lot, prestataire, notes) : {CONTEXT}
+presta: `Tu es un expert en rentabilité chantier pour AB RENOV (Rennes).
+Tu analyses ce devis pour calculer ce qu'AB RENOV peut proposer à un prestataire en main-d'oeuvre seule.
+
+RÈGLE FONDAMENTALE :
+AB RENOV assure TOUT : commercial, logistique, fournitures, relation client, SAV, coordination, risques chantier.
+Le prestataire ne fait QUE la pose avec ses propres outils. Il ne fournit RIEN.
+
+FORMULE DE CALCUL OBLIGATOIRE :
+1. Montant HT total du lot vendu au client
+2. Déduire les fournitures HT
+3. MO nette HT = montant client HT - fournitures HT
+4. RÉPARTITION PROTECTRICE :
+   - Part prestataire : 42% à 55% MAX de la MO nette HT
+   - Part AB RENOV sur MO : 45% à 58% MINIMUM
+   - Chantier difficile (étage, accès, support mauvais) : 40-45% au prestataire
+   - Lot simple et rapide : 50-55% max au prestataire, JAMAIS plus
+   - Offre basse à envoyer en 1er : 42-45% de la MO nette HT
+   - Maximum absolu : 55% de la MO nette HT
+
+JUSTIFICATION : AB RENOV a trouvé le client, chiffré, géré le planning, livré les matériaux, assuré la logistique et porte la responsabilité finale. Le prestataire n'apporte que sa main-d'oeuvre et ses outils de base.
+
+Contexte utilisateur : {CONTEXT}
+
+IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit commencer par un emoji :
+- 🔴 risque critique marge ou dépassement
+- ⚠️ vigilance ou point flou
+- ❓ question à clarifier avant validation
+- ✅ point favorable ou confirmé
+- 💡 conseil terrain ou optimisation
+
+INSTRUCTIONS POUR LE CHAMP sms_prestataire :
+Rédige un SMS destiné à un artisan du bâtiment.
+TON OBLIGATOIRE : terrain, professionnel, humain, direct. Fluide et crédible pour des artisans du bâtiment.
+INTERDIT : formulations froides, administratives, juridiques, pompeuses ou "IA".
+CONTENU OBLIGATOIRE dans l'ordre :
+1. Nom du chantier + adresse du chantier (si disponible dans le devis)
+2. Description courte des prestations : type de pose, surface, matériaux prévus, particularités
+3. Fournitures prévues par AB RENOV (liste courte)
+4. Ce qui est inclus dans le prix (ex : pose droite, jointement, nettoyage de fin de chantier)
+5. Montant HT de l'offre basse proposée
+6. Phrase EXACTE : "Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin."
+7. Signature : "Équipe travaux AB RENOV 35"
+FORMAT : phrases courtes, retours à la ligne entre chaque partie, lisible rapidement sur téléphone.
+OBJECTIF DU TON : donner le sentiment que le prix est cohérent et étudié, éviter que l'artisan ait l'impression d'être tiré vers le bas, rester rassurant sans être faible.
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
   "emoji": "✅ ou ⚠️ ou 🔴",
-  "verdict": "2-3 phrases. Synthèse de la situation.",
+  "verdict": "2-3 phrases. Synthèse avec % MO appliqué et justification courte.",
   "lot": "nom du lot analysé",
-  "montant_client_ht": "montant HT total vendu au client pour ce lot",
-  "fourniture_ht": "part fourniture estimée HT",
-  "mo_ht": "part main-d'œuvre estimée HT",
-  "presta_fourchette": "fourchette basse – haute conseillée HT",
-  "presta_max": "montant maximum à ne pas dépasser HT",
-  "marge_estimee": "marge AB RENOV estimée si respecté",
-  "alertes": ["alerte marge 1", "point à clarifier 1"],
-  "a_clarifier": ["point à clarifier avant validation 1", "..."],
-  "conseil": ["recommandation 1", "recommandation 2"],
+  "montant_client_ht": "montant HT total vendu au client",
+  "fourniture_ht": "part fourniture HT estimée",
+  "mo_nette_ht": "MO nette HT = montant client - fournitures",
+  "mo_ht": "identique à mo_nette_ht",
+  "part_presta_pct": "% appliqué au prestataire (42-55% max)",
+  "part_abrenov_pct": "% conservé par AB RENOV sur MO (45-58%)",
+  "presta_fourchette": "fourchette basse - haute HT proposée au prestataire",
+  "presta_max": "maximum absolu à ne jamais dépasser HT",
+  "marge_abrenov_mo": "part AB RENOV sur MO HT",
+  "marge_estimee": "marge totale AB RENOV estimée",
+  "alertes": ["🔴 si % trop élevé", "⚠️ vigilance"],
+  "a_clarifier": ["❓ point à clarifier"],
+  "conseil": ["✅ validation", "💡 conseil négociation"],
   "client": "nom du client si visible dans le devis, sinon NOM CLIENT",
-  "sms_prestataire": "Bonjour, pour le dossier NOM CLIENT, je peux proposer 1500 € HT pour le lot concerné en main-d'œuvre seule, suivant descriptif visible sur Vertuoza. Fournitures fournies par AB RENOV. Hors sujétions imprévues et prestations non prévues au descriptif. Accord ?",
-  "offre_basse_ht": "montant bas HT conseillé"
+  "adresse_chantier": "adresse si visible, sinon ADRESSE CHANTIER",
+  "sms_prestataire": "SMS rédigé selon les instructions ci-dessus — terrain, humain, direct, avec les 7 éléments obligatoires",
+  "offre_basse_ht": "montant offre basse HT (42-45% MO nette)"
 }`
 
 };
