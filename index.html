@@ -875,7 +875,7 @@ table.price-table th{
   background:#FFFFFF !important;
   border-left:4px solid var(--green) !important;
   white-space:pre-line !important;
-  padding:14px 16px !important;
+  padding:16px 18px !important;
 }
 
 .sms-box .item-bullet{
@@ -885,10 +885,11 @@ table.price-table th{
 .sms-box span{
   display:block !important;
   width:100% !important;
-  font-size:0.98rem !important;
-  line-height:1.45 !important;
-  font-weight:700 !important;
+  font-size:0.95rem !important;
+  line-height:1.6 !important;
+  font-weight:500 !important;
   color:#0C1E33 !important;
+  font-family:'Barlow', sans-serif !important;
 }
 
 .sms-actions{
@@ -1412,17 +1413,23 @@ IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit c
 INSTRUCTIONS POUR LE CHAMP sms_prestataire :
 Rédige un SMS destiné à un artisan du bâtiment.
 TON OBLIGATOIRE : terrain, professionnel, humain, direct. Fluide et crédible pour des artisans du bâtiment.
-INTERDIT : formulations froides, administratives, juridiques, pompeuses ou "IA".
+INTERDIT ABSOLU : "Salut", formulations froides, administratives, juridiques, pompeuses ou "IA".
+COMMENCER le SMS directement par le nom du chantier, sans formule de politesse ni mot d'accroche.
 CONTENU OBLIGATOIRE dans l'ordre :
-1. Nom du chantier + adresse du chantier (si disponible dans le devis)
-2. Description courte des prestations : type de pose, surface, matériaux prévus, particularités
-3. Fournitures prévues par AB RENOV (liste courte)
-4. Ce qui est inclus dans le prix (ex : pose droite, jointement, nettoyage de fin de chantier)
-5. Montant HT de l'offre basse proposée
-6. Phrase EXACTE : "Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin."
-7. Signature : "Équipe travaux AB RENOV 35"
-FORMAT : phrases courtes, retours à la ligne entre chaque partie, lisible rapidement sur téléphone.
-OBJECTIF DU TON : donner le sentiment que le prix est cohérent et étudié, éviter que l'artisan ait l'impression d'être tiré vers le bas, rester rassurant sans être faible.
+1. Nom et adresse du chantier (ex: "Chantier [CLIENT] — [ADRESSE]")
+2. Description courte des prestations : type de pose, surface, matériaux, particularités
+3. "AB RENOV fournit :" suivi de la liste courte des fournitures
+4. "Inclus dans le prix :" suivi des éléments inclus (pose, jointement, nettoyage, etc.)
+5. "On te propose [MONTANT] € HT" — montant = offre_basse_ht
+6. Ligne vide puis phrase EXACTE mot pour mot : "Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin."
+7. Ligne vide puis signature OBLIGATOIRE sur sa propre ligne : "Équipe travaux AB RENOV 35"
+FORMAT : phrases courtes, une ligne vide entre chaque bloc, lisible sur téléphone. La signature doit TOUJOURS être la dernière ligne du message.
+OBJECTIF : prix cohérent et étudié, rassurant sans être faible, pas l'impression d'être tiré vers le bas.
+
+VÉRIFICATION CALCUL OBLIGATOIRE avant de rédiger le SMS :
+- offre_basse_ht = 42% à 45% de mo_nette_ht
+- Si le montant calculé semble inférieur au marché Rennes pour ce type de prestation, le recalculer en partant du marché (60-75€/h pose carrelage Rennes)
+- Ne jamais proposer un montant manifestement sous-évalué
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
@@ -1905,11 +1912,12 @@ function renderPresta(r) {
   const fournitures = r.fournitures_abrenov || "fournitures fournies par AB RENOV";
   const smsTxt = r.sms_prestataire || `Chantier ${clientNom}${adresse ? " — " + adresse : ""}
 
-Lot : ${descriptif}
-Fournitures AB RENOV : ${fournitures}
+${descriptif}
+
+AB RENOV fournit : ${fournitures}
 Pose seule à votre charge.
 
-Montant proposé : ${offreTxt} HT, main-d'oeuvre seule.
+On te propose ${offreTxt} HT (pose + jointement + finitions).
 
 Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin.
 
