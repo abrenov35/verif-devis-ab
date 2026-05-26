@@ -1770,7 +1770,7 @@ const surveillances = Array.isArray(r.points_surveillance)
         ${positifs || "<div class='item'><span>Aucun point positif détecté.</span></div>"}
       </div>
     </div>
-  ${r.sms_client ? `<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-devis">${r.sms_client}</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,'sms-client-devis')">📋 Copier</button></div>` : ""}
+  ${r.sms_client ? '<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-devis">' + r.sms_client + '</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,\'sms-client-devis\')">📋 Copier</button></div>' : ""}
   `;
 }
 
@@ -2425,4 +2425,4 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 
 </body>
 </html
-  ${r.sms_client ? `<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-fourn">${r.sms_client}</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,'sms-client-fourn')">📋 Copier</button></div>` : ""}>
+  ${r.sms_client ? '<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-fourn">' + r.sms_client + '</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,\'sms-client-fourn\')">📋 Copier</button></div>' : ""}
