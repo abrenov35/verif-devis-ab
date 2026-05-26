@@ -1140,6 +1140,62 @@ table.price-table th{
   align-self: flex-start;
 }
 .sms-client-btn:hover { background: var(--navy-dk); }
+
+/* ===== BARRE RECALCUL ===== */
+.recalcul-bar {
+  background: #F8F6FD;
+  border: 2px solid #CFC4E6;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.recalcul-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: .68rem;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: #A495C3;
+}
+.recalcul-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.recalcul-chip {
+  padding: 4px 11px;
+  border: 1.5px solid #D4CCE8;
+  border-radius: 20px;
+  background: #fff;
+  font-family: 'Barlow', sans-serif;
+  font-size: .76rem; color: #6B5A9A;
+  cursor: pointer; transition: all .15s;
+  white-space: nowrap; user-select: none;
+}
+.recalcul-chip:hover, .recalcul-chip.on {
+  background: #A495C3; border-color: #A495C3; color: #fff;
+}
+.recalcul-row { display: flex; gap: 10px; align-items: flex-end; }
+.recalcul-textarea {
+  flex: 1; min-height: 52px; max-height: 110px;
+  resize: vertical;
+  border: 1.5px solid #D4CCE8; border-radius: 10px;
+  padding: 10px 13px;
+  font-family: 'Barlow', sans-serif; font-size: .9rem;
+  color: #162D49; background: #fff; outline: none;
+  line-height: 1.45; transition: border-color .15s;
+}
+.recalcul-textarea:focus { border-color: #A495C3; }
+.recalcul-textarea::placeholder { color: #B5AEC8; font-size: .85rem; }
+.recalcul-btn {
+  flex-shrink: 0; height: 42px; padding: 0 18px;
+  background: #162D49; color: #fff; border: none;
+  border-radius: 21px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: .7rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: background .15s;
+}
+.recalcul-btn:hover:not(:disabled) { background: #0C1E33; }
+.recalcul-btn:disabled { opacity: .35; cursor: not-allowed; }
+.recalcul-note { font-size: .74rem; color: #9A8EAA; }
 </style>
 </head>
 <body>
@@ -1589,7 +1645,8 @@ function renderResults(r) {
   emptyEl.style.display   = "none";
   resultsEl.style.display = "flex";
 
-  const finalHtml = currentTab !== "historique" ? html + renderRefineBox() : html;
+  const recalculBar = (currentTab !== "historique") ? renderRecalculBar(false, null) : "";
+  const finalHtml = html + recalculBar;
   resultsEl.innerHTML = finalHtml;
 
   if (currentTab !== "historique") {
@@ -2078,6 +2135,105 @@ Retourne uniquement le même format JSON que demandé au départ.
   }
 }
 
+
+/* ================================================================
+   BARRE DE RECALCUL IA
+================================================================ */
+const CHIPS = {
+  devis:  ["chantier au 3e sans ascenseur","surface réelle 32 m²","prévoir ragréage","rajouter marge sécurité","nom client : Dupont","prix déjà négocié"],
+  fourn:  ["client fournit le carrelage","prix fournisseur déjà remisé","livraison incluse","quantité à revoir","gamme haut de gamme","commande urgente"],
+  presta: ["prestataire pose uniquement","chantier au 3e sans ascenseur","prévoir ragréage","fournitures par le client","surface réelle 28 m²","accord oral à 900 € HT"]
+};
+
+function renderRecalculBar(fromHistory, historyId) {
+  const tab = (currentTab === "historique") ? "devis" : currentTab;
+  const chips = (CHIPS[tab] || CHIPS.devis)
+    .map(c => `<span class="recalcul-chip" onclick="chipClick(this)">${c}</span>`)
+    .join("");
+  const callFn = fromHistory
+    ? `recalculFromHistory(${JSON.stringify(historyId)})`
+    : "recalculCurrent()";
+  const note = fromHistory
+    ? `<span class="recalcul-note">🗂️ La nouvelle version sera ajoutée à l'historique — l'originale est conservée.</span>`
+    : `<span class="recalcul-note">💾 Le résultat recalculé sera enregistré dans l'historique.</span>`;
+  return `
+<div class="recalcul-bar" id="recalcul-bar">
+  <span class="recalcul-label">🔄 Compléter et relancer l'analyse</span>
+  <div class="recalcul-chips">${chips}</div>
+  <div class="recalcul-row">
+    <textarea id="recalcul-input" class="recalcul-textarea"
+      placeholder="Ajoutez vos précisions ici : étage, surface réelle, contraintes, nom client, remarques terrain…"></textarea>
+    <button class="recalcul-btn" id="recalcul-btn" onclick="${callFn}">↗ Relancer</button>
+  </div>
+  ${note}
+</div>`;
+}
+
+function chipClick(el) {
+  const inp = document.getElementById("recalcul-input");
+  if (!inp) return;
+  const txt = el.textContent.trim();
+  el.classList.toggle("on");
+  let val = inp.value.trim();
+  if (el.classList.contains("on")) {
+    inp.value = val ? val + " • " + txt : txt;
+  } else {
+    val = val.replace(" • " + txt, "").replace(txt + " •", "").replace(txt, "");
+    inp.value = val.replace(/^[\s•]+|[\s•]+$/g, "").trim();
+  }
+}
+
+function buildRefinePrompt(prevJson, note, sourceText) {
+  return `Analyse précédente :\n${prevJson}\n\nPrécisions ajoutées par l'utilisateur :\n${note}\n\nDocument initial :\n${sourceText.slice(0, 12000)}\n\nInstructions :\n- Refais l'analyse complète en intégrant OBLIGATOIREMENT les précisions de l'utilisateur.\n- Si une précision corrige l'analyse précédente, corrige-la clairement.\n- Si elle ajoute un risque, une contrainte ou une remarque terrain, fais-la apparaître dans la section adaptée.\n- Style court, télégraphique, concret métier.\n- Retourne uniquement le même format JSON que l'analyse précédente.`;
+}
+
+async function recalculCurrent() {
+  const inp = document.getElementById("recalcul-input");
+  const note = inp ? inp.value.trim() : "";
+  if (!note) { showError("Ajoutez au moins une précision avant de relancer."); return; }
+  if (!lastResult) { showError("Aucune analyse disponible."); return; }
+  const btn = document.getElementById("recalcul-btn");
+  if (btn) btn.disabled = true;
+  showStatus("loading", "Recalcul IA en cours…");
+  try {
+    const improved = await callAI(buildRefinePrompt(JSON.stringify(lastResult), note, lastExtractedText || ""));
+    // Vider le champ et les chips avant de re-render
+    if (inp) inp.value = "";
+    document.querySelectorAll(".recalcul-chip.on").forEach(c => c.classList.remove("on"));
+    renderResults(improved, note);
+    hideStatus();
+    btnCopy.style.display = "flex";
+    btnReset.style.display = "flex";
+  } catch (err) {
+    showError(err.message);
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function recalculFromHistory(historyId) {
+  const inp = document.getElementById("recalcul-input");
+  const note = inp ? inp.value.trim() : "";
+  if (!note) { showError("Ajoutez au moins une précision avant de relancer."); return; }
+  const item = getHistory().find(h => h.id === historyId);
+  if (!item) { showError("Analyse introuvable."); return; }
+  const btn = document.getElementById("recalcul-btn");
+  if (btn) btn.disabled = true;
+  currentTab = item.tab || "devis";
+  lastExtractedText = item.sourceText || "";
+  showStatus("loading", "Recalcul IA à partir de l'historique…");
+  try {
+    const improved = await callAI(buildRefinePrompt(JSON.stringify(item.result), note, item.sourceText || ""));
+    if (inp) inp.value = "";
+    document.querySelectorAll(".recalcul-chip.on").forEach(c => c.classList.remove("on"));
+    renderResults(improved, note);
+    hideStatus();
+    btnCopy.style.display = "flex";
+    btnReset.style.display = "flex";
+  } catch (err) {
+    showError(err.message);
+    if (btn) btn.disabled = false;
+  }
+}
 /* ================================================================
    HISTORIQUE LOCAL
 ================================================================ */
