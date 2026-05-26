@@ -1369,35 +1369,60 @@ Retourne UNIQUEMENT un JSON valide :
 
 Retourne uniquement le JSON.`,
 
-presta: `Tu es un expert en gestion de chantier et rentabilité pour AB RENOV (Rennes).
-Analyse ce devis AB RENOV pour déterminer combien peut être donné à un prestataire en main-d'œuvre seule.
-Toutes les valeurs doivent être en HT uniquement. Protège toujours la marge AB RENOV.
-Contexte fourni par l'utilisateur (lot, prestataire, notes) : {CONTEXT}
+presta: `Tu es un expert en rentabilité chantier pour AB RENOV (Rennes).
+Tu analyses ce devis pour calculer ce qu'AB RENOV peut proposer à un prestataire en main-d'oeuvre seule.
 
-IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit commencer par un emoji adapté :
+RÈGLE FONDAMENTALE :
+AB RENOV assure TOUT : commercial, logistique, fournitures, relation client, SAV, coordination, risques chantier.
+Le prestataire ne fait QUE la pose avec ses propres outils. Il ne fournit RIEN.
+
+FORMULE DE CALCUL OBLIGATOIRE :
+1. Montant HT total du lot vendu au client
+2. Déduire les fournitures HT
+3. MO nette HT = montant client HT - fournitures HT
+4. RÉPARTITION PROTECTRICE :
+   - Part prestataire : 42% à 55% MAX de la MO nette HT
+   - Part AB RENOV sur MO : 45% à 58% MINIMUM
+   - Chantier difficile (étage, accès, support mauvais) : 40-45% au prestataire
+   - Lot simple et rapide : 50-55% max au prestataire, JAMAIS plus
+   - Offre basse à envoyer en 1er : 42-45% de la MO nette HT
+   - Maximum absolu : 55% de la MO nette HT
+
+JUSTIFICATION : AB RENOV a trouvé le client, chiffré, géré le planning, livré les matériaux, assuré la logistique et porte la responsabilité finale. Le prestataire n'apporte que sa main-d'oeuvre et ses outils de base.
+
+Contexte utilisateur : {CONTEXT}
+
+IMPORTANT : chaque élément des tableaux alertes, a_clarifier et conseil doit commencer par un emoji :
 - 🔴 risque critique marge ou dépassement
-- ⚠️ vigilance ou point flou à surveiller
-- ❓ question à clarifier avant de valider
+- ⚠️ vigilance ou point flou
+- ❓ question à clarifier avant validation
 - ✅ point favorable ou confirmé
-- 💡 conseil ou recommandation terrain
+- 💡 conseil terrain ou optimisation
 
 Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
 {
   "emoji": "✅ ou ⚠️ ou 🔴",
-  "verdict": "2-3 phrases. Synthèse de la situation.",
+  "verdict": "2-3 phrases. Synthèse avec % MO appliqué et justification courte.",
   "lot": "nom du lot analysé",
-  "montant_client_ht": "montant HT total vendu au client pour ce lot",
-  "fourniture_ht": "part fourniture estimée HT",
-  "mo_ht": "part main-d'œuvre estimée HT",
-  "presta_fourchette": "fourchette basse – haute conseillée HT",
-  "presta_max": "montant maximum à ne pas dépasser HT",
-  "marge_estimee": "marge AB RENOV estimée si respecté",
-  "alertes": ["🔴 risque marge critique", "⚠️ point de vigilance"],
-  "a_clarifier": ["❓ point à clarifier avant validation", "❓ ..."],
-  "conseil": ["✅ point positif ou validé", "💡 recommandation terrain"],
+  "montant_client_ht": "montant HT total vendu au client",
+  "fourniture_ht": "part fourniture HT estimée",
+  "mo_nette_ht": "MO nette HT = montant client - fournitures",
+  "mo_ht": "identique à mo_nette_ht",
+  "part_presta_pct": "% appliqué au prestataire (42-55% max)",
+  "part_abrenov_pct": "% conservé par AB RENOV sur MO (45-58%)",
+  "presta_fourchette": "fourchette basse - haute HT proposée au prestataire",
+  "presta_max": "maximum absolu à ne jamais dépasser HT",
+  "marge_abrenov_mo": "part AB RENOV sur MO HT",
+  "marge_estimee": "marge totale AB RENOV estimée (fourniture + MO AB RENOV)",
+  "alertes": ["🔴 si % trop élevé", "⚠️ vigilance"],
+  "a_clarifier": ["❓ point à clarifier"],
+  "conseil": ["✅ validation", "💡 conseil négociation"],
   "client": "nom du client si visible dans le devis, sinon NOM CLIENT",
-  "sms_prestataire": "Bonjour, pour le dossier NOM CLIENT, je peux proposer 1500 € HT pour le lot concerné en main-d'œuvre seule, suivant descriptif visible sur Vertuoza. Fournitures fournies par AB RENOV. Hors sujétions imprévues et prestations non prévues au descriptif. Accord ?",
-  "offre_basse_ht": "montant bas HT conseillé"
+  "adresse_chantier": "adresse du chantier si visible dans le devis, sinon ADRESSE CHANTIER",
+  "descriptif_rapide": "2-3 lignes résumant les prestations : type de pose, surface, matériaux prévus, particularités",
+  "fournitures_abrenov": "liste courte des fournitures fournies par AB RENOV pour ce lot",
+  "sms_prestataire": "Rédige un SMS destiné à un artisan du bâtiment. TON : terrain, professionnel, humain, direct. PAS de formulations froides, administratives ou IA. Le SMS doit contenir dans l'ordre : 1) Nom du chantier et adresse. 2) Description rapide des prestations (pose, surface, type). 3) Fournitures prévues par AB RENOV. 4) Ce qui est inclus dans le prix (ex : pose droite/diagonale, jointement, nettoyage). 5) Montant HT proposé en offre basse, suivi de : 'Montant calculé sur la base du chantier prévu afin de rester cohérent pour tout le monde. Si contraintes ou reprises imprévues sur place, on refera naturellement un point ensemble pour ajuster si besoin.' 6) Signature : 'Équipe travaux AB RENOV 35'. Format lisible sur téléphone, phrases courtes, retours à la ligne entre les parties. Utilise le nom du client, l'adresse, le lot, le montant offre basse HT et les fournitures déduits du devis.",
+  "offre_basse_ht": "montant offre basse HT (42-45% MO nette)"
 }`
 
 };
@@ -1745,6 +1770,7 @@ const surveillances = Array.isArray(r.points_surveillance)
         ${positifs || "<div class='item'><span>Aucun point positif détecté.</span></div>"}
       </div>
     </div>
+  ${r.sms_client ? `<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-devis">${r.sms_client}</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,'sms-client-devis')">📋 Copier</button></div>` : ""}
   `;
 }
 
@@ -1836,11 +1862,14 @@ function renderPresta(r) {
   const kv = [
     ["Lot analysé", r.lot||"—"],
     ["Montant client HT", r.montant_client_ht||"—"],
-    ["Fourniture estimée", r.fourniture_ht||"—"],
-    ["Main-d'œuvre estimée", r.mo_ht||"—"],
+    ["Fourniture HT", r.fourniture_ht||"—"],
+    ["MO nette HT", r.mo_nette_ht||r.mo_ht||"—"],
+    ["Part prestataire", r.part_presta_pct ? r.part_presta_pct+" de la MO" : "—"],
+    ["Part AB RENOV / MO", r.part_abrenov_pct ? r.part_abrenov_pct+" de la MO" : "—"],
+    ["Offre basse conseillée", r.offre_basse_ht||"—"],
     ["Fourchette presta", r.presta_fourchette||"—"],
-    ["Maximum conseillé", r.presta_max||"—"],
-    ["Marge estimée", r.marge_estimee||"—"]
+    ["Maximum absolu", r.presta_max||"—"],
+    ["Marge AB RENOV estimée", r.marge_estimee||"—"]
   ];
 
   const kvHtml = kv.map(([k,v]) => `
@@ -2041,6 +2070,17 @@ function buildPlainPresta(r) {
     "RECOMMANDATIONS", (r.conseil||[]).map(x=>`• ${x}`).join("\n")].join("\n");
 }
 
+
+function copySmsByIdAndAnimate(btn, elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = "✅ Copié !";
+    btn.style.background = "#2A7A4F";
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ""; }, 2200);
+  });
+}
 
 function copySmsPresta() {
   const el = document.getElementById("sms-presta");
@@ -2384,4 +2424,5 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 
 
 </body>
-</html>
+</html
+  ${r.sms_client ? `<div class="sms-client-bar"><div style="flex:1;min-width:200px"><div class="sms-client-label">📱 Message client AB RENOV</div><div class="sms-client-text" id="sms-client-fourn">${r.sms_client}</div></div><button class="sms-client-btn" onclick="copySmsByIdAndAnimate(this,'sms-client-fourn')">📋 Copier</button></div>` : ""}>
