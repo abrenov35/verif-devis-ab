@@ -1231,10 +1231,6 @@ table.price-table th{
     <div class="tab-dot"></div>
     Prestataire main-d'œuvre
   </button>
-  <button class="tab t-histo" data-tab="historique">
-    <div class="tab-dot"></div>
-    Historique recherches
-  </button>
 </div>
 
 <!-- TOOLBAR -->
@@ -1610,15 +1606,13 @@ async function callAI(devisText) {
 
   const userMsg = `Voici le contenu du document à analyser :${contextBlock}\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
 
-  const resp = await fetch(PROXY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: AI_MODEL, max_tokens: AI_TOKENS,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMsg }]
-    })
+  const params = new URLSearchParams({
+    model: AI_MODEL,
+    max_tokens: AI_TOKENS,
+    system: systemPrompt,
+    messages: JSON.stringify([{ role: "user", content: userMsg }])
   });
+  const resp = await fetch(PROXY_URL + "?" + params.toString(), { method: "GET" });
 
   const data = await resp.json();
   if (data.error) throw new Error(data.error.message || "Erreur API");
