@@ -1608,7 +1608,7 @@ async function callAI(devisText) {
 
   const resp = await fetch(PROXY_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "text/plain" },
     body: JSON.stringify({
       model: AI_MODEL, max_tokens: AI_TOKENS,
       system: systemPrompt,
