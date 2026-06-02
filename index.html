@@ -78,15 +78,15 @@
       flex-shrink: 0;
     }
     .tab {
-      display: flex; align-items: center; gap: 7px;
-      padding: 0 20px;
-      height: 46px;
+      display: flex; align-items: center; gap: 9px;
+      padding: 16px 20px;
+      min-height: 48px;
       border: none;
       border-bottom: 3px solid transparent;
       background: transparent;
       cursor: pointer;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: .72rem;
+      font-weight: 700; font-size: 14px;
       letter-spacing: .08em; text-transform: uppercase;
       color: var(--grey);
       transition: all .15s;
@@ -97,7 +97,7 @@
     .tab.active.t-fourn { border-bottom-color: var(--orange); color: var(--orange); }
     .tab.active.t-presta { border-bottom-color: var(--lav); color: var(--lav); }
     .tab-dot {
-      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
     }
     .t-devis .tab-dot  { background: var(--red); }
     .t-fourn .tab-dot  { background: var(--orange); }
@@ -538,13 +538,12 @@
       .content { padding:16px; }
       .toolbar { padding:8px 16px; }
       .tabs { padding:0 16px; }
-      .tab { padding:0 16px; height:56px; font-size:.85rem; gap:9px; }
-      .tab-dot { width:9px; height:9px; }
+      .tab { padding:16px; font-size:14px; }
       .field-input.w-lot, .field-input.w-presta, .field-input.w-note { width:140px; }
     }
     @media (max-width:560px) {
       .header-right { display:none; }
-      .tab { padding:0 10px; font-size:.78rem; }
+      .tab { padding:12px 14px; font-size:13px; }
     }
   
 /* ===== ALIGNEMENTS PRESTATAIRE ===== */
