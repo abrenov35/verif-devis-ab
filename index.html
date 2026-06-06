@@ -1231,6 +1231,10 @@ table.price-table th{
     <div class="tab-dot"></div>
     Prestataire main-d'œuvre
   </button>
+  <button class="tab t-libelles" data-tab="libelles" style="border-bottom-color:var(--green)">
+    <div class="tab-dot" style="background:var(--green)"></div>
+    Libellés
+  </button>
 </div>
 
 <!-- TOOLBAR -->
@@ -1286,6 +1290,125 @@ table.price-table th{
   </div>
 
   <div id="results"></div>
+</div>
+
+
+<!-- LIBELLÉS TAB CONTENT -->
+<div id="libelles-panel" style="display:none;flex:1;overflow-y:auto;">
+  <div style="max-width:860px;margin:0 auto;padding:22px;">
+
+    <!-- GÉNÉRATeur -->
+    <div style="background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 24px;margin-bottom:16px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Prestation à reformuler</div>
+      <textarea id="lib-prestation" style="width:100%;padding:10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3d3830;outline:none;resize:none;min-height:52px;height:auto;overflow-y:hidden;" placeholder="Ex : dépose faïence salle de bain, pose parquet stratifié chambre…" oninput="autoResizeLib(this)"></textarea>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;margin-top:10px;">Corrections / indications <span style="font-weight:400;color:#b0a79e">(optionnel)</span></div>
+      <textarea id="lib-corrections" style="width:100%;padding:10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-family:'Barlow',sans-serif;font-size:13px;color:#3d3830;outline:none;resize:none;min-height:42px;height:auto;overflow-y:hidden;" placeholder="Ex : prix trop haut, ajouter la dépose, style plus court…" oninput="autoResizeLib(this)"></textarea>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="lib-btn-generate" onclick="libGenerate()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--navy);background:var(--navy);color:#fff;">
+          ⚡ Générer le libellé
+        </button>
+      </div>
+
+      <!-- Résultat -->
+      <div id="lib-result-section" style="margin-top:16px;">
+        <div style="height:1px;background:#e8ddd4;margin:4px 0 14px;"></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Libellé proposé</div>
+        <div id="lib-libelle-display" style="background:#F3EAE2;border:1.5px solid #e8ddd4;border-left:4px solid var(--navy);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#b0a79e;line-height:1.65;min-height:56px;">Le libellé généré par l'IA apparaîtra ici…</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px;margin-top:12px;">
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Marché bas HT</div>
+            <div style="position:relative;"><input type="number" id="lib-prix-bas" step="0.01" min="0" style="width:100%;padding:10px 30px 10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
+          </div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Marché haut HT</div>
+            <div style="position:relative;"><input type="number" id="lib-prix-haut" step="0.01" min="0" style="width:100%;padding:10px 30px 10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
+          </div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Prix AB RENOV</div>
+            <div style="position:relative;"><input type="number" id="lib-prix-abrenov" step="0.01" min="0" placeholder="Saisir" style="width:100%;padding:10px 30px 10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
+          </div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Unité</div>
+            <select id="lib-unite" style="width:100%;padding:10px 32px 10px 14px;background:#f7f4f1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23857d75' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;appearance:none;cursor:pointer;">
+              <option value="unité">unité</option><option value="m²">m²</option><option value="ml">ml</option><option value="m³">m³</option><option value="forfait">forfait</option><option value="heure">heure</option><option value="jour">jour</option><option value="point">point</option><option value="équipement">équipement</option><option value="autre">autre</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Confiance IA</div>
+            <div id="lib-confiance-badge" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid #e9e4df;background:#f7f4f1;color:#b0a79e;">—</div>
+          </div>
+        </div>
+
+        <div style="background:#ede9f5;border:1px solid #c9bfe0;border-radius:4px;padding:7px 12px;font-size:11.5px;color:#5a4a7a;margin-top:10px;">
+          ℹ️ Fourchette indicative à vérifier selon le chantier, l'état du support, l'accessibilité et les conditions d'intervention.
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <button onclick="libReset()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">↑ Nouvelle prestation</button>
+          <button id="lib-btn-prev" onclick="libPrev()" disabled style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">◀ Précédente</button>
+          <button id="lib-btn-next" onclick="libNext()" disabled style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">Suivante ▶</button>
+          <button onclick="libRegenerate()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">↻ Régénérer</button>
+          <button onclick="libCopy()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid var(--navy);color:var(--navy);">📋 Copier</button>
+          <button onclick="libSave()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--green);border:1.5px solid var(--green);color:#fff;">💾 Valider et enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIBLIOTHÈQUE -->
+    <div style="background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Bibliothèque</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="position:relative;">
+            <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#b0a79e;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="lib-search" oninput="libFilterLibrary()" placeholder="Rechercher…" style="padding:8px 12px 8px 32px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:4px;font-size:13px;color:#3d3830;outline:none;width:200px;" />
+          </div>
+          <button onclick="libLoadLibrary()" style="display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">↻ Actualiser</button>
+        </div>
+      </div>
+      <div id="lib-library-loading" style="display:none;padding:32px;text-align:center;color:#b0a79e;font-size:13px;">Chargement…</div>
+      <div id="lib-library-empty" style="display:none;padding:40px 24px;text-align:center;color:#b0a79e;font-size:14px;">Aucun libellé enregistré.</div>
+      <div id="lib-library-cards" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MODIFICATION LIBELLÉ -->
+<div id="lib-modal-overlay" onclick="libCloseModal()" style="display:none;position:fixed;inset:0;background:rgba(22,45,73,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:12px;border-top:4px solid var(--navy);box-shadow:0 12px 48px rgba(22,45,73,.18);width:100%;max-width:540px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #e9e4df;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Modifier le libellé</div>
+      <button onclick="libCloseModal()" style="background:none;border:none;cursor:pointer;color:#b0a79e;font-size:18px;">✕</button>
+    </div>
+    <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px;">
+      <input type="hidden" id="lib-edit-id" />
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Libellé</div>
+        <textarea id="lib-edit-libelle" style="width:100%;padding:10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3d3830;outline:none;resize:none;min-height:52px;" rows="2"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Prix bas (€)</div>
+          <input type="number" id="lib-edit-prix-bas" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;" />
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Prix haut (€)</div>
+          <input type="number" id="lib-edit-prix-haut" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;" />
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:4px;">Unité</div>
+          <select id="lib-edit-unite" style="width:100%;padding:9px 28px 9px 12px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;appearance:none;cursor:pointer;">
+            <option value="unité">unité</option><option value="m²">m²</option><option value="ml">ml</option><option value="m³">m³</option><option value="forfait">forfait</option><option value="heure">heure</option><option value="jour">jour</option><option value="autre">autre</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;padding:14px 24px;border-top:1px solid #e9e4df;background:#f7f4f1;border-radius:0 0 12px 12px;">
+      <button onclick="libCloseModal()" style="padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">Annuler</button>
+      <button onclick="libSaveEdit()" style="padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--navy);border:1.5px solid var(--navy);color:#fff;">Enregistrer</button>
+    </div>
+  </div>
 </div>
 
 <footer>AB RENOV — Aménagement et Rénovation &nbsp;|&nbsp; Outil interne confidentiel</footer>
@@ -1493,6 +1616,13 @@ document.querySelectorAll(".tab").forEach(tab => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
     currentTab = tab.dataset.tab;
+
+    // Gestion onglet libellés
+    const isLibelles = currentTab === "libelles";
+    document.querySelector(".toolbar").style.display = isLibelles ? "none" : "";
+    document.querySelector(".content").style.display = isLibelles ? "none" : "";
+    document.getElementById("libelles-panel").style.display = isLibelles ? "block" : "none";
+    if (isLibelles) { libLoadLibrary(); return; }
 
     document.getElementById("extra-fourn").classList.toggle("show",  currentTab === "fourn");
     document.getElementById("extra-presta").classList.toggle("show", currentTab === "presta");
@@ -2509,6 +2639,235 @@ function showStatus(type, msg) {
 }
 function hideStatus() { statusEl.style.display = "none"; }
 function showError(msg) { showStatus("error", "⚠ " + msg); }
+
+
+/* ================================================================
+   LIBELLÉS — MODULE INTÉGRÉ
+================================================================ */
+const LIB_GAS_URL = 'https://script.google.com/macros/s/AKfycbytkH3JUpT9tiNb2RauiQUITwg9xudxhjJu-jCoCZVLVSjIOMnCELO5tktfVNHJ5No3/exec';
+let libProposals = [], libCurrentIndex = -1, libAllLibelles = [];
+const libRowsById = {};
+const LIB_STYLES = ['standard','detaille','technique','court'];
+let libStyleIndex = 0;
+
+function autoResizeLib(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+function libReset() {
+  document.getElementById('lib-prestation').value = '';
+  const el = document.getElementById('lib-libelle-display');
+  el.textContent = "Le libellé généré par l'IA apparaîtra ici…";
+  el.style.color = '#b0a79e';
+  document.getElementById('lib-prix-bas').value = '';
+  document.getElementById('lib-prix-haut').value = '';
+  document.getElementById('lib-prix-abrenov').value = '';
+  document.getElementById('lib-confiance-badge').textContent = '—';
+  document.getElementById('lib-confiance-badge').style.cssText = '';
+  document.getElementById('lib-btn-prev').disabled = true;
+  document.getElementById('lib-btn-next').disabled = true;
+  libProposals = []; libCurrentIndex = -1; libStyleIndex = 0;
+}
+
+async function libGenerate() {
+  const prestation = document.getElementById('lib-prestation').value.trim();
+  if (!prestation) { libToast('Veuillez saisir une prestation.'); return; }
+  const btn = document.getElementById('lib-btn-generate');
+  btn.textContent = '⏳ Génération…'; btn.disabled = true;
+  libStyleIndex = 0;
+  try {
+    const corrections = document.getElementById('lib-corrections').value.trim();
+    const result = await libCallGAS('generate', { prestation, style: 'standard', corrections });
+    libPushProposal(result); libRenderResult();
+  } catch (err) { libToast('Erreur : ' + err.message); }
+  finally { btn.textContent = '⚡ Générer le libellé'; btn.disabled = false; }
+}
+
+async function libRegenerate() {
+  const prestation = document.getElementById('lib-prestation').value.trim();
+  if (!prestation) { libToast('Saisir une prestation.'); return; }
+  libStyleIndex = (libStyleIndex + 1) % LIB_STYLES.length;
+  try {
+    const corrections = document.getElementById('lib-corrections').value.trim();
+    const result = await libCallGAS('generate', { prestation, style: LIB_STYLES[libStyleIndex], corrections });
+    libPushProposal(result); libRenderResult();
+    libToast('Style : ' + LIB_STYLES[libStyleIndex]);
+  } catch (err) { libToast('Erreur : ' + err.message); }
+}
+
+function libPushProposal(data) {
+  libProposals = libProposals.slice(0, libCurrentIndex + 1);
+  libProposals.push(data);
+  libCurrentIndex = libProposals.length - 1;
+}
+
+function libPrev() { if (libCurrentIndex > 0) { libCurrentIndex--; libRenderResult(); } }
+function libNext() { if (libCurrentIndex < libProposals.length - 1) { libCurrentIndex++; libRenderResult(); } }
+
+function libRenderResult() {
+  const data = libProposals[libCurrentIndex];
+  const el = document.getElementById('lib-libelle-display');
+  el.textContent = data.libelle || '';
+  el.style.color = '';
+  document.getElementById('lib-prix-bas').value  = data.prix_bas  ?? '';
+  document.getElementById('lib-prix-haut').value = data.prix_haut ?? '';
+  const sel = document.getElementById('lib-unite');
+  const map = {'m2':'m²','m²':'m²','m3':'m³','m³':'m³','ml':'ml','unite':'unité','unité':'unité','forfait':'forfait','heure':'heure','jour':'jour','autre':'autre'};
+  const val = map[(data.unite||'').toLowerCase()] || data.unite || 'unité';
+  for (let i = 0; i < sel.options.length; i++) { if (sel.options[i].value === val) { sel.selectedIndex = i; break; } }
+  document.getElementById('lib-btn-prev').disabled = libCurrentIndex === 0;
+  document.getElementById('lib-btn-next').disabled = libCurrentIndex >= libProposals.length - 1;
+  const badge = document.getElementById('lib-confiance-badge');
+  const conf = data.confiance || 'moyen';
+  const confColors = { faible: '#856404', moyen: '#0c5460', eleve: '#155724' };
+  const confBg     = { faible: '#fff3cd', moyen: '#d1ecf1', eleve: '#d4edda' };
+  const confBorder = { faible: '#ffc107', moyen: '#bee5eb', eleve: '#28a745' };
+  badge.textContent = { faible: '⚠ Faible', moyen: '~ Moyen', eleve: '✓ Élevé' }[conf] || '—';
+  badge.style.cssText = `display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:${confBg[conf]||'#f7f4f1'};color:${confColors[conf]||'#b0a79e'};border:1.5px solid ${confBorder[conf]||'#e9e4df'}`;
+}
+
+function libCopy() {
+  const text = document.getElementById('lib-libelle-display').textContent;
+  if (!text || text.includes('apparaîtra')) { libToast('Aucun libellé à copier.'); return; }
+  navigator.clipboard.writeText(text).then(() => libToast('Libellé copié !')).catch(() => libToast('Erreur copie.'));
+}
+
+async function libSave() {
+  const libelle    = document.getElementById('lib-libelle-display').textContent.trim();
+  const prestation = document.getElementById('lib-prestation').value.trim();
+  const prisBas    = parseFloat(document.getElementById('lib-prix-bas').value)     || 0;
+  const prixHaut   = parseFloat(document.getElementById('lib-prix-haut').value)    || 0;
+  const prixAB     = parseFloat(document.getElementById('lib-prix-abrenov').value) || 0;
+  const unite      = document.getElementById('lib-unite').value;
+  if (!libelle || libelle.includes('apparaîtra')) { libToast('Aucun libellé à enregistrer.'); return; }
+  if (!prestation) { libToast('La prestation brute est vide.'); return; }
+  try {
+    const result = await libCallGAS('save', { prestation, libelle, prix_bas: prisBas, prix_haut: prixHaut, prix_abrenov: prixAB, unite });
+    libAllLibelles.unshift({ id: result.id, prestation, libelle, prix_bas: prisBas, prix_haut: prixHaut, prix_abrenov: prixAB, unite, date: new Date().toISOString() });
+    libToast('Libellé enregistré !');
+    libRenderLibrary(libAllLibelles);
+  } catch (err) { libToast('Erreur : ' + err.message); }
+}
+
+async function libLoadLibrary() {
+  const loading = document.getElementById('lib-library-loading');
+  const empty   = document.getElementById('lib-library-empty');
+  const cards   = document.getElementById('lib-library-cards');
+  cards.innerHTML = ''; loading.style.display = 'block'; empty.style.display = 'none';
+  try {
+    const data = await libCallGAS('list');
+    libAllLibelles = data.libelles || [];
+    libAllLibelles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    libRenderLibrary(libAllLibelles);
+  } catch (err) { libToast('Erreur chargement : ' + err.message); }
+  finally { loading.style.display = 'none'; }
+}
+
+function libFilterLibrary() {
+  const q = document.getElementById('lib-search').value.toLowerCase().trim();
+  if (!q) { libRenderLibrary(libAllLibelles); return; }
+  libRenderLibrary(libAllLibelles.filter(r => (r.libelle||'').toLowerCase().includes(q) || (r.prestation||'').toLowerCase().includes(q)));
+}
+
+function libRenderLibrary(list) {
+  const cards = document.getElementById('lib-library-cards');
+  const empty = document.getElementById('lib-library-empty');
+  cards.innerHTML = '';
+  if (!list.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.forEach(row => {
+    libRowsById[row.id] = row;
+    const date = row.date ? new Date(row.date).toLocaleDateString('fr-FR') : '—';
+    const fmtEur = v => (v===''||v==null||isNaN(Number(v))) ? '—' : Number(v).toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:2}) + ' €';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:#f7f4f1;border:1.5px solid #e9e4df;border-left:4px solid var(--navy);border-radius:8px;padding:16px 18px;transition:box-shadow .18s;';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="display:inline-block;background:var(--navy);color:#fff;border-radius:3px;padding:3px 9px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">${libEscHtml(row.unite||'')}</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #e9e4df;border-radius:3px;padding:3px 10px;">${fmtEur(row.prix_bas)} — ${fmtEur(row.prix_haut)}</span>
+          <span style="font-size:12px;color:#b0a79e;">${date}</span>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button onclick="libCopyText('${libEscAttr(row.libelle)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">📋 Copier</button>
+          <button onclick="libOpenEdit('${libEscAttr(row.id)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">✏️ Modifier</button>
+          <button onclick="libDelete('${libEscAttr(row.id)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">🗑 Supprimer</button>
+        </div>
+      </div>
+      <div style="font-size:15px;color:#3d3830;line-height:1.65;font-style:italic;">${libEscHtml(row.libelle||'')}</div>
+    `;
+    cards.appendChild(card);
+  });
+}
+
+function libOpenEdit(id) {
+  const row = libRowsById[id];
+  if (!row) return;
+  document.getElementById('lib-edit-id').value       = row.id || '';
+  document.getElementById('lib-edit-libelle').value  = row.libelle || '';
+  document.getElementById('lib-edit-prix-bas').value  = row.prix_bas ?? '';
+  document.getElementById('lib-edit-prix-haut').value = row.prix_haut ?? '';
+  const sel = document.getElementById('lib-edit-unite');
+  const val = row.unite || 'unité';
+  for (let i = 0; i < sel.options.length; i++) { if (sel.options[i].value === val) { sel.selectedIndex = i; break; } }
+  document.getElementById('lib-modal-overlay').style.display = 'flex';
+}
+
+function libCloseModal() {
+  document.getElementById('lib-modal-overlay').style.display = 'none';
+}
+
+async function libSaveEdit() {
+  const id       = document.getElementById('lib-edit-id').value;
+  const libelle  = document.getElementById('lib-edit-libelle').value.trim();
+  const prisBas  = parseFloat(document.getElementById('lib-edit-prix-bas').value)  || 0;
+  const prixHaut = parseFloat(document.getElementById('lib-edit-prix-haut').value) || 0;
+  const unite    = document.getElementById('lib-edit-unite').value;
+  if (!id || !libelle) { libToast('Données invalides.'); return; }
+  try {
+    await libCallGAS('update', { id, libelle, prix_bas: prisBas, prix_haut: prixHaut, unite });
+    libToast('Libellé modifié.');
+    libCloseModal(); libLoadLibrary();
+  } catch (err) { libToast('Erreur : ' + err.message); }
+}
+
+async function libDelete(id) {
+  if (!id || !confirm('Supprimer ce libellé définitivement ?')) return;
+  try {
+    await libCallGAS('delete', { id });
+    libToast('Libellé supprimé.'); libLoadLibrary();
+  } catch (err) { libToast('Erreur : ' + err.message); }
+}
+
+async function libCallGAS(action, params = {}) {
+  let resp;
+  if (action === 'list') {
+    resp = await fetch(LIB_GAS_URL + '?action=list', { method: 'GET' });
+  } else {
+    resp = await fetch(LIB_GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, ...params }) });
+  }
+  if (!resp.ok) throw new Error('Erreur réseau (' + resp.status + ')');
+  const json = await resp.json();
+  if (json.error) throw new Error(json.error);
+  return json;
+}
+
+function libCopyText(text) {
+  navigator.clipboard.writeText(text).then(() => libToast('Copié !')).catch(() => libToast('Erreur copie.'));
+}
+
+let libToastTimer;
+function libToast(msg) {
+  // Réutilise le status bar existant
+  showStatus('loading', msg);
+  clearTimeout(libToastTimer);
+  libToastTimer = setTimeout(hideStatus, 3000);
+}
+
+function libEscHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function libEscAttr(s) { return String(s).replace(/'/g,"\'").replace(/\n/g,' '); }
+
 </script>
 
 <!-- Correctif bouton prestataire + nouvelle analyse nouvel onglet -->
@@ -2517,3 +2876,4 @@ function showError(msg) { showStatus("error", "⚠ " + msg); }
 
 </body>
 </html>
+
