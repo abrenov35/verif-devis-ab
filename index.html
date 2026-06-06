@@ -1294,119 +1294,140 @@ table.price-table th{
 
 
 <!-- LIBELLÉS TAB CONTENT -->
-<div id="libelles-panel" style="display:none;flex:1;overflow-y:auto;">
-  <div style="max-width:860px;margin:0 auto;padding:22px;">
+<div id="libelles-panel" style="display:none;background:var(--cream);min-height:calc(100vh - 110px);overflow-y:auto;">
+  <div style="max-width:900px;margin:0 auto;padding:28px 24px 48px;">
 
-    <!-- GÉNÉRATeur -->
-    <div style="background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:20px 24px;margin-bottom:16px;border:1px solid #c8bfb5;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Prestation à reformuler</div>
-      <textarea id="lib-prestation" style="width:100%;padding:10px 14px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--navy);font-weight:500;outline:none;resize:none;min-height:52px;height:auto;overflow-y:hidden;" placeholder="Ex : dépose faïence salle de bain, pose parquet stratifié chambre…" oninput="autoResizeLib(this)"></textarea>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;margin-top:10px;">Corrections / indications <span style="font-weight:400;color:#b0a79e">(optionnel)</span></div>
-      <textarea id="lib-corrections" style="width:100%;padding:10px 14px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:8px;font-family:'Barlow',sans-serif;font-size:13px;color:#3d3830;outline:none;resize:none;min-height:42px;height:auto;overflow-y:hidden;" placeholder="Ex : prix trop haut, ajouter la dépose, style plus court…" oninput="autoResizeLib(this)"></textarea>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-        <button id="lib-btn-generate" onclick="libGenerate()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--navy);background:var(--navy);color:#fff;">
-          ⚡ Générer le libellé
-        </button>
+    <!-- HERO CARD GÉNÉRATEUR -->
+    <div style="background:var(--navy);border-radius:16px;padding:28px 32px;margin-bottom:20px;box-shadow:0 8px 32px rgba(22,45,73,.22);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="background:var(--lav);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">⚡</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;">Générateur de libellés</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5);margin-top:1px;">IA → libellé professionnel + fourchette de prix marché Rennes</div>
+        </div>
       </div>
 
-      <!-- Résultat -->
-      <div id="lib-result-section" style="margin-top:16px;">
-        <div style="height:1px;background:#e8ddd4;margin:4px 0 14px;"></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Libellé proposé</div>
-        <div id="lib-libelle-display" style="background:#F3EAE2;border:1.5px solid #e8ddd4;border-left:4px solid var(--navy);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#b0a79e;line-height:1.65;min-height:56px;">Le libellé généré par l'IA apparaîtra ici…</div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px;margin-top:12px;">
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Marché bas HT</div>
-            <div style="position:relative;"><input type="number" id="lib-prix-bas" step="0.01" min="0" style="width:100%;padding:10px 30px 10px 14px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
-          </div>
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Marché haut HT</div>
-            <div style="position:relative;"><input type="number" id="lib-prix-haut" step="0.01" min="0" style="width:100%;padding:10px 30px 10px 14px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
-          </div>
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Prix AB RENOV</div>
-            <div style="position:relative;"><input type="number" id="lib-prix-abrenov" step="0.01" min="0" placeholder="Saisir" style="width:100%;padding:10px 30px 10px 14px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" /><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#b0a79e;">€</span></div>
-          </div>
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Unité</div>
-            <select id="lib-unite" style="width:100%;padding:10px 32px 10px 14px;background:#f7f4f1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23857d75' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;border:1.5px solid #e9e4df;border-radius:8px;font-size:14px;color:#3d3830;outline:none;appearance:none;cursor:pointer;">
-              <option value="unité">unité</option><option value="m²">m²</option><option value="ml">ml</option><option value="m³">m³</option><option value="forfait">forfait</option><option value="heure">heure</option><option value="jour">jour</option><option value="point">point</option><option value="équipement">équipement</option><option value="autre">autre</option>
-            </select>
-          </div>
-          <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Confiance IA</div>
-            <div id="lib-confiance-badge" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid #e9e4df;background:#f7f4f1;color:#b0a79e;">—</div>
-          </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="grid-column:1/-1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lav);margin-bottom:6px;">Prestation à reformuler</div>
+          <textarea id="lib-prestation" style="width:100%;padding:12px 16px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;font-family:'Barlow',sans-serif;font-size:14px;color:#fff;font-weight:500;outline:none;resize:none;min-height:52px;height:auto;overflow-y:hidden;transition:border-color .15s;" placeholder="Ex : dépose faïence salle de bain, pose parquet stratifié chambre…" oninput="autoResizeLib(this)" onfocus="this.style.borderColor='rgba(164,149,195,.8)'" onblur="this.style.borderColor='rgba(255,255,255,.2)'"></textarea>
         </div>
-
-        <div style="background:#ede9f5;border:1px solid #c9bfe0;border-radius:4px;padding:7px 12px;font-size:11.5px;color:#5a4a7a;margin-top:10px;">
-          ℹ️ Fourchette indicative à vérifier selon le chantier, l'état du support, l'accessibilité et les conditions d'intervention.
+        <div style="grid-column:1/-1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px;">Corrections / indications <span style="font-weight:400;">(optionnel)</span></div>
+          <textarea id="lib-corrections" style="width:100%;padding:10px 16px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;font-family:'Barlow',sans-serif;font-size:13px;color:rgba(255,255,255,.8);outline:none;resize:none;min-height:40px;height:auto;overflow-y:hidden;" placeholder="Ex : prix trop haut, ajouter la dépose, style plus court…" oninput="autoResizeLib(this)"></textarea>
         </div>
+      </div>
 
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-          <button onclick="libReset()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">↑ Nouvelle prestation</button>
-          <button id="lib-btn-prev" onclick="libPrev()" disabled style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">◀ Précédente</button>
-          <button id="lib-btn-next" onclick="libNext()" disabled style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">Suivante ▶</button>
-          <button onclick="libRegenerate()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">↻ Régénérer</button>
-          <button onclick="libCopy()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid var(--navy);color:var(--navy);">📋 Copier</button>
-          <button onclick="libSave()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--green);border:1.5px solid var(--green);color:#fff;">💾 Valider et enregistrer</button>
+      <button id="lib-btn-generate" onclick="libGenerate()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:var(--lav);border:none;color:#fff;transition:all .15s;box-shadow:0 4px 16px rgba(164,149,195,.4);">
+        ⚡ Générer le libellé
+      </button>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div id="lib-result-card" style="background:#fff;border-radius:16px;padding:24px 28px;margin-bottom:20px;box-shadow:0 4px 20px rgba(22,45,73,.08);border:1.5px solid #e0d8d0;">
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="background:#f0ecf8;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.9rem;">📝</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);">Libellé proposé</div>
+        <div id="lib-confiance-badge" style="margin-left:auto;display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#f0ecf8;color:var(--lav);border:1px solid #d4cce8;">— Confiance</div>
+      </div>
+
+      <div id="lib-libelle-display" style="background:linear-gradient(135deg,#f8f5ff,#f0ecf8);border:2px solid #d4cce8;border-left:5px solid var(--navy);border-radius:10px;padding:16px 20px;font-size:16px;color:#b0a79e;line-height:1.7;min-height:60px;font-style:italic;transition:all .2s;">Le libellé généré par l'IA apparaîtra ici…</div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;">
+        <div style="background:#f7f4f1;border-radius:10px;padding:12px 14px;border:1.5px solid #e0d8d0;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Marché bas HT</div>
+          <div style="position:relative;"><input type="number" id="lib-prix-bas" step="0.01" min="0" style="width:100%;padding:8px 28px 8px 10px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:15px;color:var(--navy);font-weight:700;outline:none;" /><span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--grey);font-weight:600;">€</span></div>
         </div>
+        <div style="background:#f7f4f1;border-radius:10px;padding:12px 14px;border:1.5px solid #e0d8d0;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Marché haut HT</div>
+          <div style="position:relative;"><input type="number" id="lib-prix-haut" step="0.01" min="0" style="width:100%;padding:8px 28px 8px 10px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:15px;color:var(--navy);font-weight:700;outline:none;" /><span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--grey);font-weight:600;">€</span></div>
+        </div>
+        <div style="background:#E8EEF5;border-radius:10px;padding:12px 14px;border:1.5px solid #C2CEDF;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Prix AB RENOV</div>
+          <div style="position:relative;"><input type="number" id="lib-prix-abrenov" step="0.01" min="0" placeholder="—" style="width:100%;padding:8px 28px 8px 10px;background:#fff;border:1.5px solid var(--navy);border-radius:7px;font-size:15px;color:var(--navy);font-weight:700;outline:none;" /><span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--navy);font-weight:600;">€</span></div>
+        </div>
+        <div style="background:#f7f4f1;border-radius:10px;padding:12px 14px;border:1.5px solid #e0d8d0;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Unité</div>
+          <select id="lib-unite" style="width:100%;padding:8px 10px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:14px;color:var(--navy);font-weight:700;outline:none;appearance:none;cursor:pointer;">
+            <option value="unité">unité</option><option value="m²">m²</option><option value="ml">ml</option><option value="m³">m³</option><option value="forfait">forfait</option><option value="heure">heure</option><option value="jour">jour</option><option value="point">point</option><option value="équipement">équipement</option><option value="autre">autre</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid #e8e0d8;">
+        <button onclick="libReset()" style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #c8bfb5;color:var(--grey);">↑ Nouvelle</button>
+        <button id="lib-btn-prev" onclick="libPrev()" disabled style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #c8bfb5;color:var(--navy);">◀ Préc.</button>
+        <button id="lib-btn-next" onclick="libNext()" disabled style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #c8bfb5;color:var(--navy);">Suiv. ▶</button>
+        <button onclick="libRegenerate()" style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--lav-bg);border:1.5px solid var(--lav);color:#5B44A0;">↻ Régénérer</button>
+        <button onclick="libCopy()" style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid var(--navy);color:var(--navy);">📋 Copier</button>
+        <button onclick="libSave()" style="display:inline-flex;align-items:center;gap:5px;padding:10px 20px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--green);border:none;color:#fff;box-shadow:0 3px 12px rgba(30,122,74,.25);">💾 Valider & enregistrer</button>
       </div>
     </div>
 
     <!-- BIBLIOTHÈQUE -->
-    <div style="background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:20px 24px;border:1px solid #c8bfb5;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Bibliothèque</div>
+    <div style="background:#fff;border-radius:16px;padding:24px 28px;box-shadow:0 4px 20px rgba(22,45,73,.08);border:1.5px solid #e0d8d0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:#e8f4ed;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.9rem;">📚</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Bibliothèque</div>
+            <div id="lib-count" style="font-size:.72rem;color:var(--grey);margin-top:1px;">Chargement…</div>
+          </div>
+        </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <div style="position:relative;">
-            <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#b0a79e;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="lib-search" oninput="libFilterLibrary()" placeholder="Rechercher…" style="padding:8px 12px 8px 32px;background:#f7f4f1;border:1.5px solid #e9e4df;border-radius:4px;font-size:13px;color:#3d3830;outline:none;width:200px;" />
+            <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--grey);" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="lib-search" oninput="libFilterLibrary()" placeholder="Rechercher un libellé…" style="padding:9px 14px 9px 34px;background:#f7f4f1;border:1.5px solid #c8bfb5;border-radius:8px;font-size:13px;color:var(--navy);font-weight:500;outline:none;width:220px;transition:border-color .15s;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='#c8bfb5'"/>
           </div>
-          <button onclick="libLoadLibrary()" style="display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">↻ Actualiser</button>
+          <button onclick="libLoadLibrary()" style="display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #c8bfb5;color:var(--navy);">↻</button>
         </div>
       </div>
-      <div id="lib-library-loading" style="display:none;padding:32px;text-align:center;color:#b0a79e;font-size:13px;">Chargement…</div>
-      <div id="lib-library-empty" style="display:none;padding:40px 24px;text-align:center;color:#b0a79e;font-size:14px;">Aucun libellé enregistré.</div>
+      <div id="lib-library-loading" style="display:none;padding:40px;text-align:center;color:var(--grey);font-size:13px;">⏳ Chargement…</div>
+      <div id="lib-library-empty" style="display:none;padding:48px 24px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:10px;opacity:.3;">📚</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;">Bibliothèque vide</div>
+        <div style="font-size:.82rem;color:var(--grey);">Générez et validez votre premier libellé.</div>
+      </div>
       <div id="lib-library-cards" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div>
+
   </div>
 </div>
 
 <!-- MODAL MODIFICATION LIBELLÉ -->
-<div id="lib-modal-overlay" onclick="libCloseModal()" style="display:none;position:fixed;inset:0;background:rgba(22,45,73,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);">
-  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:12px;border-top:4px solid var(--navy);box-shadow:0 12px 48px rgba(22,45,73,.18);width:100%;max-width:540px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #e9e4df;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Modifier le libellé</div>
-      <button onclick="libCloseModal()" style="background:none;border:none;cursor:pointer;color:#b0a79e;font-size:18px;">✕</button>
+<div id="lib-modal-overlay" onclick="libCloseModal()" style="display:none;position:fixed;inset:0;background:rgba(22,45,73,.55);z-index:300;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:14px;border-top:4px solid var(--navy);box-shadow:0 16px 56px rgba(22,45,73,.22);width:100%;max-width:520px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #e8e0d8;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);">Modifier le libellé</div>
+      <button onclick="libCloseModal()" style="background:none;border:none;cursor:pointer;color:var(--grey);font-size:20px;line-height:1;">✕</button>
     </div>
     <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px;">
       <input type="hidden" id="lib-edit-id" />
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Libellé</div>
-        <textarea id="lib-edit-libelle" style="width:100%;padding:10px 14px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--navy);font-weight:500;outline:none;resize:none;min-height:52px;" rows="2"></textarea>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Libellé</div>
+        <textarea id="lib-edit-libelle" style="width:100%;padding:10px 14px;background:#f7f4f1;border:1.5px solid #c8bfb5;border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--navy);font-weight:500;outline:none;resize:none;min-height:60px;" rows="3"></textarea>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
         <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Prix bas (€)</div>
-          <input type="number" id="lib-edit-prix-bas" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" />
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:5px;">Prix bas (€)</div>
+          <input type="number" id="lib-edit-prix-bas" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" />
         </div>
         <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Prix haut (€)</div>
-          <input type="number" id="lib-edit-prix-haut" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" />
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:5px;">Prix haut (€)</div>
+          <input type="number" id="lib-edit-prix-haut" step="0.01" min="0" style="width:100%;padding:9px 12px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:14px;color:var(--navy);font-weight:600;outline:none;" />
         </div>
         <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Unité</div>
-          <select id="lib-edit-unite" style="width:100%;padding:9px 28px 9px 12px;background:#fff;border:1.5px solid #b0a79e;border-radius:8px;font-size:14px;color:var(--navy);font-weight:600;outline:none;appearance:none;cursor:pointer;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin-bottom:5px;">Unité</div>
+          <select id="lib-edit-unite" style="width:100%;padding:9px 10px;background:#fff;border:1.5px solid #c8bfb5;border-radius:7px;font-size:14px;color:var(--navy);font-weight:600;outline:none;appearance:none;cursor:pointer;">
             <option value="unité">unité</option><option value="m²">m²</option><option value="ml">ml</option><option value="m³">m³</option><option value="forfait">forfait</option><option value="heure">heure</option><option value="jour">jour</option><option value="autre">autre</option>
           </select>
         </div>
       </div>
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:10px;padding:14px 24px;border-top:1px solid #e9e4df;background:#f7f4f1;border-radius:0 0 12px 12px;">
-      <button onclick="libCloseModal()" style="padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #e9e4df;color:#857d75;">Annuler</button>
-      <button onclick="libSaveEdit()" style="padding:9px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--navy);border:1.5px solid var(--navy);color:#fff;">Enregistrer</button>
+    <div style="display:flex;justify-content:flex-end;gap:10px;padding:14px 24px;border-top:1px solid #e8e0d8;background:#f7f4f1;border-radius:0 0 14px 14px;">
+      <button onclick="libCloseModal()" style="padding:9px 16px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #c8bfb5;color:var(--grey);">Annuler</button>
+      <button onclick="libSaveEdit()" style="padding:9px 20px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:var(--navy);border:1.5px solid var(--navy);color:#fff;">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -2773,29 +2794,34 @@ function libFilterLibrary() {
 function libRenderLibrary(list) {
   const cards = document.getElementById('lib-library-cards');
   const empty = document.getElementById('lib-library-empty');
+  const count = document.getElementById('lib-count');
   cards.innerHTML = '';
-  if (!list.length) { empty.style.display = 'block'; return; }
+  if (count) count.textContent = list.length + ' libellé' + (list.length > 1 ? 's' : '') + ' enregistré' + (list.length > 1 ? 's' : '');
+  if (!list.length) { empty.style.display = 'flex'; return; }
   empty.style.display = 'none';
   list.forEach(row => {
     libRowsById[row.id] = row;
     const date = row.date ? new Date(row.date).toLocaleDateString('fr-FR') : '—';
     const fmtEur = v => (v===''||v==null||isNaN(Number(v))) ? '—' : Number(v).toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:2}) + ' €';
+    const hasPrix = row.prix_bas || row.prix_haut;
     const card = document.createElement('div');
-    card.style.cssText = 'background:#fff;border:1.5px solid #c8bfb5;border-left:4px solid var(--navy);border-radius:8px;padding:16px 18px;transition:box-shadow .18s;';
+    card.style.cssText = 'background:#fdfaf7;border:1.5px solid #e0d8d0;border-left:4px solid var(--navy);border-radius:10px;padding:14px 18px;transition:box-shadow .18s,border-color .18s;cursor:default;';
+    card.onmouseenter = () => { card.style.boxShadow = '0 4px 16px rgba(22,45,73,.1)'; card.style.borderColor = '#c8bfb5'; };
+    card.onmouseleave = () => { card.style.boxShadow = ''; card.style.borderColor = '#e0d8d0'; };
     card.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <span style="display:inline-block;background:var(--navy);color:#fff;border-radius:3px;padding:3px 9px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">${libEscHtml(row.unite||'')}</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #e9e4df;border-radius:3px;padding:3px 10px;">${fmtEur(row.prix_bas)} — ${fmtEur(row.prix_haut)}</span>
-          <span style="font-size:12px;color:#b0a79e;">${date}</span>
+          <span style="display:inline-block;background:var(--navy);color:#fff;border-radius:4px;padding:3px 10px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">${libEscHtml(row.unite||'')}</span>
+          ${hasPrix ? `<span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--green);background:#e8f4ed;border:1px solid #a8d5bc;border-radius:4px;padding:3px 10px;">${fmtEur(row.prix_bas)} – ${fmtEur(row.prix_haut)}</span>` : ''}
+          <span style="font-size:11px;color:var(--grey);background:#f0ebe5;border-radius:4px;padding:3px 8px;">${date}</span>
         </div>
-        <div style="display:flex;gap:6px;">
-          <button onclick="libCopyText('${libEscAttr(row.libelle)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">📋 Copier</button>
-          <button onclick="libOpenEdit('${libEscAttr(row.id)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:var(--navy);">✏️ Modifier</button>
-          <button onclick="libDelete('${libEscAttr(row.id)}')" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid #b0a79e;color:#C0392B;">🗑 Supprimer</button>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="libCopyText('${libEscAttr(row.libelle)}')" title="Copier" style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:#fff;border:1.5px solid #c8bfb5;color:var(--navy);transition:all .15s;">📋 Copier</button>
+          <button onclick="libOpenEdit('${libEscAttr(row.id)}')" title="Modifier" style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:#fff;border:1.5px solid #c8bfb5;color:var(--navy);transition:all .15s;">✏️ Modifier</button>
+          <button onclick="libDelete('${libEscAttr(row.id)}')" title="Supprimer" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:#fff;border:1.5px solid #f5c6c2;color:#C0392B;transition:all .15s;">🗑</button>
         </div>
       </div>
-      <div style="font-size:15px;color:var(--navy);line-height:1.65;font-style:italic;font-weight:500;">${libEscHtml(row.libelle||'')}</div>
+      <div style="font-size:15px;color:var(--navy);line-height:1.65;font-style:italic;font-weight:500;padding:10px 14px;background:#fff;border-radius:7px;border:1px solid #e8e0d8;">${libEscHtml(row.libelle||'')}</div>
     `;
     cards.appendChild(card);
   });
@@ -2811,7 +2837,7 @@ function libOpenEdit(id) {
   const sel = document.getElementById('lib-edit-unite');
   const val = row.unite || 'unité';
   for (let i = 0; i < sel.options.length; i++) { if (sel.options[i].value === val) { sel.selectedIndex = i; break; } }
-  document.getElementById('lib-modal-overlay').style.display = 'flex';
+  const mo=document.getElementById('lib-modal-overlay'); mo.style.display='flex'; mo.style.alignItems='center'; mo.style.justifyContent='center';
 }
 
 function libCloseModal() {
