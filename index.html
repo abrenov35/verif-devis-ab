@@ -634,6 +634,57 @@ table.price-table th{
 }
 
 
+/* ===== CURSEUR CONFIANCE IA ===== */
+.confiance-bar-wrap {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid rgba(22,45,73,.07);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  margin-bottom: 0;
+}
+.confiance-bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.confiance-bar-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.confiance-bar-pct {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--navy);
+  transition: color .4s;
+}
+.confiance-bar-track {
+  height: 8px;
+  background: var(--grey-lt);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.confiance-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+}
+.confiance-bar-mention {
+  font-size: .72rem;
+  color: var(--grey);
+  margin-top: 6px;
+  font-style: italic;
+}
+
 /* ===== CORRECTION LISIBILITÉ TEXTE + ALIGNEMENTS ===== */
 
 .content{
@@ -1495,8 +1546,11 @@ Retourne UNIQUEMENT un JSON valide :
   ],
   "points_positifs": [
     "Cuisine cohérente marché Rennes."
-  ]
+  ],
+  "score_confiance": 78
 }
+
+score_confiance = entier 0-100 : ta confiance dans l'analyse (données complètes, lisibles, cohérentes = score élevé ; données floues, incomplètes, illisibles = score bas).
 
 Retourne uniquement le JSON.`,
 
@@ -1532,8 +1586,11 @@ Retourne UNIQUEMENT un JSON valide :
   ],
   "conseil": [
     "Marge correcte."
-  ]
+  ],
+  "score_confiance": 82
 }
+
+score_confiance = entier 0-100 : ta confiance dans l'analyse (données claires = élevé, données floues = bas).
 
 Retourne uniquement le JSON.`,
 
@@ -1612,8 +1669,11 @@ Retourne UNIQUEMENT un JSON valide sans markdown ni backticks :
   "descriptif_rapide": "description courte des prestations",
   "fournitures_abrenov": "liste courte des fournitures AB RENOV",
   "sms_prestataire": "SMS complet rédigé selon les 6 blocs obligatoires ci-dessus",
-  "offre_basse_ht": "montant offre conseillée HT"
-}`
+  "offre_basse_ht": "montant offre conseillée HT",
+  "score_confiance": 75
+}
+
+score_confiance = entier 0-100 : ta confiance dans l'analyse (données complètes et lisibles = élevé, manques importants = bas).`
 
 };
 
@@ -1843,6 +1903,41 @@ btnAnalyze.addEventListener("click", async () => {
 });
 
 /* ================================================================
+   CURSEUR CONFIANCE IA
+================================================================ */
+function buildConfianceBar(score) {
+  const pct = Math.min(100, Math.max(0, parseInt(score) || 0));
+  let color, mention, label;
+  if (pct >= 75) {
+    color = '#1E7A4A'; // vert
+    mention = 'Données claires et complètes';
+  } else if (pct >= 50) {
+    color = '#C86020'; // orange
+    mention = 'Données partielles — analyse indicative';
+  } else {
+    color = '#D0392B'; // rouge
+    mention = 'Données insuffisantes — résultat à vérifier';
+  }
+  // ID unique pour animer après injection
+  const uid = 'cfb-' + Math.random().toString(36).slice(2,8);
+  setTimeout(() => {
+    const fill = document.getElementById(uid);
+    if (fill) fill.style.width = pct + '%';
+  }, 80);
+  return `
+    <div class="confiance-bar-wrap">
+      <div class="confiance-bar-header">
+        <span class="confiance-bar-label">🤖 Confiance IA</span>
+        <span class="confiance-bar-pct" style="color:${color}">${pct}%</span>
+      </div>
+      <div class="confiance-bar-track">
+        <div id="${uid}" class="confiance-bar-fill" style="background:${color};width:0%"></div>
+      </div>
+      <div class="confiance-bar-mention">${mention}</div>
+    </div>`;
+}
+
+/* ================================================================
    RENDER RESULTS
 ================================================================ */
 function renderResults(r) {
@@ -1920,6 +2015,7 @@ const surveillances = Array.isArray(r.points_surveillance)
     : "";
 
   return `
+    ${r.score_confiance !== undefined ? buildConfianceBar(r.score_confiance) : ''}
     <div class="verdict v-presta">
       <div class="verdict-badge">${r.emoji || "🟠"}</div>
 
@@ -1993,6 +2089,7 @@ const lignes = Array.isArray(r.lignes) ? r.lignes : [];
   `).join("");
 
   return `
+    ${r.score_confiance !== undefined ? buildConfianceBar(r.score_confiance) : ''}
     <div class="verdict v-presta">
       <div class="verdict-badge">${r.emoji || "🧾"}</div>
 
@@ -2096,6 +2193,7 @@ Montant calculé sur la base du chantier prévu afin de rester cohérent pour to
 Équipe travaux AB RENOV 35`;
 
   return `
+    ${r.score_confiance !== undefined ? buildConfianceBar(r.score_confiance) : ''}
     <div class="verdict v-presta">
 
       <div class="verdict-badge">${r.emoji||"🔧"}</div>
@@ -2913,4 +3011,5 @@ function libEscAttr(s) { return String(s).replace(/'/g,"\'").replace(/\n/g,' ');
 
 </body>
 </html>
+
 
