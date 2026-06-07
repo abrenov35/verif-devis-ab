@@ -1901,11 +1901,14 @@ function updatePhotosPill() {
 
 function renderPhotoThumbs() {
   photosThumbs.innerHTML = "";
+  photosThumbs.style.cssText = "display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;";
   uploadedPhotos.forEach((p, i) => {
     const wrap = document.createElement("div");
     wrap.className = "photo-thumb-wrap";
+    wrap.style.cssText = "position:relative;width:60px;height:60px;border-radius:8px;overflow:hidden;border:1.5px solid #CFC4E6;flex-shrink:0;";
     const img = document.createElement("img");
     img.src = p.dataUrl;
+    img.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;";
     const del = document.createElement("button");
     del.className = "photo-thumb-del";
     del.textContent = "×";
