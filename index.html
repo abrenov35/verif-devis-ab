@@ -1230,22 +1230,24 @@ table.price-table th{
 
 .photos-strip {
   display: none;
-  align-items: center;
+  flex-direction: row !important;
+  align-items: center !important;
   gap: 8px;
-  flex-wrap: nowrap;
   overflow-x: auto;
-  padding: 8px 28px 10px;
+  overflow-y: visible;
+  padding: 8px 16px;
   background: #F0EDF8;
   border-bottom: 2px solid #CFC4E6;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  white-space: nowrap;
 }
 .photos-strip::-webkit-scrollbar { display: none; }
-.photos-strip.visible { display: flex; }
+.photos-strip.visible { display: flex !important; }
 #photos-thumbs {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
   gap: 8px;
   flex-shrink: 0;
 }
@@ -1436,7 +1438,6 @@ table.price-table th{
 
 <!-- STRIP PHOTOS -->
 <div class="photos-strip" id="photos-strip">
-  <span class="photos-strip-label">📷 Photos IA</span>
   <div id="photos-thumbs"></div>
   <label class="photos-strip-add" title="Ajouter une photo">
     +
