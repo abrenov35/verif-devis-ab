@@ -1232,12 +1232,23 @@ table.price-table th{
   display: none;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   padding: 8px 28px 10px;
   background: #F0EDF8;
   border-bottom: 2px solid #CFC4E6;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.photos-strip::-webkit-scrollbar { display: none; }
 .photos-strip.visible { display: flex; }
+#photos-thumbs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
 .photo-thumb-wrap {
   position: relative;
   width: 52px; height: 52px;
