@@ -1233,9 +1233,9 @@ table.price-table th{
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  padding: 6px 28px 8px;
-  background: #F8F6FD;
-  border-bottom: 1px solid #DDD8EE;
+  padding: 8px 28px 10px;
+  background: #F0EDF8;
+  border-bottom: 2px solid #CFC4E6;
 }
 .photos-strip.visible { display: flex; }
 .photo-thumb-wrap {
@@ -1380,6 +1380,12 @@ table.price-table th{
     <span class="file-pill-text" id="file-pill-text">📄 Choisir un fichier</span>
   </div>
 
+  <!-- Bouton photos — juste après le fichier principal -->
+  <label class="photos-pill" id="photos-pill" title="Ajouter des photos chantier pour aider l'IA">
+    📷 <span id="photos-pill-txt">Photos chantier</span>
+    <input type="file" id="photos-input" accept="image/*" multiple />
+  </label>
+
   <!-- Champs contexte par onglet -->
 <div class="extra-fields" id="extra-fourn">
     <!-- Pas de champ avant analyse : l'affinage se fait après résultat -->
@@ -1415,12 +1421,6 @@ table.price-table th{
     <div class="spinner"></div>
     <span id="status-text">Analyse…</span>
   </div>
-
-  <!-- Bouton photos -->
-  <label class="photos-pill" id="photos-pill" title="Ajouter des photos chantier pour aider l'IA">
-    📷 <span id="photos-pill-txt">Photos chantier</span>
-    <input type="file" id="photos-input" accept="image/*" multiple />
-  </label>
 </div>
 
 <!-- STRIP PHOTOS -->
