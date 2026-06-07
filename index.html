@@ -2680,10 +2680,6 @@ const CHIPS = {
 };
 
 function renderRecalculBar(fromHistory, historyId) {
-  const tab = (currentTab === "historique") ? "devis" : currentTab;
-  const chips = (CHIPS[tab] || CHIPS.devis)
-    .map(c => `<span class="recalcul-chip" onclick="chipClick(this)">${c}</span>`)
-    .join("");
   const callFn = fromHistory
     ? `recalculFromHistory(${JSON.stringify(historyId)})`
     : "recalculCurrent()";
@@ -2693,7 +2689,6 @@ function renderRecalculBar(fromHistory, historyId) {
   return `
 <div class="recalcul-bar" id="recalcul-bar">
   <span class="recalcul-label">🔄 Compléter et relancer l'analyse</span>
-  <div class="recalcul-chips">${chips}</div>
   <div class="recalcul-row">
     <textarea id="recalcul-input" class="recalcul-textarea"
       placeholder="Ajoutez vos précisions ici : étage, surface réelle, contraintes, nom client, remarques terrain…"></textarea>
