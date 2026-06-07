@@ -1207,6 +1207,83 @@ table.price-table th{
 }
 .sms-client-btn:hover { background: var(--navy-dk); }
 
+/* ===== PHOTOS CHANTIER ===== */
+.photos-pill {
+  position: relative;
+  display: flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 14px;
+  border: 1.5px dashed #A495C3;
+  border-radius: 17px; cursor: pointer;
+  transition: all .2s; background: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: #A495C3;
+  white-space: nowrap;
+}
+.photos-pill:hover { border-color: #8070A8; background: #F0EDF8; color: #8070A8; }
+.photos-pill.has-photos { border-style: solid; border-color: #8070A8; background: #EDEAF7; color: #8070A8; }
+.photos-pill input[type="file"] {
+  position: absolute; inset: 0; opacity: 0;
+  cursor: pointer; width: 100%; height: 100%; z-index: 2;
+}
+
+.photos-strip {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px 28px 8px;
+  background: #F8F6FD;
+  border-bottom: 1px solid #DDD8EE;
+}
+.photos-strip.visible { display: flex; }
+.photo-thumb-wrap {
+  position: relative;
+  width: 52px; height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid #CFC4E6;
+  flex-shrink: 0;
+}
+.photo-thumb-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block;
+}
+.photo-thumb-del {
+  position: absolute; top: 2px; right: 2px;
+  width: 16px; height: 16px;
+  background: rgba(22,45,73,.75);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 9px; color: #fff; line-height: 1;
+  border: none;
+}
+.photo-thumb-del:hover { background: #D0392B; }
+.photos-strip-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #A495C3; margin-right: 4px; white-space: nowrap;
+}
+.photos-strip-add {
+  width: 52px; height: 52px;
+  border: 1.5px dashed #CFC4E6;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem; color: #A495C3;
+  background: #fff; flex-shrink: 0;
+  position: relative;
+  transition: all .15s;
+}
+.photos-strip-add:hover { border-color: #8070A8; color: #8070A8; background: #F0EDF8; }
+.photos-strip-add input[type="file"] {
+  position: absolute; inset: 0; opacity: 0;
+  cursor: pointer; width: 100%; height: 100%;
+}
+
 /* ===== BARRE RECALCUL ===== */
 .recalcul-bar {
   background: #F8F6FD;
@@ -1338,6 +1415,22 @@ table.price-table th{
     <div class="spinner"></div>
     <span id="status-text">Analyse…</span>
   </div>
+
+  <!-- Bouton photos -->
+  <label class="photos-pill" id="photos-pill" title="Ajouter des photos chantier pour aider l'IA">
+    📷 <span id="photos-pill-txt">Photos chantier</span>
+    <input type="file" id="photos-input" accept="image/*" multiple />
+  </label>
+</div>
+
+<!-- STRIP PHOTOS -->
+<div class="photos-strip" id="photos-strip">
+  <span class="photos-strip-label">📷 Photos IA</span>
+  <div id="photos-thumbs"></div>
+  <label class="photos-strip-add" title="Ajouter une photo">
+    +
+    <input type="file" id="photos-input-add" accept="image/*" multiple />
+  </label>
 </div>
 
 <!-- CONTENT -->
@@ -1685,6 +1778,7 @@ let currentFile = null;
 let plainText   = "";
 let lastExtractedText = "";
 let lastResult = null;
+let uploadedPhotos = []; // [{dataUrl, mediaType}]
 
 /* ================================================================
    DOM
@@ -1772,6 +1866,102 @@ function loadFile(f) {
 }
 
 /* ================================================================
+   GESTION PHOTOS CHANTIER
+================================================================ */
+const photosInput    = document.getElementById("photos-input");
+const photosInputAdd = document.getElementById("photos-input-add");
+const photosStrip    = document.getElementById("photos-strip");
+const photosThumbs   = document.getElementById("photos-thumbs");
+const photosPill     = document.getElementById("photos-pill");
+const photosPillTxt  = document.getElementById("photos-pill-txt");
+
+function updatePhotosPill() {
+  const n = uploadedPhotos.length;
+  if (n === 0) {
+    photosPillTxt.textContent = "Photos chantier";
+    photosPill.classList.remove("has-photos");
+    photosStrip.classList.remove("visible");
+  } else {
+    photosPillTxt.textContent = `${n} photo${n>1?"s":""} ajoutée${n>1?"s":""}`;
+    photosPill.classList.add("has-photos");
+    photosStrip.classList.add("visible");
+  }
+}
+
+function renderPhotoThumbs() {
+  photosThumbs.innerHTML = "";
+  uploadedPhotos.forEach((p, i) => {
+    const wrap = document.createElement("div");
+    wrap.className = "photo-thumb-wrap";
+    const img = document.createElement("img");
+    img.src = p.dataUrl;
+    const del = document.createElement("button");
+    del.className = "photo-thumb-del";
+    del.textContent = "×";
+    del.title = "Supprimer";
+    del.addEventListener("click", () => {
+      uploadedPhotos.splice(i, 1);
+      renderPhotoThumbs();
+      updatePhotosPill();
+    });
+    wrap.appendChild(img);
+    wrap.appendChild(del);
+    photosThumbs.appendChild(wrap);
+  });
+}
+
+async function readPhotoFiles(files) {
+  const MAX = 5;
+  const remaining = MAX - uploadedPhotos.length;
+  const toAdd = Array.from(files).slice(0, remaining);
+  for (const f of toAdd) {
+    if (!f.type.startsWith("image/")) continue;
+    const dataUrl = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result);
+      r.onerror = rej;
+      r.readAsDataURL(f);
+    });
+    // Compress to max 800px before sending
+    const compressed = await compressImage(dataUrl, 800, 0.75);
+    uploadedPhotos.push({ dataUrl: compressed, mediaType: f.type.startsWith("image/png") ? "image/png" : "image/jpeg" });
+  }
+  renderPhotoThumbs();
+  updatePhotosPill();
+}
+
+async function compressImage(dataUrl, maxPx, quality) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let w = img.width, h = img.height;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else       { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      res(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.src = dataUrl;
+  });
+}
+
+photosInput.addEventListener("change", () => {
+  if (photosInput.files && photosInput.files.length) {
+    readPhotoFiles(photosInput.files);
+    photosInput.value = "";
+  }
+});
+photosInputAdd.addEventListener("change", () => {
+  if (photosInputAdd.files && photosInputAdd.files.length) {
+    readPhotoFiles(photosInputAdd.files);
+    photosInputAdd.value = "";
+  }
+});
+
+/* ================================================================
    EXTRACT TEXT FROM PDF
 ================================================================ */
 async function extractPdf(file) {
@@ -1828,13 +2018,30 @@ async function callAI(devisText) {
 
   const userMsg = `Voici le contenu du document à analyser :${contextBlock}\n\n---\n${devisText.slice(0, 14000)}\n---\n\nRetourne le JSON.`;
 
+  // Construire le contenu du message (texte + photos en vision si disponibles)
+  let msgContent;
+  if (uploadedPhotos.length > 0) {
+    msgContent = [
+      { type: "text", text: userMsg + `\n\nDes photos du chantier sont jointes (${uploadedPhotos.length} photo${uploadedPhotos.length>1?"s":""}). Utilise-les pour mieux évaluer la complexité, l'état du support, l'accès, et tout élément visible pertinent pour l'analyse.` }
+    ];
+    uploadedPhotos.forEach(p => {
+      const b64 = p.dataUrl.split(",")[1];
+      msgContent.push({
+        type: "image",
+        source: { type: "base64", media_type: "image/jpeg", data: b64 }
+      });
+    });
+  } else {
+    msgContent = userMsg;
+  }
+
   const resp = await fetch(PROXY_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain" },
     body: JSON.stringify({
       model: AI_MODEL, max_tokens: AI_TOKENS,
       system: systemPrompt,
-      messages: [{ role: "user", content: userMsg }]
+      messages: [{ role: "user", content: msgContent }]
     })
   });
 
